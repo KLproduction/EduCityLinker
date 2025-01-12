@@ -15,7 +15,7 @@ export const PartnershipSlider = () => {
     setActiveIndex(index);
   };
   return (
-    <div className=" bg-zinc-50 min-h-[60vh] flex flex-col items-center">
+    <div className=" bg-zinc-50 min-h-[60vh] flex flex-col items-center ">
       <div className="pt-10  flex flex-col gap-3 w-full justify-start container ">
         <h1 className="text-3xl font-bold text-blue-900">Our Partner</h1>
         <Link href="/centers" className=" text-blue-700 ml-5">

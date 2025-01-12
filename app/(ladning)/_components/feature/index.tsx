@@ -1,105 +1,127 @@
 "use client";
 
-import { useRef, useState } from "react";
-import {
-  motion,
-  AnimatePresence,
-  useScroll,
-  useTransform,
-} from "framer-motion";
-import { Card, CardDescription, CardTitle } from "@/components/ui/card";
+import { useRef } from "react";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-
-const cards = [
-  { id: 1, title: "Card 1", content: "Content for the first card." },
-  { id: 2, title: "Card 2", content: "Content for the second card." },
-  { id: 3, title: "Card 3", content: "Content for the third card." },
-];
+import { BookOpen, GraduationCap, Laptop, MessageCircle } from "lucide-react";
 
 export default function ScrollCards() {
   const sectionRef = useRef(null);
-  const captionRef = useRef(null);
 
-  const { scrollY, scrollYProgress } = useScroll({
+  const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start center", "end center"], // Adjust offsets based on your needs
+    offset: ["start center", "end start"],
   });
 
-  // Transform values based on scroll progress
-  const height = useTransform(scrollY, [400, 700], ["0vh", "100vh"]);
-  const width = useTransform(scrollY, [250, 500], ["100vw", "100vw"]);
-  const opacity = useTransform(scrollY, [0, 1000], [1, 1]);
-  const backgroundTransformY = useTransform(scrollYProgress, [0, 1], [0, -50]);
-  const captionTransformY = useTransform(scrollYProgress, [0, 1], [0, -250]);
+  const backgroundOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.5]);
+  const contentOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    [0, 1, 1, 0]
+  );
+  const contentTranslateY = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    [100, 0, 0, -100]
+  );
+  const captionTranslateY = useTransform(
+    scrollYProgress,
+    [0, 0.2, 0.8, 1],
+    [50, 0, 0, -50]
+  );
+  const cardsScale = useTransform(scrollYProgress, [0.2, 0.4], [0.8, 1]);
 
-  const cardContent = [
-    { id: 1, title: "Learning Center Near Me", icon: "", description: "" },
-    { id: 2, title: "Chat with Tutor", icon: "", description: "" },
-    { id: 3, title: "Online Learning Platform", icon: "", description: "" },
-    { id: 3, title: "Online Learning Platform", icon: "", description: "" },
+  const learningOptions = [
+    {
+      id: 1,
+      title: "Learning Center Near Me",
+      icon: <BookOpen className="h-6 w-6" />,
+      description:
+        "Find local learning centers for personalized, face-to-face education and support.",
+    },
+    {
+      id: 2,
+      title: "Chat with Tutor",
+      icon: <MessageCircle className="h-6 w-6" />,
+      description:
+        "Connect with expert tutors online for real-time help and guidance on various subjects.",
+    },
+    {
+      id: 3,
+      title: "Self Studying Platform",
+      icon: <Laptop className="h-6 w-6" />,
+      description:
+        "Access a comprehensive online platform for self-paced learning across multiple disciplines.",
+    },
+    {
+      id: 4,
+      title: "IELTS Prep",
+      icon: <GraduationCap className="h-6 w-6" />,
+      description:
+        "Prepare for the IELTS exam with specialized resources, practice tests, and study materials.",
+    },
   ];
 
   return (
-    <div ref={sectionRef} className={cn("relative h-[100]")}>
+    <section ref={sectionRef} className={cn("relative min-h-screen")}>
       <motion.div
+        className="absolute inset-0 bg-cover bg-center"
         style={{
-          height,
-          width,
-          opacity,
+          backgroundImage: "url('/pexels-yankrukov-8199759.jpg')",
+          opacity: backgroundOpacity,
         }}
-        className={cn(
-          "flex flex-col items-center justify-center overflow-hidden relative h-full"
-        )}
-      >
-        {/* Sticky Background */}
-        <div
-          className="absolute top-0 left-0 w-full h-full bg-cover bg-center brightness-75"
-          style={{
-            backgroundImage: "url('/pexels-yankrukov-8199759.jpg')",
-          }}
-        />
+      />
+      <div className="absolute inset-0 bg-black bg-opacity-50" />
 
-        {/* Caption */}
+      <motion.div
+        className="relative z-10 min-h-screen flex flex-col items-center justify-center px-4 py-16"
+        style={{
+          opacity: contentOpacity,
+          y: contentTranslateY,
+        }}
+      >
         <motion.div
+          className="text-center mb-12"
           style={{
-            y: captionTransformY,
+            y: captionTranslateY,
           }}
-          className="flex flex-col gap-3 z-10"
         >
-          <h1 className="text-4xl text-zinc-50 font-bold flex gap-3 items-center">
-            <span className=" text-md">Learning with</span>
-            <span className="bg-zinc-50 p-1 text-zinc-900">EduCityLinker</span>
+          <h1 className="text-4xl md:text-5xl text-zinc-50 font-bold mb-4">
+            Learning with{" "}
+            <span className="bg-zinc-50 px-2 py-1 text-zinc-900">
+              EduCityLinker
+            </span>
           </h1>
-          <p className="text-zinc-50 text-md">
+          <p className="text-zinc-50 text-sm md:text-md max-w-2xl mx-auto">
             Learn English quickly with top-notch teachers in Bristol! Our
             courses help you improve your skills, make new friends, and have fun
             while learning.
           </p>
         </motion.div>
 
-        {/* Cards */}
-        <motion.div className="flex items-center gap-5"></motion.div>
+        <motion.div
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 w-full max-w-7xl"
+          style={{ scale: cardsScale }}
+        >
+          {learningOptions.map((option) => (
+            <Card
+              key={option.id}
+              className="bg-white/80 backdrop-blur-sm hover:bg-white/90 transition-all duration-300 hover:shadow-lg"
+            >
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2 text-lg">
+                  {option.icon}
+                  {option.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-sm text-gray-600">{option.description}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </motion.div>
       </motion.div>
-    </div>
+    </section>
   );
-}
-
-{
-  /* <AnimatePresence mode="wait">
-  <motion.div
-    key={cards[currentCard].id}
-    initial={{ opacity: 0, y: 50 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -50 }}
-    transition={{ duration: 0.5 }}
-    className="relative text-center w-96"
-  >
-    <Card className="text-2xl font-bold">
-      <CardTitle className="text-lg text-gray-700 mt-4">
-        {cards[currentCard].title}
-      </CardTitle>
-      <CardDescription>{cards[currentCard].content}</CardDescription>
-    </Card>
-  </motion.div>
-</AnimatePresence> */
 }

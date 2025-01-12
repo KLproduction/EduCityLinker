@@ -19,8 +19,8 @@ export default function Footer() {
               Ready to start your English learning journey?
             </h2>
             <p className="text-blue-200 mb-4">
-              Join LinguaLink today and connect with the best English learning
-              centers in your city.
+              Join EduCityLinker today and connect with the best English
+              learning centers in your city.
             </p>
             <Button
               size="lg"
@@ -57,7 +57,7 @@ export default function Footer() {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <p>&copy; 2023 LinguaLink. All rights reserved.</p>
+          <p>&copy; 2025 Shim-solution. All rights reserved.</p>
         </motion.div>
       </div>
     </footer>

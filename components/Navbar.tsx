@@ -34,7 +34,7 @@ const Navbar = async () => {
   const user = await currentUser();
 
   return (
-    <nav className="sticky z-[100] h-30 inset-x-0 top-0 w-full bg-white/75 backdrop-blur-lg transition-all">
+    <nav className="fixed z-[100] h-30 inset-x-0 top-0 w-full bg-white/75 backdrop-blur-lg transition-all">
       <ul className="flex items-center justify-around">
         {navList.map(({ label, path }) => (
           <li key={label}>

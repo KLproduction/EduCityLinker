@@ -10,6 +10,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  box-sizing: border-box;
 }
 
 @layer base {
