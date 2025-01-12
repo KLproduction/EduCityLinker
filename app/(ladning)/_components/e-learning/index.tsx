@@ -69,9 +69,9 @@ const ELearningPage = () => {
   });
 
   return (
-    <div className="h-full bg-blue-100">
-      <div className={cn(" flex flex-col items-center  gap-10")}>
-        <motion.div ref={sectionRef} className="my-[50vh]">
+    <div className="h-full bg-gradient-to-b from-zinc-100 to-zinc-50">
+      <div className={cn(" flex flex-col items-center")}>
+        <motion.div ref={sectionRef} className="mb-[50vh] mt-[20vh]">
           {cards.map((card, index) => {
             const targetScale = 1 - (cards.length - index) * 0.05;
             return (

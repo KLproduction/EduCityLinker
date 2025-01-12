@@ -47,10 +47,10 @@ export const LearningCard = ({
         <Card
           className={cn(
             "h-auto w-auto md:h-[400px] md:w-[800px] overflow-hidden border-none",
-            backgroundColor
+            "bg-black/75 backdrop-blur-md"
           )}
         >
-          <CardHeader className="text-3xl text-zinc-900 w-full text-center">
+          <CardHeader className="text-3xl text-zinc-50 w-full text-center">
             <CardTitle>{title}</CardTitle>
           </CardHeader>
 
@@ -60,20 +60,20 @@ export const LearningCard = ({
                 style={{ scale: imageScale }}
                 src={image}
                 alt={title}
-                className=" object-cover object-center hover:scale-105"
+                className=" object-cover object-center"
               />
             </motion.div>
             <div className="flex flex-col gap-3 justify-between flex-1 mt-4 md:mt-0">
               <div>
-                <p className="text-gray-700 mt-2">{description}</p>
-                <ul className="list-disc list-inside mt-4 text-gray-700">
+                <p className="text-gray-100 mt-2">{description}</p>
+                <ul className="list-disc list-inside mt-4 text-zinc-100">
                   {points.map((point, index) => (
                     <li key={index}>{point}</li>
                   ))}
                 </ul>
               </div>
               <div className=" w-full flex justify-end ">
-                <Button>Start Learning</Button>
+                <Button className="">Start Learning</Button>
               </div>
             </div>
           </CardContent>
