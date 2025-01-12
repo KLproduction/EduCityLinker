@@ -5,13 +5,8 @@ export const useCurrentUser = () => {
     queryKey: ["user"],
     queryFn: () => {
       const session = useSession();
-
-      if (session.data?.user.id) {
-        return {
-          status: 200,
-          data: session.data?.user,
-        };
-      }
+      return session.data?.user;
     },
   });
+  return data;
 };

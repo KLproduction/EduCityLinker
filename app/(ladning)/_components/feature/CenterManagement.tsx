@@ -26,7 +26,7 @@ export default function CenterManagement() {
               Powerful Management Tools
             </h3>
             <ul className="list-disc list-inside mb-6 text-blue-700">
-              <li>Manage your center's profile and services</li>
+              <li>{`Manage your center's profile and services`}</li>
               <li>Add and update tutor information</li>
               <li>Access analytics to track engagement and feedback</li>
             </ul>

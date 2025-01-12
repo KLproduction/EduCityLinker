@@ -13,6 +13,7 @@ import { useCurrentUser } from "@/hooks/use-current-user";
 
 export const UserBtn = () => {
   const user = useCurrentUser();
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
