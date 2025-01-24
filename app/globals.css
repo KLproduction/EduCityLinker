@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Showcard-Gothic";
+  src: url("/showg.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 body {
   color: rgb(var(--foreground-rgb));
   background: linear-gradient(
@@ -11,6 +18,10 @@ body {
     )
     rgb(var(--background-start-rgb));
   box-sizing: border-box;
+}
+
+h2 {
+  font-family: "Showcard-Gothic", sans-serif;
 }
 
 @layer base {
@@ -85,6 +96,6 @@ body {
 
 @layer components {
   .container {
-    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+    @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
   }
 }

@@ -8,6 +8,9 @@ import FeaturesPage from "./_components/feature";
 import ELearningPage from "./_components/e-learning";
 import Lenis from "lenis";
 import { useEffect } from "react";
+import LogoScroll from "./_components/logo-scroll/LogoScroll";
+import ParallaxBg from "./_components/parallex-bg/ParallaxBg";
+import { motion } from "framer-motion";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -29,11 +32,13 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div>
+    <div className="h-full">
+      <LogoScroll />
       <Hero />
       <FeaturesPage />
-      <ELearningPage />
-      <PartnershipSlider />
+      <ParallaxBg />
+      {/* <ELearningPage /> */}
+      {/* <PartnershipSlider /> */}
       {/* <MapPreview />
       {/* <Testimonials /> */}
       <Footer />

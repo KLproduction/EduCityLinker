@@ -5,9 +5,9 @@ import { motion } from "framer-motion";
 
 export default function Footer() {
   return (
-    <footer className="bg-blue-900 text-white py-12">
+    <footer className="bg-blue-900 py-12 text-white">
       <div className="container mx-auto px-4">
-        <div className="flex flex-col md:flex-row justify-between items-center">
+        <div className="flex flex-col items-center justify-between md:flex-row">
           <motion.div
             className="mb-8 md:mb-0"
             initial={{ opacity: 0, y: 20 }}
@@ -15,16 +15,16 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5 }}
           >
-            <h2 className="text-3xl font-bold mb-4">
+            <h3 className="mb-4 text-3xl font-bold">
               Ready to start your English learning journey?
-            </h2>
-            <p className="text-blue-200 mb-4">
+            </h3>
+            <p className="mb-4 text-blue-200">
               Join EduCityLinker today and connect with the best English
               learning centers in your city.
             </p>
             <Button
               size="lg"
-              className="bg-white text-blue-900 hover:bg-blue-100 font-bold py-3 px-6 rounded-full transition duration-300 ease-in-out transform hover:scale-105"
+              className="transform rounded-full bg-white px-6 py-3 font-bold text-blue-900 transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-100"
             >
               Sign Up Now
             </Button>
@@ -36,16 +36,16 @@ export default function Footer() {
             viewport={{ once: true }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <a href="#" className="hover:text-blue-300 transition duration-300">
+            <a href="#" className="transition duration-300 hover:text-blue-300">
               About Us
             </a>
-            <a href="#" className="hover:text-blue-300 transition duration-300">
+            <a href="#" className="transition duration-300 hover:text-blue-300">
               Contact
             </a>
-            <a href="#" className="hover:text-blue-300 transition duration-300">
+            <a href="#" className="transition duration-300 hover:text-blue-300">
               Privacy Policy
             </a>
-            <a href="#" className="hover:text-blue-300 transition duration-300">
+            <a href="#" className="transition duration-300 hover:text-blue-300">
               Terms of Service
             </a>
           </motion.div>

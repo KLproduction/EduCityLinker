@@ -40,7 +40,7 @@ const NewVerificationForm = () => {
   }, [onSubmit]);
 
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <CardWapper
         headerLabel="Confirming your verification"
         backBtnHref="/auth/login"

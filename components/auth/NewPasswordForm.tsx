@@ -51,7 +51,7 @@ export const NewPasswordForm = () => {
   };
 
   return (
-    <div className="flex h-full items-center justify-center">
+    <div className="flex min-h-screen items-center justify-center">
       <CardWapper
         headerLabel="Enter a new password"
         backBtnLabel="Back to login"
