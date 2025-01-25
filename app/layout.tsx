@@ -28,7 +28,7 @@ export default async function RootLayout({
         <ReactQueryProvider>
           <ReduxProvider>
             <body className={inter.className}>
-              <Navbar />
+              {/* <Navbar /> */}
               <Toaster />
               {children}
             </body>

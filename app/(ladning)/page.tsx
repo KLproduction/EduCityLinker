@@ -11,6 +11,7 @@ import { useEffect } from "react";
 import LogoScroll from "./_components/logo-scroll/LogoScroll";
 import ParallaxBg from "./_components/parallex-bg/ParallaxBg";
 import { motion } from "framer-motion";
+import DragAndDrop from "./_components/drag-and-drop-hero/DragAndDrop";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -35,6 +36,7 @@ export default function LandingPage() {
     <div className="h-full">
       <LogoScroll />
       <Hero />
+      <DragAndDrop className="z-[200] bg-zinc-800" />
       <FeaturesPage />
       <ParallaxBg />
       {/* <ELearningPage /> */}

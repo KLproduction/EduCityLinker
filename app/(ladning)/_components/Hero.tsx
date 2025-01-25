@@ -43,9 +43,9 @@ export default function Hero() {
         >
           <Button
             size="lg"
-            className="transform rounded-full bg-blue-600 px-6 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-700"
+            className="transform rounded-full bg-red-600 px-6 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-700"
           >
-            Get Started
+            Explore Now
           </Button>
         </motion.div>
       </div>
