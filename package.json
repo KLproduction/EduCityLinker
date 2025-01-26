@@ -80,6 +80,8 @@
   "devDependencies": {
     "@types/bcrypt": "^5.0.2",
     "@types/bcryptjs": "^2.4.6",
+    "@types/lodash": "^4.17.14",
+    "@types/matter-js": "^0.19.8",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
