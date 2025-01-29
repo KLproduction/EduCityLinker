@@ -12,6 +12,7 @@ import LogoScroll from "./_components/logo-scroll/LogoScroll";
 import ParallaxBg from "./_components/parallex-bg/ParallaxBg";
 import { motion } from "framer-motion";
 import DragAndDrop from "./_components/drag-and-drop-hero/DragAndDrop";
+import NewNav from "@/components/Nabar/newNav";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="h-full">
+    <div className="h-full w-full">
       <LogoScroll />
       <Hero />
       <DragAndDrop className="z-[200] bg-zinc-800" />

@@ -24,6 +24,13 @@ h2 {
   font-family: "Showcard-Gothic", sans-serif;
 }
 
+.leaflet-bottom,
+.leaflet-control,
+.leaflet-pane,
+.leaflet-top {
+  z-index: 0 !important;
+}
+
 @layer base {
   :root {
     --background: 0 0% 100%;

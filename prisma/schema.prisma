@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
 }
 
@@ -13,7 +13,7 @@ enum UserRole {
 }
 
 model User {
-  id                    String                 @id @default(cuid())
+  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
   name                  String?
   email                 String?                @unique
   emailVerified         DateTime?              @map("email_verified")
@@ -23,22 +23,28 @@ model User {
   accounts              Account[]
   isTwoFactorEnabled    Boolean                @default(false)
   twoFactorConfirmation TwoFactorConfirmation?
+  createdAt             DateTime               @default(now())
+  updatedAt             DateTime               @updatedAt
+  favoriteIds           String[]               @db.ObjectId
+  listing               Listing[]
+  reservations          Reservation[]
+  organization          Organization[]
 
   @@map("users")
 }
 
 model Account {
-  id                String  @id @default(cuid())
-  userId            String  @map("user_id")
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String  @db.ObjectId
   type              String
   provider          String
   providerAccountId String  @map("provider_account_id")
-  refresh_token     String? @db.Text
-  access_token      String? @db.Text
+  refresh_token     String?
+  access_token      String?
   expires_at        Int?
   token_type        String?
   scope             String?
-  id_token          String? @db.Text
+  id_token          String?
   session_state     String?
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
@@ -47,8 +53,58 @@ model Account {
   @@map("accounts")
 }
 
+model Organization {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String?
+  logo        String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  listings    Listing[] @relation("OrganizationListings")
+  userId      String    @db.ObjectId
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("organizations")
+}
+
+model Listing {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  title          String
+  description    String
+  imageSrc       String
+  createdAt      DateTime @default(now())
+  category       String
+  courseCount    Int
+  guestCount     Int
+  locationValue  String
+  price          Int
+  userId         String   @db.ObjectId
+  organizationId String?  @db.ObjectId
+
+  organization Organization? @relation("OrganizationListings", fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  reservations Reservation[]
+
+  @@map("listings")
+}
+
+model Reservation {
+  id         String   @id @default(auto()) @map("_id") @db.ObjectId
+  listingId  String   @db.ObjectId
+  userId     String   @db.ObjectId
+  startDate  DateTime
+  endDate    DateTime
+  totalPrice Int
+  createdAt  DateTime @default(now())
+
+  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("reservations")
+}
+
 model VerificationToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String
   token   String   @unique
   expires DateTime
@@ -57,7 +113,7 @@ model VerificationToken {
 }
 
 model PasswordResetToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String
   token   String   @unique
   expires DateTime
@@ -66,7 +122,7 @@ model PasswordResetToken {
 }
 
 model TwoFactorToken {
-  id      String   @id @default(cuid())
+  id      String   @id @default(auto()) @map("_id") @db.ObjectId
   email   String
   token   String   @unique
   expires DateTime
@@ -75,8 +131,8 @@ model TwoFactorToken {
 }
 
 model TwoFactorConfirmation {
-  id     String @id @default(cuid())
-  userId String
+  id     String @id @default(auto()) @map("_id") @db.ObjectId
+  userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId])

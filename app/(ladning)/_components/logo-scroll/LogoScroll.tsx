@@ -22,7 +22,7 @@ const LogoScroll = () => {
 
   const scale = useTransform(scrollYProgress, [0, 0.5], [7, 1]);
   const scaleMobile = useTransform(scrollYProgress, [0, 0.5], [0, 5]);
-  const height = useTransform(scrollYProgress, [0, 0.5], [500, 0]);
+  const height = useTransform(scrollYProgress, [0, 0.5], [800, 0]);
   const mobileHeight = useTransform(scrollYProgress, [0, 0.5], [400, 0]);
 
   const opacity0 = useTransform(scrollYProgress, [0.4, 0.8, 1], [0, 1, 0]);
@@ -43,7 +43,7 @@ const LogoScroll = () => {
             scale,
             height,
           }}
-          className="fixed left-0 top-0 z-[100] w-full p-3 text-5xl font-bold text-red-500"
+          className="fixed -top-2 left-24 z-[100] w-full text-5xl font-bold text-rose-500"
         >
           {/* SCREEN LOGO */}
           <motion.div
@@ -60,7 +60,7 @@ const LogoScroll = () => {
               transform: transformMobile,
               height: mobileHeight,
             }}
-            className="fixed left-0 top-0 p-3 text-5xl sm:hidden"
+            className="pointer-events-none fixed left-0 top-0 p-3 text-5xl sm:hidden"
           >
             <h2>AMIO</h2>
           </motion.div>

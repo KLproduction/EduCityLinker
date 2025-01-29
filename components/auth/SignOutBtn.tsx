@@ -10,7 +10,7 @@ const SignOutBtn = () => {
 
   return (
     <div className="flex items-center">
-      <Button onClick={() => onClickHandler()} variant={"ghost"} size={"lg"}>
+      <Button onClick={() => onClickHandler()} variant={"ghost"} size={"sm"}>
         <div className="mr-3 flex">Sign Out</div>
         <div className="text-lg">
           <CgLogOut />

@@ -1,16 +1,14 @@
 //this is our redux store
 "use client";
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import { TypedUseSelectorHook, useSelector } from "react-redux";
+import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import courseSlice, {
+  setCourseData,
+  resetCourseData,
+} from "./slice/create-courseSlice";
 
-const placeholderReducer = (state = {}, action: any) => {
-  switch (action.type) {
-    default:
-      return state;
-  }
-};
 const rootReducer = combineReducers({
-  placeholder: placeholderReducer,
+  createCourse: courseSlice,
 });
 export const store = configureStore({
   reducer: rootReducer,
@@ -26,3 +24,5 @@ export type AppDispatch = typeof store.dispatch;
 
 //this useAppSelector has type definitions added
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
+export const useAppDispatch = () => useDispatch<AppDispatch>();
+export { setCourseData, resetCourseData };

@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { LoginForm } from "./LoginForm";
 import { useRef } from "react";
+import { Button } from "../ui/button";
 
 interface LoginButtonProps {
   children: React.ReactNode;
@@ -25,16 +26,16 @@ export const LoginButtonProps = ({
     return (
       <Dialog>
         <DialogTrigger asChild={asChild}>{children}</DialogTrigger>
-        <DialogContent className=" p-0 w-auto bg-white bg-transparent border-none">
+        <DialogContent className="z-[9999] w-auto border-none bg-transparent bg-white p-0">
           <LoginForm />
         </DialogContent>
       </Dialog>
     );
   } else {
     return (
-      <span onClick={onClick} className=" cursor-pointer m-0 p-0">
+      <Button onClick={onClick} className="m-0 cursor-pointer p-0">
         {children}
-      </span>
+      </Button>
     );
   }
 };

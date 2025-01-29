@@ -1,4 +1,5 @@
 import { UserRole } from "@prisma/client";
+import { title } from "process";
 import * as z from "zod";
 
 export const SettingSchema = z
@@ -21,7 +22,7 @@ export const SettingSchema = z
     {
       message: "New password is required",
       path: ["newPassword"],
-    }
+    },
   )
 
   .refine(
@@ -35,7 +36,7 @@ export const SettingSchema = z
     {
       message: "Password is required",
       path: ["password"],
-    }
+    },
   );
 
 export const LoginSchema = z.object({
@@ -69,4 +70,22 @@ export const NewPasswordSchema = z.object({
   password: z.string().min(8, {
     message: "Minimum 8 Characters required",
   }),
+});
+
+const countrySelectValueSchema = z.object({
+  flag: z.string(),
+  label: z.string(),
+  latlng: z.tuple([z.number(), z.number()]), // ✅ Ensure latlng is [number, number]
+  region: z.string(),
+  value: z.string(),
+});
+
+export const createCourseSchema = z.object({
+  category: z.string().optional(),
+  location: countrySelectValueSchema.optional(),
+  guestCount: z.number().optional(),
+  courseCount: z.number().optional(),
+  price: z.number().optional(),
+  imageSrc: z.string().optional(),
+  title: z.string().optional(),
 });

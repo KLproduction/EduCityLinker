@@ -1,42 +1,110 @@
+"use client";
+
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuTrigger,
+  DropdownMenuItem,
+} from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+
 import Image from "next/image";
 import React from "react";
+import { LoginButtonProps } from "../loginBtn";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import SignOutBtn from "../SignOutBtn";
+import { signOutAction } from "@/actions/(auth)/signOut";
+import { CgLogOut } from "react-icons/cg";
 
 type Props = {
   image?: string;
-  name: string;
+  name?: string;
   className?: string;
   fallbackClassName?: string;
+  userId?: string;
 };
 
-const UserAvatar = ({ image, name, className, fallbackClassName }: Props) => {
-  if (image) {
-    return (
-      <div
-        className={cn(
-          className,
-          "relative overflow-hidden rounded-full size-10"
-        )}
-      >
-        <Image src={image} alt="image" fill className="object-cover " />
-      </div>
-    );
-  }
+const UserAvatar = ({
+  image,
+  name,
+  className,
+  fallbackClassName,
+  userId,
+}: Props) => {
+  if (!userId) return;
+
+  const onClickHandler = async () => {
+    await signOutAction();
+  };
 
   return (
-    <Avatar className={cn("", className)}>
-      <AvatarFallback
-        className={cn(
-          "flex items-center justify-center bg-zinc-500",
-          fallbackClassName
-        )}
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Avatar className={cn("cursor-pointer", className)}>
+          {image ? (
+            <div
+              className={cn("relative size-10 overflow-hidden rounded-full")}
+            >
+              <Image src={image} alt="image" fill className="object-cover" />
+            </div>
+          ) : (
+            <AvatarFallback
+              className={cn(
+                "flex items-center justify-center bg-zinc-500",
+                fallbackClassName,
+              )}
+            >
+              {name ? name[0].toUpperCase() : "U"}
+            </AvatarFallback>
+          )}
+        </Avatar>
+      </DropdownMenuTrigger>
+
+      <DropdownMenuContent
+        sideOffset={12}
+        align="center"
+        className="z-[99999] bg-zinc-50"
       >
-        <p className="text-sm font-black text-zinc-50">
-          {name[0].toUpperCase()}
-        </p>
-      </AvatarFallback>
-    </Avatar>
+        <DropdownMenuItem
+          onClick={() => console.log("clicked")}
+          className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
+        >
+          My Trip
+          <div className="mt-2 h-0.5 w-full bg-zinc-200" />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => console.log("clicked")}
+          className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
+        >
+          My Favorites
+          <div className="mt-2 h-0.5 w-full bg-zinc-200" />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => console.log("clicked")}
+          className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
+        >
+          My Reservations
+          <div className="mt-2 h-0.5 w-full bg-zinc-200" />
+        </DropdownMenuItem>
+        <DropdownMenuItem
+          onClick={() => console.log("clicked")}
+          className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
+        >
+          My Courses
+          <div className="mt-2 h-0.5 w-full bg-zinc-200" />
+        </DropdownMenuItem>
+
+        <DropdownMenuItem
+          className="flex w-full items-center justify-start gap-3 py-2 text-sm text-zinc-700"
+          onClick={() => onClickHandler()}
+        >
+          Sign Out
+          <CgLogOut />
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
   );
 };
 
