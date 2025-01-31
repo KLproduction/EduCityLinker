@@ -9,8 +9,10 @@ export type CourseState = z.infer<typeof createCourseSchema>;
 const initialState: CourseState = {
   category: "",
   location: undefined,
-  guestCount: 1,
-  courseCount: 1,
+  courseLevels: "",
+  ageGroups: "",
+  maxStudents: 1,
+  durationWeeks: 1,
   price: 1,
   imageSrc: "",
   title: "",

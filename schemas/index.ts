@@ -1,3 +1,4 @@
+import { ageGroups, courseLevels } from "@/data/data";
 import { UserRole } from "@prisma/client";
 import { title } from "process";
 import * as z from "zod";
@@ -79,12 +80,21 @@ const countrySelectValueSchema = z.object({
   region: z.string(),
   value: z.string(),
 });
-
+const courseLevelLabels = courseLevels.map((level) => level.label) as [
+  string,
+  ...string[],
+];
+const ageGroupLabels = ageGroups.map((level) => level.label) as [
+  string,
+  ...string[],
+];
 export const createCourseSchema = z.object({
   category: z.string().optional(),
   location: countrySelectValueSchema.optional(),
-  guestCount: z.number().optional(),
-  courseCount: z.number().optional(),
+  courseLevels: z.enum(courseLevelLabels),
+  ageGroups: z.enum(ageGroupLabels),
+  maxStudents: z.number().optional(),
+  durationWeeks: z.number().optional(),
   price: z.number().optional(),
   imageSrc: z.string().optional(),
   title: z.string().optional(),

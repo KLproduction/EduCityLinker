@@ -3,13 +3,13 @@
 import { cn } from "@/lib/utils";
 import { useEffect } from "react";
 import React from "react";
-import { categories } from "../Nabar/Categories";
 import { useCreateCourse } from "@/hooks/create-course";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import {
   setCourseData,
   resetCourseData,
 } from "@/redux/slice/create-courseSlice";
+import { categories } from "@/data/data";
 
 const CategoryInput = () => {
   const courseData = useAppSelector((state) => state.createCourse);

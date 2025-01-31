@@ -27,7 +27,7 @@ model User {
   updatedAt             DateTime               @updatedAt
   favoriteIds           String[]               @db.ObjectId
   listing               Listing[]
-  reservations          Reservation[]
+  enrollments           Enrollment[]
   organization          Organization[]
 
   @@map("users")
@@ -74,8 +74,10 @@ model Listing {
   imageSrc       String
   createdAt      DateTime @default(now())
   category       String
-  courseCount    Int
-  guestCount     Int
+  courseLevel    String
+  ageGroup       String
+  durationWeeks  Int
+  maxStudents    Int
   locationValue  String
   price          Int
   userId         String   @db.ObjectId
@@ -83,12 +85,12 @@ model Listing {
 
   organization Organization? @relation("OrganizationListings", fields: [organizationId], references: [id], onDelete: Cascade)
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  reservations Reservation[]
+  enrollments  Enrollment[]
 
   @@map("listings")
 }
 
-model Reservation {
+model Enrollment {
   id         String   @id @default(auto()) @map("_id") @db.ObjectId
   listingId  String   @db.ObjectId
   userId     String   @db.ObjectId

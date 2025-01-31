@@ -2,6 +2,10 @@ import { createCourseSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import countries from "world-countries";
+import { useMutation } from "@tanstack/react-query";
+import { uploadImage } from "@/actions/uploadImage";
+import { toast } from "sonner";
+import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 
 export const useCreateCourse = () => {
   const {
@@ -15,9 +19,9 @@ export const useCreateCourse = () => {
   } = useForm<z.infer<typeof createCourseSchema>>({
     defaultValues: {
       category: "",
-      location: "",
-      guestCount: 1,
-      courseCount: 1,
+      location: undefined,
+      maxStudents: 1,
+      durationWeeks: 1,
       price: 1,
       imageSrc: "",
       title: "",
@@ -52,5 +56,27 @@ export const useSelectCountry = () => {
   return {
     getAll,
     getByValue,
+  };
+};
+
+export const useUploadImage = () => {
+  const dispatch = useAppDispatch();
+  const courseData = useAppSelector((state) => state.createCourse);
+  const { mutate: uploadImageMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.cdnUrl;
+    },
+    onError: (error) => toast.error(error.message),
+    onSuccess: (data) => {
+      dispatch(setCourseData({ imageSrc: data }));
+      console.log(courseData);
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadImageMutate,
+    isPending,
   };
 };
