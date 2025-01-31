@@ -23,23 +23,20 @@ const CategoryInput = () => {
         .map((item) => {
           const selected = courseData.category === item.label;
           return (
-            <div>
-              <div
-                className={cn(
-                  "flex cursor-pointer flex-col gap-3 rounded-xl border-2 p-4 transition hover:border-rose-800",
-                  selected ? "border-rose-800" : "border-zinc-400",
-                )}
-                onClick={() =>
-                  dispatch(setCourseData({ category: item.label! }))
-                }
-              >
-                <input type="radio" value={item.label!} className="hidden" />
-                {item.icon &&
-                  React.createElement(item.icon, {
-                    className: "h-6 w-6 text-gray-700",
-                  })}
-                <div className="text-xs font-medium">{item.label}</div>
-              </div>
+            <div
+              key={item.label}
+              className={cn(
+                "flex cursor-pointer flex-col gap-3 rounded-xl border-2 p-4 transition hover:border-rose-800",
+                selected ? "border-rose-800" : "border-zinc-400",
+              )}
+              onClick={() => dispatch(setCourseData({ category: item.label! }))}
+            >
+              <input type="radio" value={item.label!} className="hidden" />
+              {item.icon &&
+                React.createElement(item.icon, {
+                  className: "h-6 w-6 text-gray-700",
+                })}
+              <div className="text-xs font-medium">{item.label}</div>
             </div>
           );
         })}
