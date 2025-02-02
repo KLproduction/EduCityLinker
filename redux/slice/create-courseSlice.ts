@@ -16,6 +16,7 @@ const initialState: CourseState = {
   price: 1,
   imageSrc: "",
   title: "",
+  description: "",
 };
 
 // ✅ Use CourseState for TypeScript safety

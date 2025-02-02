@@ -9,7 +9,7 @@ import { FieldValues, useForm } from "react-hook-form";
 import { createCourseSchema } from "@/schemas";
 import { z } from "zod";
 import CountrySelect from "../inputs/CountrySelect";
-import { useAppSelector } from "@/redux/store";
+import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import CourseLevelInput from "../inputs/CourseLevel";
@@ -18,6 +18,8 @@ import ImageUpload from "../inputs/ImageUpload";
 import { currentUser } from "@/lib/auth";
 import { get } from "lodash";
 import { useCurrentUser } from "@/hooks/use-current-user";
+import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
 
 enum STEPS {
   CATEGORY = 0,
@@ -34,7 +36,9 @@ export const CreateCourseModal = () => {
   const { isOpen, setIsOpen } = useCreateModal();
   const [step, setStep] = useState(STEPS.CATEGORY);
   const [disable, setDisable] = useState(false);
+
   const location = useAppSelector((state) => state.createCourse.location);
+  const dispatch = useAppDispatch();
   const Map = useMemo(
     () => dynamic(() => import("../Map"), { ssr: false }),
     [location],
@@ -60,6 +64,41 @@ export const CreateCourseModal = () => {
     }
     return "Back";
   }, [step]);
+
+  let isDisabled = false;
+
+  if (step === STEPS.CATEGORY) {
+    isDisabled = !courseData.category;
+  }
+
+  if (step === STEPS.LOCATION) {
+    isDisabled = !courseData.location; // Disable if location is empty
+  }
+
+  if (step === STEPS.INFO) {
+    isDisabled =
+      !courseData.courseLevels ||
+      !courseData.ageGroups ||
+      !courseData.maxStudents ||
+      courseData.maxStudents < 1 ||
+      !courseData.durationWeeks ||
+      courseData.durationWeeks < 1;
+  }
+
+  if (step === STEPS.IMAGES) {
+    isDisabled = !courseData.imageSrc; // Disable if no image is uploaded
+  }
+
+  if (step === STEPS.DESCRIPTION) {
+    isDisabled =
+      !courseData.title ||
+      !courseData.description ||
+      courseData.description.length < 1;
+  }
+
+  if (step === STEPS.PRICE) {
+    isDisabled = !courseData.price || courseData.price < 1;
+  }
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -132,7 +171,34 @@ export const CreateCourseModal = () => {
       </div>
     );
   }
- 
+
+  if (step === STEPS.DESCRIPTION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Course description</h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          How would you describe your course?
+        </p>
+        <Input
+          onChange={(e) => dispatch(setCourseData({ title: e.target.value }))}
+          value={courseData.title}
+          className="border-zinc-500 bg-zinc-50"
+          placeholder="Course Name"
+        />
+
+        <Textarea
+          onChange={(e) =>
+            dispatch(setCourseData({ description: e.target.value }))
+          }
+          className="border-zinc-500 bg-zinc-50"
+          rows={6}
+          value={courseData.description}
+          placeholder="Course description"
+        />
+      </div>
+    );
+  }
+
   return (
     <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>
       <Modal
@@ -142,6 +208,7 @@ export const CreateCourseModal = () => {
         secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
         body={bodyContent}
         onSubmit={onNext}
+        disabled={isDisabled}
       />
     </ResponsiveModel>
   );

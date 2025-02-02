@@ -56,7 +56,7 @@ const Modal = ({
               <Button
                 className="flex w-full items-center justify-center gap-3"
                 onClick={handleSecondaryAction}
-                disabled={!secondaryAction || disabled}
+                disabled={!secondaryAction}
                 variant={secondaryAction ? "secondary" : "ghost"}
               >
                 {secondaryActionLabel}
