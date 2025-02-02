@@ -9,7 +9,7 @@ export const autoComplete = async (input: string) => {
     const response = await client.placeAutocomplete({
       params: {
         input,
-        key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API!,
+        key: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
       },
     });
 
