@@ -1,66 +1,80 @@
 "use client";
 
-import { useGoogleLocation } from "@/hooks/create-course";
-import { Loader } from "@googlemaps/js-api-loader";
-import { useRef, useEffect, useState } from "react";
+import { Library, Loader } from "@googlemaps/js-api-loader";
+import { useJsApiLoader } from "@react-google-maps/api";
+import { useRef, useEffect } from "react";
+
+type Props = {
+  location: {
+    coordinates: [number, number];
+  };
+};
 
 const containerStyle = {
   width: "100%",
-  height: "100%",
+  height: "500px", // Ensure the map container has height
 };
 
-const MyGoogleMap = () => {
-  const [center, setCenter] = useState<string>("");
+const MyGoogleMap = ({ location }: Props) => {
   const mapRef = useRef<HTMLDivElement | null>(null);
 
-  const { location } = useGoogleLocation();
+  const libs: Library[] = ["places", "maps", "marker"];
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+    libraries: libs,
+  });
 
   useEffect(() => {
-    if (location) {
-      setCenter(location.place_id);
-      console.log("MapLocation", location);
-    }
-  }, [location]);
-
-  useEffect(() => {
-    const initMap = async () => {
+    if (isLoaded && mapRef.current) {
       const loader = new Loader({
         apiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
         version: "weekly",
       });
 
-      const { Map } = await loader.importLibrary("maps");
+      const initMap = async () => {
+        const { Map } = await loader.importLibrary("maps");
+        const { Marker } = (await loader.importLibrary(
+          "marker",
+        )) as google.maps.MarkerLibrary;
 
-      const position = {
-        lat: 43.642693,
-        lng: -79.3871189,
+        // Map options
+        const mapOptions: google.maps.MapOptions = {
+          center: {
+            lat: location.coordinates[0],
+            lng: location.coordinates[1],
+          },
+          zoom: 15,
+          mapId: "MAP_ID", // Replace "MAP_ID" with your actual mapId or remove it if unused
+        };
+
+        // Initialize the map
+        const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
+
+        // Add a marker
+        new Marker({
+          map: map,
+          position: {
+            lat: location.coordinates[0],
+            lng: location.coordinates[1],
+          },
+        });
       };
 
-      //init marker
-      const { Marker } = (await loader.importLibrary(
-        "marker",
-      )) as google.maps.MarkerLibrary;
+      initMap();
+    }
+  }, [isLoaded, location]);
 
-      //map options
-      const mapOptions: google.maps.MapOptions = {
-        center: position,
-        zoom: 15,
-        mapId: "MAP_ID",
-      };
-
-      //setup map
-      const map = new Map(mapRef.current as HTMLDivElement, mapOptions);
-
-      //setup marker
-      const marker = new Marker({
-        map: map,
-        position: position,
-      });
-    };
-    initMap();
-  }, []);
-
-  return <div ref={mapRef} style={{ height: "500px" }} />;
+  return (
+    <>
+      {isLoaded ? (
+        <div ref={mapRef} style={containerStyle} />
+      ) : (
+        <p>Loading...</p>
+      )}
+    </>
+  );
 };
 
 export default MyGoogleMap;

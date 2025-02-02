@@ -1,6 +1,7 @@
 "use client";
 import MyGoogleMap from "@/components/GoogleMap";
 import GoogleAddressInput from "@/components/inputs/GoogleAddressInput";
+import TestGoogleMap from "@/components/TestGoogleMap";
 import { autoComplete } from "@/lib/google";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { Loader } from "@googlemaps/js-api-loader";
@@ -13,10 +14,12 @@ const ExplorePage = () => {
   return (
     <div className="mt-24 flex min-h-screen w-full flex-col items-center justify-center">
       <h1 className="h-full w-full text-2xl font-bold text-red-500">EXPLORE</h1>
-      <GoogleAddressInput />
+      {/* <GoogleAddressInput /> */}
 
-      <div className="h-full w-1/2 border border-red-500">
-        <MyGoogleMap />
+      <div className="h-full w-1/2">
+        {/* <MyGoogleMap location={{ coordinates: [43.642693, -79.3871189] }} /> */}
+        <TestGoogleMap />
+        {/* <MyGoogleMap location={{ coordinates: [43.642693, -79.3871189] }} /> */}
       </div>
     </div>
   );
