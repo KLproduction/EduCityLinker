@@ -1,6 +1,6 @@
 "use client";
 
-import { autoComplete } from "@/lib/google";
+import { autoComplete, getGeometry } from "@/lib/google";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { useEffect, useState } from "react";
 import {
@@ -12,22 +12,57 @@ import {
   CommandList,
 } from "../ui/command";
 import { useGoogleLocation } from "@/hooks/create-course";
+import { googleLat } from "../GoogleMapSimple";
+import { v4 } from "uuid";
 
 type Props = {};
 
 const GoogleAddressInput = (props: Props) => {
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
   const [input, setInput] = useState("");
-  const { setLocation } = useGoogleLocation();
+  const { location, setLocation, setCenter } = useGoogleLocation();
+
+  const generateSessionToken = (): string => {
+    return v4();
+  };
+
+  const [sessionToken, setSessionToken] = useState<string>(
+    generateSessionToken(),
+  );
 
   useEffect(() => {
     const fetchPredictions = async () => {
-      const data = await autoComplete(input);
+      const data = await autoComplete(input, sessionToken);
 
-      setPredictions(data ?? []);
+      setPredictions(data?.predictions ?? []);
     };
-    fetchPredictions();
-  }, [input]);
+    if (input.length >= 3) {
+      fetchPredictions();
+    }
+  }, [input, sessionToken]);
+
+  useEffect(() => {
+    const fetchGeometry = async (placeId: string) => {
+      const data = await getGeometry(placeId);
+      console.log("g", data);
+
+      if (data) {
+        setCenter({
+          location: {
+            coordinates: [data.lat, data.lng],
+          },
+        } as googleLat);
+      }
+    };
+    fetchGeometry(location?.place_id ?? "");
+  }, [location]);
+
+  const handleSelectLocation = (prediction: PlaceAutocompleteResult) => {
+    setLocation(prediction);
+    setInput(prediction.description);
+
+    setSessionToken(generateSessionToken());
+  };
 
   return (
     <div className="flex flex-col items-center justify-center gap-16 p-8">
@@ -44,9 +79,7 @@ const GoogleAddressInput = (props: Props) => {
             {predictions.map((prediction) => (
               <CommandItem
                 key={prediction.place_id}
-                onSelect={() => {
-                  setLocation(prediction);
-                }}
+                onSelect={() => handleSelectLocation(prediction)}
               >
                 {prediction.description}
               </CommandItem>

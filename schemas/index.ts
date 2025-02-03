@@ -73,13 +73,6 @@ export const NewPasswordSchema = z.object({
   }),
 });
 
-const countrySelectValueSchema = z.object({
-  flag: z.string(),
-  label: z.string(),
-  latlng: z.tuple([z.number(), z.number()]), // ✅ Ensure latlng is [number, number]
-  region: z.string(),
-  value: z.string(),
-});
 const courseLevelLabels = courseLevels.map((level) => level.label) as [
   string,
   ...string[],
@@ -90,7 +83,9 @@ const ageGroupLabels = ageGroups.map((level) => level.label) as [
 ];
 export const createCourseSchema = z.object({
   category: z.string(),
-  location: countrySelectValueSchema.optional(),
+  location: z.string().min(1),
+  lat: z.number().min(1),
+  lng: z.number().min(1),
   courseLevels: z.enum(courseLevelLabels),
   ageGroups: z.enum(ageGroupLabels),
   maxStudents: z.number().min(1),

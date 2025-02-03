@@ -8,7 +8,9 @@ export type CourseState = z.infer<typeof createCourseSchema>;
 // ✅ Ensure correct type for initialState
 const initialState: CourseState = {
   category: "",
-  location: undefined,
+  location: "",
+  lat: 51.4545,
+  lng: -2.5879,
   courseLevels: "",
   ageGroups: "",
   maxStudents: 1,

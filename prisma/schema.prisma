@@ -79,6 +79,8 @@ model Listing {
   durationWeeks  Int
   maxStudents    Int
   locationValue  String
+  lat            Float
+  lng            Float
   price          Int
   userId         String   @db.ObjectId
   organizationId String?  @db.ObjectId

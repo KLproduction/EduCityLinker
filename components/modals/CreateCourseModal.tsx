@@ -20,6 +20,9 @@ import { get } from "lodash";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
+import MyGoogleMap from "../MyGoogleMap";
+import GoogleAddressInput from "../inputs/GoogleAddressInput";
+import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
 
 enum STEPS {
   CATEGORY = 0,
@@ -116,8 +119,8 @@ export const CreateCourseModal = () => {
         <p className="text-sm font-medium text-zinc-600">
           Help student find you
         </p>
-        <CountrySelect />
-        <Map center={location?.latlng} />
+
+        <GoogleMapWithAddressInput />
       </div>
     );
   }

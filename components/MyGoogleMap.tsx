@@ -8,7 +8,7 @@ import { Label } from "./ui/label";
 
 const LIBRARY: Library[] = ["places", "marker"]; // Only include needed libraries
 
-const TestGoogleMap = () => {
+const MyGoogleMap = () => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
   const [autoComplete, setAutoComplete] =
     useState<google.maps.places.Autocomplete | null>(null);
@@ -91,13 +91,14 @@ const TestGoogleMap = () => {
 
   return (
     <div className="flex flex-col space-y-4">
-      <Input ref={placeAutoCompleteRef} />
+      <Input ref={placeAutoCompleteRef} className="z-[99999] h-full w-full" />
+
       <Label>{place}</Label>
 
       {isLoaded ? (
         <div
           className="mt-12"
-          style={{ width: "100%", height: "400px" }}
+          style={{ width: "100%", height: "600px" }}
           ref={mapRef}
         ></div>
       ) : (
@@ -107,4 +108,4 @@ const TestGoogleMap = () => {
   );
 };
 
-export default TestGoogleMap;
+export default MyGoogleMap;

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 import { useState } from "react";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
+import { googleLat } from "@/components/GoogleMapSimple";
 
 export const useCreateCourse = () => {
   const {
@@ -88,8 +89,12 @@ export const useGoogleLocation = () => {
     null,
   );
 
+  const [center, setCenter] = useState<googleLat | null>(null);
+
   return {
     location,
     setLocation,
+    center,
+    setCenter,
   };
 };
