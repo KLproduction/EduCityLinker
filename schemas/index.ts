@@ -84,8 +84,8 @@ const ageGroupLabels = ageGroups.map((level) => level.label) as [
 export const createCourseSchema = z.object({
   category: z.string(),
   location: z.string().min(1),
-  lat: z.number().min(1),
-  lng: z.number().min(1),
+  lat: z.number().optional(),
+  lng: z.number().optional(),
   courseLevels: z.enum(courseLevelLabels),
   ageGroups: z.enum(ageGroupLabels),
   maxStudents: z.number().min(1),

@@ -1,9 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useEffect } from "react";
 import React from "react";
-import { useCreateCourse } from "@/hooks/create-course";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import {
   setCourseData,

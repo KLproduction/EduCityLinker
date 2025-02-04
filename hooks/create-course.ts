@@ -5,40 +5,52 @@ import countries from "world-countries";
 import { useMutation } from "@tanstack/react-query";
 import { uploadImage } from "@/actions/uploadImage";
 import { toast } from "sonner";
-import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
+import {
+  resetCourseData,
+  setCourseData,
+  useAppDispatch,
+  useAppSelector,
+} from "@/redux/store";
 import { useState } from "react";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { googleLat } from "@/components/GoogleMapSimple";
+import { createCourseAction } from "@/actions/createCourse";
+import { useCreateModal } from "./modal";
+import { STEPS } from "@/components/modals/CreateCourseModal";
 
-export const useCreateCourse = () => {
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    formState: { errors },
-    getValues,
-    reset,
-  } = useForm<z.infer<typeof createCourseSchema>>({
-    defaultValues: {
-      category: "",
-      location: undefined,
-      maxStudents: 1,
-      durationWeeks: 1,
-      price: 1,
-      imageSrc: "",
-      title: "",
-    },
-  });
+export const useCreateCourse = (
+  data: z.infer<typeof createCourseSchema>,
+  setStep: (step: STEPS) => void,
+) => {
+  const dispatch = useAppDispatch();
+  const { close } = useCreateModal();
+  const { mutate: createCourseMutate, isPending: isCreatingCourse } =
+    useMutation({
+      mutationFn: async () => {
+        const result = await createCourseAction(data);
+
+        if (result?.status === 200) {
+          return result;
+        } else {
+          throw new Error(result?.message || "Failed to create course");
+        }
+      },
+      onError: (error) => {
+        console.error("Mutation Error:", error);
+        toast.error(error.message || "Failed to create course");
+      },
+      onSuccess: (data) => {
+        console.log("Mutation Success Data:", data);
+        toast.success("Course created successfully!");
+        dispatch(resetCourseData());
+        setStep(STEPS.CATEGORY);
+        close();
+      },
+    });
 
   return {
-    register,
-    handleSubmit,
-    setValue,
-    watch,
-    errors,
-    reset,
-    getValues,
+    createCourseMutate,
+    isCreatingCourse,
   };
 };
 

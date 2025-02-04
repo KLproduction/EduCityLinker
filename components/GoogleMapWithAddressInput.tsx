@@ -29,10 +29,16 @@ const GoogleMapWithAddressInput = () => {
     lng: courseLng,
   } = useAppSelector((state) => state.createCourse);
 
-  const { location, setLocation, center, setCenter } = useGoogleLocation();
+  console.log(courseLocation, courseLat, courseLng);
+
+  const [location, setLocation] = useState<PlaceAutocompleteResult | null>(
+    null,
+  );
+
+  const [center, setCenter] = useState<googleLat | null>(null);
 
   // Local state for autocomplete input and predictions.
-  const [input, setInput] = useState("");
+  const [input, setInput] = useState(courseLocation ?? "");
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
 
   // Refs to hold the map container, map instance, and marker.
@@ -68,33 +74,13 @@ const GoogleMapWithAddressInput = () => {
     }
   }, [input, sessionToken]);
 
-  // set geometry to update the center.
-  useEffect(() => {
-    const fetchGeometry = async (placeId: string) => {
-      const data = await getGeometry(placeId);
-      if (data) {
-        setCenter({
-          location: {
-            coordinates: [data.lat, data.lng],
-          },
-        } as googleLat);
-      }
-    };
-
-    if (location?.place_id) {
-      fetchGeometry(location.place_id);
-    }
-  }, [location, setCenter]);
-
-  // --- Map Initialization and Updates ---
-
   // Initialize the map once when the API is loaded.
   useEffect(() => {
     if (isLoaded && mapRef.current && !mapInstanceRef.current) {
       // Use the provided center or fallback to default coordinates.
       const initialCenter = {
-        lat: center?.location?.coordinates[0] ?? 51.4545,
-        lng: center?.location?.coordinates[1] ?? -2.5879,
+        lat: center?.location?.coordinates[0] ?? courseLat ?? 51.4545,
+        lng: center?.location?.coordinates[1] ?? courseLng ?? -2.5879,
       };
 
       // Create the map.
@@ -132,19 +118,42 @@ const GoogleMapWithAddressInput = () => {
     }
   }, [center]);
 
-  const handleSelectLocation = (prediction: PlaceAutocompleteResult) => {
-    setLocation(prediction);
-    setInput(prediction.description);
+  const handleSelectLocation = async (
+    prediction: PlaceAutocompleteResult,
+    placeId: string,
+  ) => {
+    const data = await getGeometry(placeId);
 
-    dispatch(
-      setCourseData({
-        location: prediction.description,
-        lat: center?.location?.coordinates[0],
-        lng: center?.location?.coordinates[1],
-      }),
-    );
+    if (data) {
+      const newCenter = {
+        lat: data.lat,
+        lng: data.lng,
+      };
 
-    setSessionToken(generateSessionToken());
+      // ✅ Update state first
+      setCenter({
+        location: {
+          coordinates: [newCenter.lat, newCenter.lng],
+        },
+      } as googleLat);
+
+      // ✅ Wait for state update using a timeout to ensure React updates state before dispatch
+      setTimeout(() => {
+        dispatch(
+          setCourseData({
+            location: prediction.description,
+            lat: newCenter.lat, // ✅ Now using directly fetched lat/lng
+            lng: newCenter.lng,
+          }),
+        );
+      }, 100); // Delay dispatch slightly to allow state update
+
+      setLocation(prediction);
+      setInput(prediction.description);
+      setSessionToken(generateSessionToken());
+    } else {
+      console.error("Failed to fetch location coordinates.");
+    }
   };
 
   return (
@@ -163,7 +172,9 @@ const GoogleMapWithAddressInput = () => {
             {predictions.map((prediction) => (
               <CommandItem
                 key={prediction.place_id}
-                onSelect={() => handleSelectLocation(prediction)}
+                onSelect={() =>
+                  handleSelectLocation(prediction, prediction.place_id)
+                }
               >
                 {prediction.description}
               </CommandItem>

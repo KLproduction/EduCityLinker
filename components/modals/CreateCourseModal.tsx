@@ -5,26 +5,19 @@ import ResponsiveModel from "../globel/responsive-model";
 import Modal from "./Modal";
 import { useCreateModal } from "@/hooks/modal";
 import CategoryInput from "../inputs/CategoryInput";
-import { FieldValues, useForm } from "react-hook-form";
-import { createCourseSchema } from "@/schemas";
-import { z } from "zod";
-import CountrySelect from "../inputs/CountrySelect";
 import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
-import dynamic from "next/dynamic";
 import Counter from "../inputs/Counter";
 import CourseLevelInput from "../inputs/CourseLevel";
 import AgeGroupInput from "../inputs/AgeGroups";
 import ImageUpload from "../inputs/ImageUpload";
 import { currentUser } from "@/lib/auth";
-import { get } from "lodash";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
-import MyGoogleMap from "../MyGoogleMap";
-import GoogleAddressInput from "../inputs/GoogleAddressInput";
 import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
+import { useCreateCourse } from "@/hooks/create-course";
 
-enum STEPS {
+export enum STEPS {
   CATEGORY = 0,
   LOCATION = 1,
   INFO = 2,
@@ -38,14 +31,8 @@ export const CreateCourseModal = () => {
   const courseData = useAppSelector((state) => state.createCourse);
   const { isOpen, setIsOpen } = useCreateModal();
   const [step, setStep] = useState(STEPS.CATEGORY);
-  const [disable, setDisable] = useState(false);
 
-  const location = useAppSelector((state) => state.createCourse.location);
   const dispatch = useAppDispatch();
-  const Map = useMemo(
-    () => dynamic(() => import("../Map"), { ssr: false }),
-    [location],
-  );
 
   const onBack = () => {
     setStep((perv) => perv - 1);
@@ -152,12 +139,14 @@ export const CreateCourseModal = () => {
           title="Number of student"
           subtitle="How many students can join?"
           type="maxStudents"
+          counterType="students"
         />
 
         <Counter
           title="Duration of the course"
           subtitle="How many days of the course?"
           type="durationWeeks"
+          counterType="days"
         />
       </div>
     );
@@ -202,6 +191,29 @@ export const CreateCourseModal = () => {
     );
   }
 
+  if (step === STEPS.PRICE) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <div>
+          <h1 className="font-bold">Course Pricing</h1>
+          <p className="mb-3 text-sm font-medium text-zinc-600">
+            How much do you charge for your course?
+          </p>
+        </div>
+
+        <Counter type="price" />
+      </div>
+    );
+  }
+  const { createCourseMutate, isCreatingCourse } = useCreateCourse(
+    courseData,
+    setStep,
+  );
+  const onSubmit = () => {
+    if (step !== STEPS.PRICE) return onNext();
+    createCourseMutate();
+  };
+
   return (
     <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>
       <Modal
@@ -210,8 +222,8 @@ export const CreateCourseModal = () => {
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={step === STEPS.CATEGORY ? undefined : onBack}
         body={bodyContent}
-        onSubmit={onNext}
-        disabled={isDisabled}
+        onSubmit={onSubmit}
+        disabled={isDisabled || isCreatingCourse}
       />
     </ResponsiveModel>
   );

@@ -1,4 +1,4 @@
-import { useCreateCourse, useSelectCountry } from "@/hooks/create-course";
+import { useSelectCountry } from "@/hooks/create-course";
 import { useAppDispatch, useAppSelector, setCourseData } from "@/redux/store";
 import { divide } from "lodash";
 import React, { useEffect } from "react";
@@ -13,7 +13,6 @@ export type CountrySelectValue = {
 };
 
 const CountrySelect = () => {
-  const { register, setValue, watch, getValues, errors } = useCreateCourse();
   const { getAll, getByValue } = useSelectCountry();
 
   const courseData = useAppSelector((state) => state.createCourse);
@@ -23,7 +22,6 @@ const CountrySelect = () => {
   return (
     <div className="flex flex-col">
       <Select
-        {...register}
         value={courseData.location || ""}
         placeholder="Anywhere"
         isClearable
@@ -59,7 +57,6 @@ const CountrySelect = () => {
           },
         })}
       />
-      {errors && errors.location && <p>{errors.location.message}</p>}
     </div>
   );
 };

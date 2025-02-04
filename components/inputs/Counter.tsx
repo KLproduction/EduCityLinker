@@ -7,18 +7,18 @@ import {
 import { Button } from "../ui/button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Input } from "../ui/input";
+import { cn } from "@/lib/utils";
 
 type Props = {
-  title: string;
-  subtitle: string;
+  title?: string;
+  subtitle?: string;
+  counterType?: string;
   type: "maxStudents" | "durationWeeks" | "price";
 };
 
-const Counter = ({ title, subtitle, type }: Props) => {
+const Counter = ({ title, subtitle, type, counterType }: Props) => {
   const courseData = useAppSelector((state) => state.createCourse);
   const dispatch = useAppDispatch();
-
-  console.log(courseData);
 
   const value = useAppSelector((state) => state.createCourse[type]) || 1;
 
@@ -39,37 +39,47 @@ const Counter = ({ title, subtitle, type }: Props) => {
   };
 
   return (
-    <div className="flex items-center justify-between">
-      <div className="flex flex-col">
-        <div className="font-medium">{title}</div>
-        <p className="text-sm font-medium text-zinc-600">{subtitle}</p>
+    <div className="flex w-full items-center justify-between gap-10">
+      <div className={"flex flex-col"}>
+        {title && <div className="font-medium">{title}</div>}
+        {subtitle && (
+          <p className="text-sm font-medium text-zinc-600">{subtitle}</p>
+        )}
       </div>
-      <div className="my-4 flex items-center gap-4">
-        <Button
-          onClick={onReduce}
-          variant={"ghost"}
-          size={"icon"}
-          className="rounded-full"
-        >
-          <AiOutlineMinus />
-        </Button>
+      <div className={cn("flex w-full flex-1 flex-grow flex-col items-center")}>
+        <div className="my-4 flex w-full items-center gap-4">
+          <Button
+            onClick={onReduce}
+            variant={"ghost"}
+            size={"icon"}
+            className="rounded-full"
+          >
+            <AiOutlineMinus />
+          </Button>
+          <div className="flex w-full items-center justify-center gap-3">
+            {type === "price" && <p className="text-sm font-semibold">£</p>}
+            <Input
+              type="number"
+              value={value}
+              onChange={onChange}
+              className={cn(
+                "rounded-lg border border-gray-300 bg-zinc-50 p-1 text-center",
+                type === "price" ? "w-full" : "w-16",
+              )}
+              min={1}
+            />
+          </div>
 
-        <Input
-          type="number"
-          value={value}
-          onChange={onChange}
-          className="w-16 rounded-lg border border-gray-300 bg-zinc-50 p-1 text-center"
-          min={1}
-        />
-
-        <Button
-          onClick={onAdd}
-          variant={"ghost"}
-          size={"icon"}
-          className="rounded-full"
-        >
-          <AiOutlinePlus />
-        </Button>
+          <Button
+            onClick={onAdd}
+            variant={"ghost"}
+            size={"icon"}
+            className="rounded-full"
+          >
+            <AiOutlinePlus />
+          </Button>
+        </div>
+        <p className="text-sm text-zinc-600">{counterType}</p>
       </div>
     </div>
   );

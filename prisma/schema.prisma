@@ -74,16 +74,16 @@ model Listing {
   imageSrc       String
   createdAt      DateTime @default(now())
   category       String
-  courseLevel    String
-  ageGroup       String
+  courseLevels   String
+  ageGroups      String
   durationWeeks  Int
   maxStudents    Int
-  locationValue  String
+  location       String
   lat            Float
   lng            Float
   price          Int
   userId         String   @db.ObjectId
-  organizationId String?  @db.ObjectId
+  organizationId String   @db.ObjectId
 
   organization Organization? @relation("OrganizationListings", fields: [organizationId], references: [id], onDelete: Cascade)
   user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
