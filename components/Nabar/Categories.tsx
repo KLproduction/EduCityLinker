@@ -17,18 +17,20 @@ const Categories = () => {
   if (!isMainPage) return null;
 
   return (
-    <MyContainer>
-      <div className="flex items-center justify-between overflow-x-auto pt-4">
-        {categories.map((item) => (
-          <CategoryBox
-            key={item.label}
-            label={item.label}
-            icon={item.icon}
-            selected={category === item.label}
-          />
-        ))}
-      </div>
-    </MyContainer>
+    <div className="h-full w-full bg-white/75 backdrop-blur-md">
+      <MyContainer>
+        <div className="flex items-center justify-between overflow-x-auto pt-4">
+          {categories.map((item) => (
+            <CategoryBox
+              key={item.label}
+              label={item.label}
+              icon={item.icon}
+              selected={category === item.label}
+            />
+          ))}
+        </div>
+      </MyContainer>
+    </div>
   );
 };
 

@@ -9,7 +9,9 @@ type Props = {
 const ExploreLayout = ({ children }: Props) => {
   return (
     <div className="flex flex-col items-center justify-center">
-      <Navbar />
+      <div className="mb-48">
+        <Navbar />
+      </div>
       {children}
     </div>
   );

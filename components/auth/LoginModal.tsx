@@ -8,7 +8,7 @@ export const LoginModal = () => {
   const { isOpen, setIsOpen } = useLoginModal();
   return (
     <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>
-      <div className="flex h-full w-full items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center p-10">
         <LoginForm />
       </div>
     </ResponsiveModel>

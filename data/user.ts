@@ -7,9 +7,9 @@ export const getUserByEmail = async (email: any) => {
         email,
       },
     });
-    return user
-  } catch{
-    return null
+    return user;
+  } catch {
+    return null;
   }
 };
 export const getUserById = async (id: string) => {
@@ -19,8 +19,8 @@ export const getUserById = async (id: string) => {
         id,
       },
     });
-    return user
+    return user;
   } catch {
-    return null
+    return null;
   }
 };
