@@ -1,6 +1,6 @@
 import { useMedia } from "react-use";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
-import { Dialog, DialogContent } from "../ui/dialog";
+import { Dialog, DialogContent } from "../../ui/dialog";
 import { DialogDescription, DialogTitle } from "@radix-ui/react-dialog";
 type Props = {
   children: React.ReactNode;

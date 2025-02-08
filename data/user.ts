@@ -18,6 +18,10 @@ export const getUserById = async (id: string) => {
       where: {
         id,
       },
+      include: {
+        enrollments: true,
+        organization: true,
+      },
     });
     return user;
   } catch {

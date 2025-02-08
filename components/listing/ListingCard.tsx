@@ -56,10 +56,7 @@ const ListingCard = ({
     return null;
   }, [enrollment]);
   return (
-    <div
-      className="group col-span-1 cursor-pointer justify-center"
-      // onClick={() => router.push(`/listings/${data.id}`)}
-    >
+    <div className="group col-span-1 cursor-pointer justify-center">
       <div className="flex flex-col gap-2">
         <div className="relative h-[250px] w-[250px] overflow-hidden rounded-xl border border-red-500">
           <Image
@@ -88,6 +85,9 @@ const ListingCard = ({
             {actionLabel}
           </Button>
         )}
+        <Button onClick={() => router.push(`/listing/${data.id}`)}>
+          View Details
+        </Button>
       </div>
     </div>
   );

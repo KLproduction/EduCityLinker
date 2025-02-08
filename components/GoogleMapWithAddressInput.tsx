@@ -16,20 +16,23 @@ import { googleLat } from "./GoogleMapSimple";
 import { Library } from "@googlemaps/js-api-loader";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { v4 } from "uuid";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { setCourseData } from "@/redux/slice/create-courseSlice";
+import {
+  useAppDispatch,
+  useAppSelector,
+  setOrganizationData,
+} from "@/redux/store";
 
 const LIBRARIES: Library[] = ["marker"];
 
 const GoogleMapWithAddressInput = () => {
   const dispatch = useAppDispatch();
   const {
-    location: courseLocation,
-    lat: courseLat,
-    lng: courseLng,
-  } = useAppSelector((state) => state.createCourse);
+    location: centerLocation,
+    lat: centerLat,
+    lng: centerLng,
+  } = useAppSelector((state) => state.organization);
 
-  console.log(courseLocation, courseLat, courseLng);
+  console.log(centerLocation, centerLat, centerLng);
 
   const [location, setLocation] = useState<PlaceAutocompleteResult | null>(
     null,
@@ -38,7 +41,7 @@ const GoogleMapWithAddressInput = () => {
   const [center, setCenter] = useState<googleLat | null>(null);
 
   // Local state for autocomplete input and predictions.
-  const [input, setInput] = useState(courseLocation ?? "");
+  const [input, setInput] = useState(centerLocation ?? "");
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
 
   // Refs to hold the map container, map instance, and marker.
@@ -79,8 +82,8 @@ const GoogleMapWithAddressInput = () => {
     if (isLoaded && mapRef.current && !mapInstanceRef.current) {
       // Use the provided center or fallback to default coordinates.
       const initialCenter = {
-        lat: center?.location?.coordinates[0] ?? courseLat ?? 51.4545,
-        lng: center?.location?.coordinates[1] ?? courseLng ?? -2.5879,
+        lat: center?.location?.coordinates[0] ?? centerLat ?? 51.4545,
+        lng: center?.location?.coordinates[1] ?? centerLng ?? -2.5879,
       };
 
       // Create the map.
@@ -140,7 +143,7 @@ const GoogleMapWithAddressInput = () => {
       // ✅ Wait for state update using a timeout to ensure React updates state before dispatch
       setTimeout(() => {
         dispatch(
-          setCourseData({
+          setOrganizationData({
             location: prediction.description,
             lat: newCenter.lat, // ✅ Now using directly fetched lat/lng
             lng: newCenter.lng,

@@ -1,7 +1,7 @@
 "use client";
 
 import { useLoginModal } from "@/hooks/modal";
-import ResponsiveModel from "../globel/responsive-model";
+import ResponsiveModel from "./global/responsive-model";
 import { LoginForm } from "./LoginForm";
 
 export const LoginModal = () => {

@@ -29,6 +29,25 @@ export const useCreateModal = () => {
     setIsOpen,
   };
 };
+export const useCreateOrganizerModal = () => {
+  const [isOpen, setIsOpen] = useQueryState(
+    "create-organizer",
+    parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+  );
+
+  const open = () => {
+    setIsOpen(true);
+  };
+  const close = () => {
+    setIsOpen(false);
+  };
+  return {
+    isOpen,
+    open,
+    close,
+    setIsOpen,
+  };
+};
 
 export const useLoginModal = () => {
   const [isOpen, setIsOpen] = useQueryState(

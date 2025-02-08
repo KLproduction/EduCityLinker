@@ -13,6 +13,7 @@ import Categories from "./Categories";
 import NavLogo from "./NavLogo";
 import ModalBtn from "./ModalBtn";
 import LoginModalBtn from "./LoginModalBtn";
+import { getUserById } from "@/data/user";
 
 const navList = [
   {
@@ -39,6 +40,10 @@ const navList = [
 
 const Navbar = async () => {
   const user = await currentUser();
+  const userDetails = await getUserById(user?.id!);
+
+  const isAdmin = user?.role === "ADMIN" ? true : false;
+  const isOrganizer = userDetails?.organization[0].id ? true : false;
 
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
@@ -78,6 +83,8 @@ const Navbar = async () => {
                 name={user?.name!}
                 userId={user?.id}
                 image={user?.image || ""}
+                isAdmin
+                isOrganizer
               />
             </div>
           )}

@@ -6,11 +6,18 @@ import courseSlice, {
   setCourseData,
   resetCourseData,
 } from "./slice/create-courseSlice";
+import organizationSlice, {
+  setOrganizationData,
+  resetOrganizationData,
+  appendToGallery,
+  appendToFeature,
+} from "./slice/create-organizationSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   createCourse: courseSlice,
+  organization: organizationSlice,
 });
 const persisConfig = {
   key: "root",
@@ -36,3 +43,9 @@ export const persistor = persistStore(store);
 export const useAppSelector: TypedUseSelectorHook<RootState> = useSelector;
 export const useAppDispatch = () => useDispatch<AppDispatch>();
 export { setCourseData, resetCourseData };
+export {
+  setOrganizationData,
+  resetOrganizationData,
+  appendToGallery,
+  appendToFeature,
+};

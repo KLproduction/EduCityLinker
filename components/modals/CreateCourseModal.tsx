@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import ResponsiveModel from "../globel/responsive-model";
+import ResponsiveModel from "../auth/global/responsive-model";
 import Modal from "./Modal";
 import { useCreateModal } from "@/hooks/modal";
 import CategoryInput from "../inputs/CategoryInput";

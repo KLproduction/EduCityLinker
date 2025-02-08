@@ -74,28 +74,6 @@ export const useSelectCountry = () => {
   };
 };
 
-export const useUploadImage = () => {
-  const dispatch = useAppDispatch();
-  const courseData = useAppSelector((state) => state.createCourse);
-  const { mutate: uploadImageMutate, isPending } = useMutation({
-    mutationFn: async (fileData: File) => {
-      const result = await uploadImage(fileData);
-      return result.cdnUrl;
-    },
-    onError: (error) => toast.error(error.message),
-    onSuccess: (data) => {
-      dispatch(setCourseData({ imageSrc: data }));
-      console.log(courseData);
-      toast.success("Image uploaded successfully!");
-    },
-  });
-
-  return {
-    uploadImageMutate,
-    isPending,
-  };
-};
-
 export const useGoogleLocation = () => {
   const [location, setLocation] = useState<PlaceAutocompleteResult | null>(
     null,

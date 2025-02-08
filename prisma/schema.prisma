@@ -58,6 +58,11 @@ model Organization {
   name        String
   description String?
   logo        String?
+  gallery     String[]  @default([])
+  feature     String[]  @default([])
+  location    String
+  lat         Float
+  lng         Float
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   listings    Listing[] @relation("OrganizationListings")

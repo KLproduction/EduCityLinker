@@ -1,9 +1,11 @@
+import ClientOnly from "@/components/auth/global/ClientOnly";
 import EmptyState from "./_components/EmptyState";
 import { getListingsAction } from "@/actions/listing";
 import MyContainer from "@/components/Container";
-import ClientOnly from "@/components/globel/ClientOnly";
+
 import ListingCard from "@/components/listing/ListingCard";
 import { currentUser } from "@/lib/auth";
+import { Button } from "@/components/ui/button";
 
 const ExplorePage = async () => {
   const data = await getListingsAction();
@@ -22,10 +24,11 @@ const ExplorePage = async () => {
       </ClientOnly>
     );
   }
+
   return (
     <ClientOnly>
       <MyContainer>
-        <div className="grid grid-cols-1 gap-8 pt-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+        <div className="grid grid-cols-1 gap-8 pt-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {listings?.map((listing: any) => {
             return (
               <div className="" key={listing.id}>

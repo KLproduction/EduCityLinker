@@ -95,3 +95,14 @@ export const createCourseSchema = z.object({
   title: z.string().optional(),
   description: z.string().min(1),
 });
+
+export const createOrganizerSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  logo: z.string().optional(),
+  gallery: z.array(z.string()).optional(),
+  feature: z.array(z.string()).optional(),
+  location: z.string(),
+  lat: z.number(),
+  lng: z.number(),
+});

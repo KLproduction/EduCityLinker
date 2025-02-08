@@ -12,6 +12,7 @@ import Modal from "@/components/modals/Modal";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { CreateCourseModal } from "@/components/modals/CreateCourseModal";
 import { LoginModal } from "@/components/auth/LoginModal";
+import { CreateOrganizerModal } from "@/components/modals/CreateOrganizerModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default async function RootLayout({
               <NuqsAdapter>
                 <Toaster />
                 <CreateCourseModal />
+                <CreateOrganizerModal />
                 <LoginModal />
                 {children}
               </NuqsAdapter>

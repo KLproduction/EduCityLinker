@@ -1,7 +1,10 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import { Trash2, CheckCircle, ImageIcon, Loader2 } from "lucide-react";
-import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { setCourseData } from "@/redux/slice/create-courseSlice";
+import {
+  setOrganizationData,
+  useAppDispatch,
+  useAppSelector,
+} from "@/redux/store";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -14,12 +17,15 @@ import "@uploadcare/react-uploader/core.css";
 import * as LR from "@uploadcare/blocks";
 
 import { set } from "lodash";
-import { useUploadLogo } from "@/hooks/create-organization";
+import {
+  useDeleteUploadcare,
+  useUploadLogo,
+} from "@/hooks/create-organization";
 
 LR.registerBlocks(LR);
 
 type Props = {};
-const ImageUpload = () => {
+const LogoUpload = () => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
@@ -34,21 +40,32 @@ const ImageUpload = () => {
       setUploadFile(file);
     }
   };
-  const imageSrc = useAppSelector((state) => state.createCourse.imageSrc);
+
+  const { onDeleteUploadcare, isPending: isDeleting } = useDeleteUploadcare();
+  const logoSrcId = useAppSelector((state) => state.organization.logo);
+  const logoSrc = `https://ucarecdn.com/${logoSrcId}/-/preview/300x300/`;
   useEffect(() => {
-    console.log("IMG", imageSrc);
+    console.log("IMG", logoSrc);
   }, [handleImageChange]);
 
+  const handleImageDelete = (id: string) => {
+    if (logoSrcId) {
+      onDeleteUploadcare(id);
+    }
+    setPreviewUrl(null);
+    if (imgInputRef.current) {
+      imgInputRef.current.value = "";
+      dispatch(setOrganizationData({ logo: undefined }));
+    }
+  };
   return (
     <div className="flex flex-col items-center justify-center gap-3">
-      {previewUrl || imageSrc ? (
+      {previewUrl || logoSrcId ? (
         <div className="mt-6 flex h-full w-full items-center justify-center">
           <img
-            src={previewUrl || imageSrc}
+            src={previewUrl || logoSrc}
             alt="image"
-            width={200}
-            height={200}
-            className="aspect-ratio relative flex rounded-lg object-cover object-center"
+            className="h-48 w-48 rounded-full object-cover object-center"
           />
         </div>
       ) : (
@@ -66,7 +83,7 @@ const ImageUpload = () => {
         onChange={handleImageChange}
         accept=".jpg, .jpeg, .png, .svg"
       />
-      {!previewUrl && !imageSrc ? (
+      {!previewUrl && !logoSrcId ? (
         <div>
           <Button
             type="button"
@@ -85,14 +102,10 @@ const ImageUpload = () => {
             size={"sm"}
             className="mt-2 w-fit"
             variant={"outline"}
-            onClick={() => {
-              setPreviewUrl(null);
-              if (imgInputRef.current) {
-                imgInputRef.current.value = "";
-                dispatch(setCourseData({ imageSrc: undefined }));
-              }
-            }}
+            onClick={() => handleImageDelete(logoSrcId!)}
+            disabled={isDeleting}
           >
+            {/* TO DO : ADD DELETE HOOK */}
             <Trash2 className="h-4 w-4 text-red-500" />
           </Button>
           <Button
@@ -100,11 +113,11 @@ const ImageUpload = () => {
             size={"sm"}
             className="mt-2 w-fit"
             onClick={() => uploadImageMutate(uploadFile!)}
-            disabled={imageSrc ? true : false}
+            disabled={logoSrcId ? true : false}
           >
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : imageSrc ? (
+            ) : logoSrcId ? (
               <CheckCircle className="h-4 w-4 text-green-600" />
             ) : (
               <TbPhotoPlus className="h-4 w-4 text-green-600" />
@@ -115,4 +128,4 @@ const ImageUpload = () => {
     </div>
   );
 };
-export default ImageUpload;
+export default LogoUpload;

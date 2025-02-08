@@ -1,0 +1,278 @@
+"use client";
+
+import { useEffect, useMemo, useState } from "react";
+import ResponsiveModel from "../auth/global/responsive-model";
+import Modal from "./Modal";
+import { useCreateModal, useCreateOrganizerModal } from "@/hooks/modal";
+import CategoryInput from "../inputs/CategoryInput";
+import {
+  useAppDispatch,
+  useAppSelector,
+  setOrganizationData,
+} from "@/redux/store";
+import Counter from "../inputs/Counter";
+import CourseLevelInput from "../inputs/CourseLevel";
+import AgeGroupInput from "../inputs/AgeGroups";
+import ImageUpload from "../inputs/ImageUpload";
+import { Textarea } from "../ui/textarea";
+import { Input } from "../ui/input";
+import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
+import LogoUpload from "../inputs/LogoUpload";
+import GalleryUpload from "../inputs/GalleryUpload";
+import FeatureInput from "../inputs/FeaturesInput";
+
+export enum STEPS {
+  DESCRIPTION = 0,
+  LOCATION = 1,
+  IMAGES = 2,
+  GALLERY = 3,
+  INFO = 4,
+  FEATURE = 5,
+}
+
+export const CreateOrganizerModal = () => {
+  const organizationData = useAppSelector((state) => state.organization);
+  const { isOpen, setIsOpen } = useCreateOrganizerModal();
+  const [step, setStep] = useState(STEPS.DESCRIPTION);
+  const dispatch = useAppDispatch();
+
+  const onBack = () => {
+    setStep((perv) => perv - 1);
+  };
+  const onNext = () => {
+    setStep((perv) => perv + 1);
+  };
+
+  const actionLabel = useMemo(() => {
+    if (step === STEPS.FEATURE) {
+      return "Create Organization";
+    }
+    return "Next";
+  }, [step, organizationData]);
+
+  const secondaryActionLabel = useMemo(() => {
+    if (step === STEPS.DESCRIPTION) {
+      return undefined;
+    }
+    return "Back";
+  }, [step]);
+
+  let isDisabled = false;
+
+  // if (step === STEPS) {
+  //   isDisabled = !courseData.category;
+  // }
+
+  // if (step === STEPS.LOCATION) {
+  //   isDisabled = !courseData.location; // Disable if location is empty
+  // }
+
+  // if (step === STEPS.INFO) {
+  //   isDisabled =
+  //     !courseData.courseLevels ||
+  //     !courseData.ageGroups ||
+  //     !courseData.maxStudents ||
+  //     courseData.maxStudents < 1 ||
+  //     !courseData.durationWeeks ||
+  //     courseData.durationWeeks < 1;
+  // }
+
+  // if (step === STEPS.IMAGES) {
+  //   isDisabled = !courseData.imageSrc; // Disable if no image is uploaded
+  // }
+
+  // if (step === STEPS.DESCRIPTION) {
+  //   isDisabled =
+  //     !courseData.title ||
+  //     !courseData.description ||
+  //     courseData.description.length < 1;
+  // }
+
+  // if (step === STEPS.DESCRIPTION) {
+  //   isDisabled = !courseData.price || courseData.price < 1;
+  // }
+
+  let bodyContent = (
+    <div className="flex flex-col gap-8">
+      <h1 className="font-bold">Course description</h1>
+      <p className="mb-3 text-sm font-medium text-zinc-600">
+        How would you describe your course?
+      </p>
+      <Input
+        onChange={(e) =>
+          dispatch(setOrganizationData({ name: e.target.value }))
+        }
+        value={organizationData.name}
+        className="border-zinc-500 bg-zinc-50"
+        placeholder="Center Name"
+      />
+
+      <Textarea
+        onChange={(e) =>
+          dispatch(setOrganizationData({ description: e.target.value }))
+        }
+        className="border-zinc-500 bg-zinc-50"
+        rows={6}
+        value={organizationData.description}
+        placeholder="Center description"
+      />
+    </div>
+  );
+
+  if (step === STEPS.LOCATION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Where is the course located?</h1>
+        <p className="text-sm font-medium text-zinc-600">
+          Help student find you
+        </p>
+
+        <GoogleMapWithAddressInput />
+      </div>
+    );
+  }
+
+  if (step === STEPS.IMAGES) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Images</h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          Add a cover photo for your center
+        </p>
+        <LogoUpload />
+      </div>
+    );
+  }
+  if (step === STEPS.GALLERY) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Gallery</h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          {`Add a gallery photos for your center (Up to 10 images)`}
+        </p>
+        <GalleryUpload />
+      </div>
+    );
+  }
+  // TODO: CORRECT INFO
+  if (step === STEPS.INFO) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <div>
+          <h1 className="font-bold">Introduction about your Center</h1>
+          <p className="mb-3 text-sm font-medium text-zinc-600">
+            Details of the center
+          </p>
+        </div>
+        <div>
+          <h1 className="font-bold">Distance from the city center</h1>
+          <p className="mb-3 text-sm font-medium text-zinc-600">
+            What age group is the course targeting?
+          </p>
+          <AgeGroupInput />
+        </div>
+        <div>
+          <h1 className="font-bold">Course Levels</h1>
+          <p className="mb-3 text-sm font-medium text-zinc-600">
+            What level is the course?
+          </p>
+          <CourseLevelInput />
+        </div>
+        <Counter
+          title="Number of student"
+          subtitle="How many students can join?"
+          type="maxStudents"
+          counterType="students"
+        />
+
+        <Counter
+          title="Duration of the course"
+          subtitle="How many days of the course?"
+          type="durationWeeks"
+          counterType="days"
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.DESCRIPTION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Course description</h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          How would you describe your course?
+        </p>
+        <Input
+          onChange={(e) =>
+            dispatch(setOrganizationData({ name: e.target.value }))
+          }
+          value={organizationData.name}
+          className="border-zinc-500 bg-zinc-50"
+          placeholder="Course Name"
+        />
+
+        <Textarea
+          onChange={(e) =>
+            dispatch(setOrganizationData({ description: e.target.value }))
+          }
+          className="border-zinc-500 bg-zinc-50"
+          rows={6}
+          value={organizationData.description}
+          placeholder="Course description"
+        />
+      </div>
+    );
+  }
+
+  if (step === STEPS.FEATURE) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">
+          Which of these best describes your course?
+        </h1>
+        <p className="text-sm font-medium text-zinc-600">Pick a category</p>
+
+        <FeatureInput />
+      </div>
+    );
+  }
+
+  // if (step === STEPS.DESCRIPTION) {
+  //   bodyContent = (
+  //     <div className="flex flex-col gap-8">
+  //       <div>
+  //         <h1 className="font-bold">Course Pricing</h1>
+  //         <p className="mb-3 text-sm font-medium text-zinc-600">
+  //           How much do you charge for your course?
+  //         </p>
+  //       </div>
+
+  //       <Counter type="price" />
+  //     </div>
+  //   );
+  // }
+  // const { createCourseMutate, isCreatingCourse } = useCreateCourse(
+  //   courseData,
+  //   setStep,
+  // // );
+  // const onSubmit = () => {
+  //   if (step !== STEPS.DESCRIPTION) return onNext();
+  //   createCourseMutate();
+  // };
+  const onSubmit = () => {
+    onNext();
+  };
+  return (
+    <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>
+      <Modal
+        title="Create Organization"
+        actionLabel={actionLabel}
+        secondaryActionLabel={secondaryActionLabel}
+        secondaryAction={step === STEPS.DESCRIPTION ? undefined : onBack}
+        body={bodyContent}
+        onSubmit={onSubmit}
+        disabled={isDisabled}
+      />
+    </ResponsiveModel>
+  );
+};

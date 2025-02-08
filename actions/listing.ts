@@ -22,3 +22,24 @@ export const getListingsAction = async () => {
     console.error(e);
   }
 };
+
+export const getListingByIdAction = async (listingId: string) => {
+  try {
+    const listing = await db.listing.findUnique({
+      where: { id: listingId },
+      include: { organization: true },
+    });
+    if (listing) {
+      return {
+        listing,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Listing not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};
