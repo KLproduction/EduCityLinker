@@ -16,14 +16,13 @@ import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
 import { useCreateCourse } from "@/hooks/create-course";
+import CourseTypeInput from "../inputs/CourseTypeInput";
 
 export enum STEPS {
   CATEGORY = 0,
-  LOCATION = 1,
-  INFO = 2,
-  IMAGES = 3,
-  DESCRIPTION = 4,
-  PRICE = 5,
+  INFO = 1,
+  DESCRIPTION = 2,
+  PRICE = 3,
 }
 
 export const CreateCourseModal = () => {
@@ -58,11 +57,7 @@ export const CreateCourseModal = () => {
   let isDisabled = false;
 
   if (step === STEPS.CATEGORY) {
-    isDisabled = !courseData.category;
-  }
-
-  if (step === STEPS.LOCATION) {
-    isDisabled = !courseData.location; // Disable if location is empty
+    isDisabled = !courseData.courseType;
   }
 
   if (step === STEPS.INFO) {
@@ -73,10 +68,6 @@ export const CreateCourseModal = () => {
       courseData.maxStudents < 1 ||
       !courseData.durationWeeks ||
       courseData.durationWeeks < 1;
-  }
-
-  if (step === STEPS.IMAGES) {
-    isDisabled = !courseData.imageSrc; // Disable if no image is uploaded
   }
 
   if (step === STEPS.DESCRIPTION) {
@@ -95,22 +86,9 @@ export const CreateCourseModal = () => {
       <h1 className="font-bold">Which of these best describes your course?</h1>
       <p className="text-sm font-medium text-zinc-600">Pick a category</p>
 
-      <CategoryInput />
+      <CourseTypeInput />
     </div>
   );
-
-  if (step === STEPS.LOCATION) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <h1 className="font-bold">Where is the course located?</h1>
-        <p className="text-sm font-medium text-zinc-600">
-          Help student find you
-        </p>
-
-        <GoogleMapWithAddressInput />
-      </div>
-    );
-  }
 
   if (step === STEPS.INFO) {
     bodyContent = (
@@ -136,7 +114,7 @@ export const CreateCourseModal = () => {
           <CourseLevelInput />
         </div>
         <Counter
-          title="Number of student"
+          title="Max students per class"
           subtitle="How many students can join?"
           type="maxStudents"
           counterType="students"
@@ -146,20 +124,8 @@ export const CreateCourseModal = () => {
           title="Duration of the course"
           subtitle="How many days of the course?"
           type="durationWeeks"
-          counterType="days"
+          counterType="Weeks"
         />
-      </div>
-    );
-  }
-
-  if (step === STEPS.IMAGES) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <h1 className="font-bold">Images</h1>
-        <p className="mb-3 text-sm font-medium text-zinc-600">
-          Add a photo to your course
-        </p>
-        <ImageUpload />
       </div>
     );
   }

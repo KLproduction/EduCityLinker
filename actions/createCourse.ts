@@ -33,18 +33,7 @@ export const createCourseAction = async (
     // Create course in database
     const course = await db.listing.create({
       data: {
-        category: courseData.category,
-        location: courseData.location as string,
-        lat: courseData.lat!,
-        lng: courseData.lng!,
-        courseLevels: courseData.courseLevels,
-        ageGroups: courseData.ageGroups,
-        maxStudents: courseData.maxStudents,
-        durationWeeks: courseData.durationWeeks,
-        price: courseData.price,
-        imageSrc: courseData.imageSrc,
-        title: courseData.title!,
-        description: courseData.description,
+        ...validationResult.data,
         organizationId: organization.organization.id,
         userId: user.id,
       },
@@ -57,5 +46,21 @@ export const createCourseAction = async (
     };
   } catch (error: any) {
     return { status: 500, message: error.message || "Database error" };
+  }
+};
+
+export const deleteAllListingSuperAdminAction = async () => {
+  const user = await currentUser();
+  const isAdmin = user?.role === "ADMIN" ? true : false;
+
+  if (!isAdmin) return;
+
+  try {
+    const result = await db.listing.deleteMany();
+    if (result) {
+      return { status: 200, message: "All listing deleted successfully!" };
+    }
+  } catch (e) {
+    console.error(e);
   }
 };

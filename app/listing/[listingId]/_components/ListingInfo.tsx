@@ -4,28 +4,22 @@ import { IconType } from "react-icons/lib";
 
 type Props = {
   organizer: Organization;
-  category: string;
+  courseType: string;
   description: string;
   courseLevels: string;
   ageGroups: string;
   durationWeeks: number;
   maxStudents: number;
-  location: string;
-  lat: number;
-  lng: number;
 };
 
 const ListingInfo = ({
   organizer,
-  category,
+  courseType,
   description,
   courseLevels,
   ageGroups,
   durationWeeks,
   maxStudents,
-  location,
-  lat,
-  lng,
 }: Props) => {
   return (
     <div className="col-span-4 flex flex-col gap-8">

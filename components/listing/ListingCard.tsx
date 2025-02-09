@@ -1,7 +1,7 @@
 "use client";
 import { formattedPrice } from "@/lib/formatPrice";
 import { ExtenderUser } from "@/next-auth";
-import { Enrollment, Listing } from "@prisma/client";
+import { Enrollment, Listing, Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { format } from "date-fns";
@@ -11,6 +11,7 @@ import { Button } from "../ui/button";
 
 type Props = {
   data: Listing;
+  organizer: Organization;
   currentUser?: ExtenderUser | null;
   enrollment?: Enrollment;
   onAction?: (id: string) => void;
@@ -21,6 +22,7 @@ type Props = {
 
 const ListingCard = ({
   data,
+  organizer,
   currentUser,
   enrollment,
   onAction,
@@ -58,23 +60,25 @@ const ListingCard = ({
   return (
     <div className="group col-span-1 cursor-pointer justify-center">
       <div className="flex flex-col gap-2">
-        <div className="relative h-[250px] w-[250px] overflow-hidden rounded-xl border border-red-500">
-          <Image
-            src={`${data.imageSrc}-/scale_crop/300x300/`}
-            alt="listing"
-            fill
-            className="object-cover transition duration-300 group-hover:scale-110"
-          />
-          <div className="absolute right-3 top-3">
-            <HeartButton
-              listingId={data.id}
-              currentUser={currentUser || null}
+        {organizer.logo && (
+          <div className="relative h-[250px] w-[250px] overflow-hidden rounded-xl border border-red-500">
+            <Image
+              src={`${organizer.logo}-/scale_crop/300x300/`}
+              alt="listing"
+              fill
+              className="object-cover transition duration-300 group-hover:scale-110"
             />
+            <div className="absolute right-3 top-3">
+              <HeartButton
+                listingId={data.id}
+                currentUser={currentUser || null}
+              />
+            </div>
           </div>
-        </div>
-        <div className="text-lg font-semibold">{data.location}</div>
+        )}
+        <div className="text-lg font-semibold">{organizer.location}</div>
         <div className="font-light text-zinc-500">
-          {enrollmentDate || data.category}
+          {enrollmentDate || data.courseType}
         </div>
         <div className="flex items-center gap-1">
           <div className="font-semibold">{formattedPrice(data.price)}</div>

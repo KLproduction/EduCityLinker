@@ -58,6 +58,7 @@ model Organization {
   name        String
   description String?
   logo        String?
+  coverPhoto  String?
   gallery     String[]  @default([])
   feature     String[]  @default([])
   location    String
@@ -76,16 +77,12 @@ model Listing {
   id             String   @id @default(auto()) @map("_id") @db.ObjectId
   title          String
   description    String
-  imageSrc       String
   createdAt      DateTime @default(now())
-  category       String
+  courseType     String
   courseLevels   String
   ageGroups      String
   durationWeeks  Int
   maxStudents    Int
-  location       String
-  lat            Float
-  lng            Float
   price          Int
   userId         String   @db.ObjectId
   organizationId String   @db.ObjectId

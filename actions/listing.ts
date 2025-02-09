@@ -5,6 +5,7 @@ import { db } from "@/lib/db";
 export const getListingsAction = async () => {
   try {
     const listings = await db.listing.findMany({
+      include: { organization: true },
       orderBy: { createdAt: "desc" },
     });
 

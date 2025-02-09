@@ -82,17 +82,13 @@ const ageGroupLabels = ageGroups.map((level) => level.label) as [
   ...string[],
 ];
 export const createCourseSchema = z.object({
-  category: z.string(),
-  location: z.string().min(1),
-  lat: z.number().optional(),
-  lng: z.number().optional(),
+  courseType: z.string(),
   courseLevels: z.enum(courseLevelLabels),
   ageGroups: z.enum(ageGroupLabels),
   maxStudents: z.number().min(1),
   durationWeeks: z.number().min(1),
   price: z.number().min(1),
-  imageSrc: z.string(),
-  title: z.string().optional(),
+  title: z.string().min(1),
   description: z.string().min(1),
 });
 
@@ -100,6 +96,7 @@ export const createOrganizerSchema = z.object({
   name: z.string().min(1),
   description: z.string().min(1),
   logo: z.string().optional(),
+  coverPhoto: z.string().optional(),
   gallery: z.array(z.string()).optional(),
   feature: z.array(z.string()).optional(),
   location: z.string(),

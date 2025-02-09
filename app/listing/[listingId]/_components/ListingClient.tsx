@@ -1,7 +1,7 @@
 "use client";
 
 import MyContainer from "@/components/Container";
-import { categories } from "@/data/data";
+import { courseTypes } from "@/data/data";
 import { ExtenderUser } from "@/next-auth";
 import {
   Enrollment,
@@ -27,9 +27,9 @@ const ListingClient = ({
   organizer,
   enrollment,
 }: Props) => {
-  const category = useMemo(() => {
-    return categories.find((item) => item.label === listing.category);
-  }, [listing.category]);
+  const courseType = useMemo(() => {
+    return courseTypes.find((item) => item.title === listing.courseType);
+  }, [listing]);
 
   return (
     <MyContainer>
@@ -37,26 +37,20 @@ const ListingClient = ({
         <div className="flex flex-col gap-6">
           <ListingHead
             title={listing.title}
-            imageSrc={listing.imageSrc}
-            location={listing.location}
-            lat={listing.lat}
-            lng={listing.lng}
             id={listing.id}
             currentUser={currentUser || null}
+            organizer={organizer}
           />
         </div>
         <div className="gird-cols-1 mt-6 grid md:grid-cols-7 md:gap-10">
           <ListingInfo
             organizer={organizer!}
-            category={listing.category}
+            courseType={listing.courseType}
             description={listing.description}
             courseLevels={listing.courseLevels}
             ageGroups={listing.ageGroups}
             durationWeeks={listing.durationWeeks}
             maxStudents={listing.maxStudents}
-            location={listing.location}
-            lat={listing.lat}
-            lng={listing.lng}
           />
         </div>
       </div>

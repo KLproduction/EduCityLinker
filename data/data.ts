@@ -9,6 +9,7 @@ import {
   GiForestCamp,
   GiCaveEntrance,
   GiCactus,
+  GiSofa,
 } from "react-icons/gi";
 import { IoDiamond } from "react-icons/io5";
 import { BsSnow } from "react-icons/bs";
@@ -29,7 +30,13 @@ import {
   FaBriefcase,
 } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
-
+import { FaSchool, FaDesktop, FaFutbol, FaParking } from "react-icons/fa";
+import {
+  MdTheaters,
+  MdPsychology,
+  MdOutlineBusinessCenter,
+  MdSecurity,
+} from "react-icons/md";
 export const features = [
   {
     label: "WiFi",
@@ -110,6 +117,69 @@ export const features = [
   },
 ];
 
+export const schoolFacilities = [
+  {
+    label: "Modern Classrooms",
+    icon: FaSchool,
+    description:
+      "Well-equipped classrooms featuring modern teaching aids and ergonomic seating to create an engaging learning environment.",
+  },
+  {
+    label: "Computer Lab",
+    icon: FaDesktop,
+    description:
+      "High-performance computers and up-to-date software available for research, digital projects, and interactive learning.",
+  },
+  {
+    label: "Auditorium",
+    icon: MdTheaters,
+    description:
+      "A spacious auditorium designed for guest lectures, presentations, and school-wide events.",
+  },
+  {
+    label: "Sports Complex",
+    icon: FaFutbol,
+    description:
+      "Comprehensive sports facilities to promote physical fitness, teamwork, and extracurricular activities.",
+  },
+  {
+    label: "Counseling Center",
+    icon: MdPsychology,
+    description:
+      "A dedicated center providing academic guidance, personal counseling, and mental health support for students.",
+  },
+  {
+    label: "Study Lounge",
+    icon: GiSofa,
+    description:
+      "Comfortable, quiet zones for self-study, group discussions, and collaborative projects outside the classroom.",
+  },
+  {
+    label: "Administrative Office",
+    icon: MdOutlineBusinessCenter,
+    description:
+      "The central hub for administrative support, student services, and essential campus information.",
+  },
+  {
+    label: "Parking Facility",
+    icon: FaParking,
+    description:
+      "Ample parking spaces available for students, faculty, and visitors to ensure a smooth campus experience.",
+  },
+  {
+    label: "Security & Surveillance",
+    icon: MdSecurity,
+    description:
+      "State-of-the-art security systems and 24/7 surveillance to maintain a safe and secure campus environment.",
+  },
+  {
+    label: "Recreational Area",
+    icon: MdSecurity, //change icon
+    description:
+      "Outdoor spaces designed for relaxation, social interaction, and recreational activities to unwind between classes.",
+  },
+];
+
 export const categories = [
   {
     label: null,
@@ -170,6 +240,69 @@ export const categories = [
     label: "Lux",
     icon: IoDiamond,
     description: "This is luxurious.",
+  },
+];
+
+export const courseTypes = [
+  {
+    title: "General English",
+    level: "Beginner to Advanced",
+    description:
+      "A comprehensive course covering all language skills including reading, writing, speaking, and listening.",
+  },
+  {
+    title: "IELTS Preparation",
+    level: "Intermediate to Advanced",
+    description:
+      "Focused preparation with practice tests and strategies designed to boost your IELTS score.",
+  },
+  {
+    title: "Business English",
+    level: "Intermediate to Advanced",
+    description:
+      "Tailored for professionals, this course covers business vocabulary, presentations, and negotiation skills.",
+  },
+  {
+    title: "Conversational English",
+    level: "Beginner to Intermediate",
+    description:
+      "Designed to boost your confidence in everyday communication and social interactions.",
+  },
+  {
+    title: "Academic English",
+    level: "Intermediate to Advanced",
+    description:
+      "Focus on essay writing, critical reading, and research skills to prepare for academic studies.",
+  },
+  {
+    title: "English for Specific Purposes",
+    level: "Varies",
+    description:
+      "Specialized courses addressing needs in fields such as medicine, law, technology, and more.",
+  },
+  {
+    title: "TOEFL Preparation",
+    level: "Intermediate to Advanced",
+    description:
+      "An intensive course covering all TOEFL sections with practice tests to improve your score.",
+  },
+  {
+    title: "Advanced Writing Skills",
+    level: "Advanced",
+    description:
+      "Enhance your writing techniques for academic, professional, or creative writing endeavors.",
+  },
+  {
+    title: "Pronunciation and Accent Training",
+    level: "All Levels",
+    description:
+      "Targeted exercises and sessions aimed at improving clarity, accent, and overall pronunciation.",
+  },
+  {
+    title: "English Grammar Intensive",
+    level: "Beginner to Advanced",
+    description:
+      "A deep dive into grammar rules through interactive sessions and practical exercises.",
   },
 ];
 

@@ -20,14 +20,19 @@ import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
 import LogoUpload from "../inputs/LogoUpload";
 import GalleryUpload from "../inputs/GalleryUpload";
 import FeatureInput from "../inputs/FeaturesInput";
+import { useCreateOrganization } from "@/hooks/create-organization";
+import { z } from "zod";
+import { createOrganizerSchema } from "@/schemas";
+import CoverPhotoUpload from "../inputs/CoverPhotoUpload";
 
 export enum STEPS {
   DESCRIPTION = 0,
   LOCATION = 1,
-  IMAGES = 2,
-  GALLERY = 3,
-  INFO = 4,
-  FEATURE = 5,
+  LOGO = 2,
+  COVER_PHOTO = 3,
+  GALLERY = 4,
+  INFO = 5,
+  FEATURE = 6,
 }
 
 export const CreateOrganizerModal = () => {
@@ -35,6 +40,9 @@ export const CreateOrganizerModal = () => {
   const { isOpen, setIsOpen } = useCreateOrganizerModal();
   const [step, setStep] = useState(STEPS.DESCRIPTION);
   const dispatch = useAppDispatch();
+  const { createOrganizationMutate, isPending } = useCreateOrganization({
+    setStep: setStep,
+  });
 
   const onBack = () => {
     setStep((perv) => perv - 1);
@@ -122,7 +130,7 @@ export const CreateOrganizerModal = () => {
   if (step === STEPS.LOCATION) {
     bodyContent = (
       <div className="flex flex-col gap-8">
-        <h1 className="font-bold">Where is the course located?</h1>
+        <h1 className="font-bold">Where is the center located?</h1>
         <p className="text-sm font-medium text-zinc-600">
           Help student find you
         </p>
@@ -132,14 +140,25 @@ export const CreateOrganizerModal = () => {
     );
   }
 
-  if (step === STEPS.IMAGES) {
+  if (step === STEPS.LOGO) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">LOGO</h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          Add a Logo for your center
+        </p>
+        <LogoUpload />
+      </div>
+    );
+  }
+  if (step === STEPS.COVER_PHOTO) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <h1 className="font-bold">Images</h1>
         <p className="mb-3 text-sm font-medium text-zinc-600">
           Add a cover photo for your center
         </p>
-        <LogoUpload />
+        <CoverPhotoUpload />
       </div>
     );
   }
@@ -195,35 +214,6 @@ export const CreateOrganizerModal = () => {
     );
   }
 
-  if (step === STEPS.DESCRIPTION) {
-    bodyContent = (
-      <div className="flex flex-col gap-8">
-        <h1 className="font-bold">Course description</h1>
-        <p className="mb-3 text-sm font-medium text-zinc-600">
-          How would you describe your course?
-        </p>
-        <Input
-          onChange={(e) =>
-            dispatch(setOrganizationData({ name: e.target.value }))
-          }
-          value={organizationData.name}
-          className="border-zinc-500 bg-zinc-50"
-          placeholder="Course Name"
-        />
-
-        <Textarea
-          onChange={(e) =>
-            dispatch(setOrganizationData({ description: e.target.value }))
-          }
-          className="border-zinc-500 bg-zinc-50"
-          rows={6}
-          value={organizationData.description}
-          placeholder="Course description"
-        />
-      </div>
-    );
-  }
-
   if (step === STEPS.FEATURE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
@@ -237,30 +227,9 @@ export const CreateOrganizerModal = () => {
     );
   }
 
-  // if (step === STEPS.DESCRIPTION) {
-  //   bodyContent = (
-  //     <div className="flex flex-col gap-8">
-  //       <div>
-  //         <h1 className="font-bold">Course Pricing</h1>
-  //         <p className="mb-3 text-sm font-medium text-zinc-600">
-  //           How much do you charge for your course?
-  //         </p>
-  //       </div>
-
-  //       <Counter type="price" />
-  //     </div>
-  //   );
-  // }
-  // const { createCourseMutate, isCreatingCourse } = useCreateCourse(
-  //   courseData,
-  //   setStep,
-  // // );
-  // const onSubmit = () => {
-  //   if (step !== STEPS.DESCRIPTION) return onNext();
-  //   createCourseMutate();
-  // };
   const onSubmit = () => {
-    onNext();
+    if (step !== STEPS.FEATURE) return onNext();
+    return createOrganizationMutate(organizationData);
   };
   return (
     <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>
@@ -271,7 +240,7 @@ export const CreateOrganizerModal = () => {
         secondaryAction={step === STEPS.DESCRIPTION ? undefined : onBack}
         body={bodyContent}
         onSubmit={onSubmit}
-        disabled={isDisabled}
+        disabled={isDisabled || isPending}
       />
     </ResponsiveModel>
   );

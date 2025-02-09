@@ -6,6 +6,7 @@ import MyContainer from "@/components/Container";
 import ListingCard from "@/components/listing/ListingCard";
 import { currentUser } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
+import { deleteAllListingSuperAdminAction } from "@/actions/createCourse";
 
 const ExplorePage = async () => {
   const data = await getListingsAction();
@@ -30,10 +31,12 @@ const ExplorePage = async () => {
       <MyContainer>
         <div className="grid grid-cols-1 gap-8 pt-24 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
           {listings?.map((listing: any) => {
+            const organizer = listing?.organization;
             return (
               <div className="" key={listing.id}>
                 <ListingCard
                   data={listing}
+                  organizer={organizer}
                   currentUser={user}
                   // onAction={onClick}
                   actionLabel="View"

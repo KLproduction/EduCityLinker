@@ -8,6 +8,7 @@ const initialState: organizationSliceState = {
   name: "",
   description: "",
   logo: "",
+  coverPhoto: "",
   gallery: [],
   feature: [],
   location: "",

@@ -7,16 +7,12 @@ export type CourseState = z.infer<typeof createCourseSchema>;
 
 // ✅ Ensure correct type for initialState
 const initialState: CourseState = {
-  category: "",
-  location: "",
-  lat: undefined,
-  lng: undefined,
+  courseType: "",
   courseLevels: "",
   ageGroups: "",
   maxStudents: 1,
   durationWeeks: 1,
   price: 1,
-  imageSrc: "",
   title: "",
   description: "",
 };
@@ -29,6 +25,7 @@ const courseSlice = createSlice({
     setCourseData: (state, action: PayloadAction<Partial<CourseState>>) => {
       return { ...state, ...action.payload };
     },
+
     resetCourseData: () => initialState,
   },
 });
