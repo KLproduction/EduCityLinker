@@ -38,13 +38,13 @@ const UserAvatar = ({
   userId,
   isAdmin,
 }: Props) => {
-  if (!userId) return;
-
   const onClickHandler = async () => {
     await signOutAction();
   };
 
   const { open: openCreateOrganizerModal } = useCreateOrganizerModal();
+
+  if (!userId) return;
 
   return (
     <DropdownMenu>
