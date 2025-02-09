@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import ResponsiveModel from "../auth/global/responsive-model";
 import Modal from "./Modal";
 import { useCreateModal } from "@/hooks/modal";
-import CategoryInput from "../inputs/CategoryInput";
+
 import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 import Counter from "../inputs/Counter";
 import CourseLevelInput from "../inputs/CourseLevel";

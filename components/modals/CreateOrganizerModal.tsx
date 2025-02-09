@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import ResponsiveModel from "../auth/global/responsive-model";
 import Modal from "./Modal";
 import { useCreateModal, useCreateOrganizerModal } from "@/hooks/modal";
-import CategoryInput from "../inputs/CategoryInput";
+
 import {
   useAppDispatch,
   useAppSelector,
