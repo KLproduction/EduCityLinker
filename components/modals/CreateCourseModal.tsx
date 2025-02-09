@@ -9,7 +9,6 @@ import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 import Counter from "../inputs/Counter";
 import CourseLevelInput from "../inputs/CourseLevel";
 import AgeGroupInput from "../inputs/AgeGroups";
-import ImageUpload from "../inputs/ImageUpload";
 import { currentUser } from "@/lib/auth";
 import { useCurrentUser } from "@/hooks/use-current-user";
 import { Textarea } from "../ui/textarea";

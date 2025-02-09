@@ -13,7 +13,6 @@ import {
 import Counter from "../inputs/Counter";
 import CourseLevelInput from "../inputs/CourseLevel";
 import AgeGroupInput from "../inputs/AgeGroups";
-import ImageUpload from "../inputs/ImageUpload";
 import { Textarea } from "../ui/textarea";
 import { Input } from "../ui/input";
 import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
