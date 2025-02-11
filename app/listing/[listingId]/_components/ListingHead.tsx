@@ -30,7 +30,7 @@ const ListingHead = ({ id, title, currentUser, organizer }: Props) => {
           />
         )}
         <div className="absolute right-3 top-3">
-          <HeartButton listingId={id} currentUser={currentUser || null} />
+          <HeartButton id={id} currentUser={currentUser || null} />
         </div>
       </div>
     </div>

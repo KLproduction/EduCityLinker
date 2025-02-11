@@ -32,8 +32,6 @@ const ListingTable = ({ data, currentUser }: Props) => {
   const categoryFilter = params.get("category");
   const ageGroupsFilter = params.get("age-groups");
 
-  if (data?.length === 0) return;
-
   const [organizations, setOrganizations] =
     useState<(Organization & { listings: Listing[] })[]>(data);
 
