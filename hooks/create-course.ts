@@ -17,6 +17,7 @@ import { googleLat } from "@/components/GoogleMapSimple";
 import { createCourseAction } from "@/actions/createCourse";
 import { useCreateModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateCourseModal";
+import { useRouter } from "next/navigation";
 
 export const useCreateCourse = (
   data: z.infer<typeof createCourseSchema>,
@@ -24,6 +25,7 @@ export const useCreateCourse = (
 ) => {
   const dispatch = useAppDispatch();
   const { close } = useCreateModal();
+  const router = useRouter();
   const { mutate: createCourseMutate, isPending: isCreatingCourse } =
     useMutation({
       mutationFn: async () => {
@@ -40,11 +42,16 @@ export const useCreateCourse = (
         toast.error(error.message || "Failed to create course");
       },
       onSuccess: (data) => {
-        console.log("Mutation Success Data:", data);
-        toast.success("Course created successfully!");
-        dispatch(resetCourseData());
-        setStep(STEPS.CATEGORY);
-        close();
+        if (data.status === 200) {
+          console.log("Mutation Success Data:", data);
+          toast.success("Course created successfully!");
+          dispatch(resetCourseData());
+          setStep(STEPS.CATEGORY);
+          close();
+          router.refresh();
+        }
+        toast.error(data.message);
+        console.log(data.message);
       },
     });
 

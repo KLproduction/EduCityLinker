@@ -61,6 +61,7 @@ model Organization {
   coverPhoto  String?
   gallery     String[]  @default([])
   feature     String[]  @default([])
+  facility    String[]  @default([])
   location    String
   lat         Float
   lng         Float

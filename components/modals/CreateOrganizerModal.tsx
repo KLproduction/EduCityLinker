@@ -23,6 +23,7 @@ import { useCreateOrganization } from "@/hooks/create-organization";
 import { z } from "zod";
 import { createOrganizerSchema } from "@/schemas";
 import CoverPhotoUpload from "../inputs/CoverPhotoUpload";
+import FacilitiesInput from "../inputs/FacilitiesInput";
 
 export enum STEPS {
   DESCRIPTION = 0,
@@ -31,7 +32,8 @@ export enum STEPS {
   COVER_PHOTO = 3,
   GALLERY = 4,
   INFO = 5,
-  FEATURE = 6,
+  FACILITY = 6,
+  FEATURE = 7,
 }
 
 export const CreateOrganizerModal = () => {
@@ -54,6 +56,11 @@ export const CreateOrganizerModal = () => {
     if (step === STEPS.FEATURE) {
       return "Create Organization";
     }
+    if (step === STEPS.GALLERY) {
+      if (organizationData.gallery?.length === 0) {
+        return "Skip";
+      }
+    }
     return "Next";
   }, [step, organizationData]);
 
@@ -66,38 +73,28 @@ export const CreateOrganizerModal = () => {
 
   let isDisabled = false;
 
-  // if (step === STEPS) {
-  //   isDisabled = !courseData.category;
-  // }
+  if (step === STEPS.DESCRIPTION) {
+    isDisabled = !organizationData.name || !organizationData.description;
+  }
 
-  // if (step === STEPS.LOCATION) {
-  //   isDisabled = !courseData.location; // Disable if location is empty
-  // }
-
-  // if (step === STEPS.INFO) {
-  //   isDisabled =
-  //     !courseData.courseLevels ||
-  //     !courseData.ageGroups ||
-  //     !courseData.maxStudents ||
-  //     courseData.maxStudents < 1 ||
-  //     !courseData.durationWeeks ||
-  //     courseData.durationWeeks < 1;
-  // }
-
-  // if (step === STEPS.IMAGES) {
-  //   isDisabled = !courseData.imageSrc; // Disable if no image is uploaded
-  // }
-
-  // if (step === STEPS.DESCRIPTION) {
-  //   isDisabled =
-  //     !courseData.title ||
-  //     !courseData.description ||
-  //     courseData.description.length < 1;
-  // }
-
-  // if (step === STEPS.DESCRIPTION) {
-  //   isDisabled = !courseData.price || courseData.price < 1;
-  // }
+  if (step === STEPS.LOCATION) {
+    isDisabled =
+      !organizationData.location ||
+      !organizationData.lat ||
+      !organizationData.lng;
+  }
+  if (step === STEPS.LOGO) {
+    isDisabled = !organizationData.logo;
+  }
+  if (step === STEPS.COVER_PHOTO) {
+    isDisabled = !organizationData.coverPhoto;
+  }
+  if (step === STEPS.FACILITY) {
+    isDisabled = organizationData.facility?.length === 0;
+  }
+  if (step === STEPS.FEATURE) {
+    isDisabled = organizationData.feature?.length === 0;
+  }
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -213,13 +210,25 @@ export const CreateOrganizerModal = () => {
     );
   }
 
+  if (step === STEPS.FACILITY) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">
+          Which facilities are available in your center?
+        </h1>
+        <p className="text-sm font-medium text-zinc-600">Add facilities</p>
+
+        <FacilitiesInput />
+      </div>
+    );
+  }
   if (step === STEPS.FEATURE) {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <h1 className="font-bold">
           Which of these best describes your course?
         </h1>
-        <p className="text-sm font-medium text-zinc-600">Pick a category</p>
+        <p className="text-sm font-medium text-zinc-600">Add features</p>
 
         <FeatureInput />
       </div>

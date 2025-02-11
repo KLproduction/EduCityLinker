@@ -1,6 +1,6 @@
 "use client";
 
-import { categories } from "@/data/data";
+import { categories, courseTypes, features } from "@/data/data";
 import MyContainer from "../Container";
 
 import CategoryBox from "./CategoryBox";
@@ -20,12 +20,12 @@ const Categories = () => {
     <div className="h-full w-full bg-white/75 backdrop-blur-md">
       <MyContainer>
         <div className="flex items-center justify-between overflow-x-auto pt-4">
-          {categories.map((item) => (
+          {courseTypes.map((item) => (
             <CategoryBox
-              key={item.label}
-              label={item.label}
+              key={item.title}
+              label={item.title || null}
               icon={item.icon}
-              selected={category === item.label}
+              selected={category === item.title}
             />
           ))}
         </div>

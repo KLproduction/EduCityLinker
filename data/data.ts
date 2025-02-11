@@ -13,7 +13,7 @@ import {
 } from "react-icons/gi";
 import { IoDiamond } from "react-icons/io5";
 import { BsSnow } from "react-icons/bs";
-import { MdOutlineVilla } from "react-icons/md";
+import { MdOutlineVilla, MdPublic } from "react-icons/md";
 import {
   MdOutlineApps,
   MdLanguage,
@@ -28,9 +28,19 @@ import {
   FaUsers,
   FaMicrophoneAlt,
   FaBriefcase,
+  FaSchool,
+  FaDesktop,
+  FaFutbol,
+  FaParking,
+  FaComments,
+  FaUniversity,
+  FaWrench,
+  FaTrophy,
+  FaPencilAlt,
+  FaBookOpen,
 } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
-import { FaSchool, FaDesktop, FaFutbol, FaParking } from "react-icons/fa";
+
 import {
   MdTheaters,
   MdPsychology,
@@ -172,12 +182,108 @@ export const schoolFacilities = [
     description:
       "State-of-the-art security systems and 24/7 surveillance to maintain a safe and secure campus environment.",
   },
+];
+
+export const courseTypes = [
   {
-    label: "Recreational Area",
-    icon: MdSecurity, //change icon
-    description:
-      "Outdoor spaces designed for relaxation, social interaction, and recreational activities to unwind between classes.",
+    label: null,
+    icon: AiOutlineGlobal,
+    description: "All",
   },
+  {
+    title: "General English",
+    level: "Beginner to Advanced",
+    description:
+      "A comprehensive course covering all language skills including reading, writing, speaking, and listening.",
+    icon: MdPublic,
+  },
+  {
+    title: "IELTS Preparation",
+    level: "Intermediate to Advanced",
+    description:
+      "Focused preparation with practice tests and strategies designed to boost your IELTS score.",
+    icon: FaGraduationCap,
+  },
+  {
+    title: "Business English",
+    level: "Intermediate to Advanced",
+    description:
+      "Tailored for professionals, this course covers business vocabulary, presentations, and negotiation skills.",
+    icon: FaBriefcase,
+  },
+  {
+    title: "Conversational English",
+    level: "Beginner to Intermediate",
+    description:
+      "Designed to boost your confidence in everyday communication and social interactions.",
+    icon: FaComments,
+  },
+  {
+    title: "Academic English",
+    level: "Intermediate to Advanced",
+    description:
+      "Focus on essay writing, critical reading, and research skills to prepare for academic studies.",
+    icon: FaUniversity,
+  },
+  {
+    title: "English for Specific Purposes",
+    level: "Varies",
+    description:
+      "Specialized courses addressing needs in fields such as medicine, law, technology, and more.",
+    icon: FaWrench,
+  },
+  {
+    title: "TOEFL Preparation",
+    level: "Intermediate to Advanced",
+    description:
+      "An intensive course covering all TOEFL sections with practice tests to improve your score.",
+    icon: FaTrophy,
+  },
+  {
+    title: "Advanced Writing Skills",
+    level: "Advanced",
+    description:
+      "Enhance your writing techniques for academic, professional, or creative writing endeavors.",
+    icon: FaPencilAlt,
+  },
+  {
+    title: "Pronunciation and Accent Training",
+    level: "All Levels",
+    description:
+      "Targeted exercises and sessions aimed at improving clarity, accent, and overall pronunciation.",
+    icon: FaMicrophoneAlt,
+  },
+  {
+    title: "English Grammar Intensive",
+    level: "Beginner to Advanced",
+    description:
+      "A deep dive into grammar rules through interactive sessions and practical exercises.",
+    icon: FaBookOpen,
+  },
+];
+
+export const courseLevels = [
+  { label: "Beginner", description: "For new learners", icon: null },
+  { label: "Elementary", description: "Basic understanding", icon: null },
+  { label: "Intermediate", description: "Conversational skills", icon: null },
+  {
+    label: "Upper Intermediate",
+    description: "Fluent communication",
+    icon: null,
+  },
+  { label: "Advanced", description: "Near-native fluency", icon: null },
+  {
+    label: "Proficient",
+    description: "Academic/professional level",
+    icon: null,
+  },
+];
+
+export const ageGroups = [
+  { label: "Kids (5-10)", description: "For young learners", icon: null },
+  { label: "Teens (11-17)", description: "For teenage learners", icon: null },
+  { label: "Adults (18+)", description: "For adult learners", icon: null },
+  { label: "Seniors (50+)", description: "For senior learners", icon: null },
 ];
 
 export const categories = [
@@ -241,91 +347,4 @@ export const categories = [
     icon: IoDiamond,
     description: "This is luxurious.",
   },
-];
-
-export const courseTypes = [
-  {
-    title: "General English",
-    level: "Beginner to Advanced",
-    description:
-      "A comprehensive course covering all language skills including reading, writing, speaking, and listening.",
-  },
-  {
-    title: "IELTS Preparation",
-    level: "Intermediate to Advanced",
-    description:
-      "Focused preparation with practice tests and strategies designed to boost your IELTS score.",
-  },
-  {
-    title: "Business English",
-    level: "Intermediate to Advanced",
-    description:
-      "Tailored for professionals, this course covers business vocabulary, presentations, and negotiation skills.",
-  },
-  {
-    title: "Conversational English",
-    level: "Beginner to Intermediate",
-    description:
-      "Designed to boost your confidence in everyday communication and social interactions.",
-  },
-  {
-    title: "Academic English",
-    level: "Intermediate to Advanced",
-    description:
-      "Focus on essay writing, critical reading, and research skills to prepare for academic studies.",
-  },
-  {
-    title: "English for Specific Purposes",
-    level: "Varies",
-    description:
-      "Specialized courses addressing needs in fields such as medicine, law, technology, and more.",
-  },
-  {
-    title: "TOEFL Preparation",
-    level: "Intermediate to Advanced",
-    description:
-      "An intensive course covering all TOEFL sections with practice tests to improve your score.",
-  },
-  {
-    title: "Advanced Writing Skills",
-    level: "Advanced",
-    description:
-      "Enhance your writing techniques for academic, professional, or creative writing endeavors.",
-  },
-  {
-    title: "Pronunciation and Accent Training",
-    level: "All Levels",
-    description:
-      "Targeted exercises and sessions aimed at improving clarity, accent, and overall pronunciation.",
-  },
-  {
-    title: "English Grammar Intensive",
-    level: "Beginner to Advanced",
-    description:
-      "A deep dive into grammar rules through interactive sessions and practical exercises.",
-  },
-];
-
-export const courseLevels = [
-  { label: "Beginner", description: "For new learners", icon: null },
-  { label: "Elementary", description: "Basic understanding", icon: null },
-  { label: "Intermediate", description: "Conversational skills", icon: null },
-  {
-    label: "Upper Intermediate",
-    description: "Fluent communication",
-    icon: null,
-  },
-  { label: "Advanced", description: "Near-native fluency", icon: null },
-  {
-    label: "Proficient",
-    description: "Academic/professional level",
-    icon: null,
-  },
-];
-
-export const ageGroups = [
-  { label: "Kids (5-10)", description: "For young learners", icon: null },
-  { label: "Teens (11-17)", description: "For teenage learners", icon: null },
-  { label: "Adults (18+)", description: "For adult learners", icon: null },
-  { label: "Seniors (50+)", description: "For senior learners", icon: null },
 ];

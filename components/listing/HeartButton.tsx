@@ -8,10 +8,10 @@ import { AiFillHeart, AiOutlineHeart } from "react-icons/ai";
 
 type Props = {
   currentUser: ExtenderUser | null;
-  listingId: string;
+  id: string;
 };
 
-const HeartButton = ({ listingId, currentUser }: Props) => {
+const HeartButton = ({ id, currentUser }: Props) => {
   const [isFavorite, setIsFavorite] = useState(false);
 
   const toggleFavorite = () => {};
@@ -22,14 +22,14 @@ const HeartButton = ({ listingId, currentUser }: Props) => {
     removeFavoriteMutate,
     isRemovingFavorite,
     favorites,
-  } = useAddFavorites(currentUser?.id!, listingId);
+  } = useAddFavorites(currentUser?.id!, id);
 
   useEffect(() => {
     if (favorites && favorites.favoriteIds) {
-      const hasId = favorites?.favoriteIds?.includes(listingId) || false;
+      const hasId = favorites?.favoriteIds?.includes(id) || false;
       setIsFavorite(hasId);
     }
-  }, [listingId, favorites]);
+  }, [id, favorites]);
 
   return (
     <div className="relative cursor-pointer transition hover:opacity-80">

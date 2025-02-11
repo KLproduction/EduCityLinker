@@ -18,7 +18,10 @@ export const currentOrganization = async () => {
   const user = await currentUser();
   if (user) {
     const userId = user?.id;
-    const organization = await db.organization.findFirst({ where: { userId } });
+    const organization = await db.organization.findFirst({
+      where: { userId },
+      orderBy: { createdAt: "desc" },
+    });
 
     if (organization) {
       return {

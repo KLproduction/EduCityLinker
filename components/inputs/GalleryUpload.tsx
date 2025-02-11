@@ -113,7 +113,7 @@ const GalleryUpload = () => {
           {gallery.map((src, index) => (
             <div key={`uploaded-${index}`} className="relative">
               <img
-                src={`https://ucarecdn.com/${src}/-/preview/300x300/`}
+                src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${src}/-/preview/300x300/`}
                 alt={`Uploaded image ${index + 1}`}
                 width={200}
                 height={200}

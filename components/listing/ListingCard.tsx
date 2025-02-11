@@ -10,8 +10,8 @@ import HeartButton from "./HeartButton";
 import { Button } from "../ui/button";
 
 type Props = {
-  data: Listing;
   organizer: Organization;
+  data: Listing;
   currentUser?: ExtenderUser | null;
   enrollment?: Enrollment;
   onAction?: (id: string) => void;
@@ -63,16 +63,13 @@ const ListingCard = ({
         {organizer.logo && (
           <div className="relative h-[250px] w-[250px] overflow-hidden rounded-xl border border-red-500">
             <Image
-              src={`${organizer.logo}-/scale_crop/300x300/`}
+              src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organizer.coverPhoto}/-/preview/500x500/`}
               alt="listing"
               fill
               className="object-cover transition duration-300 group-hover:scale-110"
             />
             <div className="absolute right-3 top-3">
-              <HeartButton
-                listingId={data.id}
-                currentUser={currentUser || null}
-              />
+              <HeartButton id={data.id} currentUser={currentUser || null} />
             </div>
           </div>
         )}

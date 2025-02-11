@@ -43,8 +43,12 @@ const Navbar = async () => {
   const userDetails = await getUserById(user?.id!);
 
   const isAdmin = user?.role === "ADMIN" ? true : false;
-  const isOrganizer = userDetails?.organization[0].id ? true : false;
-
+  const isOrganizer =
+    userDetails?.organization &&
+    userDetails.organization.length > 0 &&
+    userDetails.organization[0].id
+      ? true
+      : false;
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
       <MyContainer>

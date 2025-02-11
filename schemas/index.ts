@@ -1,3 +1,4 @@
+import FacilitiesInput from "@/components/inputs/FacilitiesInput";
 import { ageGroups, courseLevels } from "@/data/data";
 import { UserRole } from "@prisma/client";
 import { title } from "process";
@@ -99,6 +100,7 @@ export const createOrganizerSchema = z.object({
   coverPhoto: z.string().optional(),
   gallery: z.array(z.string()).optional(),
   feature: z.array(z.string()).optional(),
+  facility: z.array(z.string()).optional(),
   location: z.string(),
   lat: z.number(),
   lng: z.number(),

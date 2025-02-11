@@ -44,3 +44,45 @@ export const getListingByIdAction = async (listingId: string) => {
     console.error(e);
   }
 };
+
+export const getOrganizationWithListingAction = async () => {
+  try {
+    const organization = await db.organization.findMany({
+      include: { listings: true },
+    });
+    if (organization) {
+      return {
+        organization,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Organization not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getOrganizationByListingIdAction = async (
+  organizationId: string,
+) => {
+  try {
+    const organization = await db.organization.findUnique({
+      where: { id: organizationId },
+    });
+    if (organization) {
+      return {
+        organization,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Organization not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};

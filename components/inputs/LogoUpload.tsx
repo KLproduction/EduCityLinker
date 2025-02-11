@@ -43,7 +43,7 @@ const LogoUpload = () => {
 
   const { onDeleteUploadcare, isPending: isDeleting } = useDeleteUploadcare();
   const logoSrcId = useAppSelector((state) => state.organization.logo);
-  const logoSrc = `https://ucarecdn.com/${logoSrcId}/-/preview/300x300/`;
+  const logoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${logoSrcId}/-/preview/300x300/`;
   useEffect(() => {
     console.log("IMG", logoSrc);
   }, [handleImageChange]);

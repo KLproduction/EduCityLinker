@@ -11,9 +11,10 @@ const initialState: organizationSliceState = {
   coverPhoto: "",
   gallery: [],
   feature: [],
+  facility: [],
   location: "",
-  lat: 0,
-  lng: 0,
+  lat: 51.4545,
+  lng: -2.5879,
 };
 
 const organizationSlice = createSlice({
@@ -36,6 +37,11 @@ const organizationSlice = createSlice({
         state.feature.push(action.payload);
       }
     },
+    appendToFacility: (state, action: PayloadAction<string>) => {
+      if (state.facility) {
+        state.facility.push(action.payload);
+      }
+    },
     resetOrganizationData: () => initialState,
   },
 });
@@ -46,6 +52,7 @@ export const {
   resetOrganizationData,
   appendToGallery,
   appendToFeature,
+  appendToFacility,
 } = organizationSlice.actions;
 
 // ✅ Export reducer

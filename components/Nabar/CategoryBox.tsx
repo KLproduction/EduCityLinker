@@ -47,15 +47,15 @@ const CategoryBox = ({ label, icon: Icon, description, selected }: Props) => {
     <div
       onClick={handleClick}
       className={cn(
-        "border-b2 flex cursor-pointer flex-col items-center justify-center gap-2 p-3 transition hover:text-zinc-800",
+        "border-b2 flex cursor-pointer items-center justify-center gap-5 p-3 transition hover:text-zinc-800",
         selected
           ? "border-b-2 border-zinc-800 text-zinc-800"
           : "border-transparent text-zinc-500",
       )}
     >
       <Icon size={26} />
-      {!label && <div className="text-sm font-medium">All</div>}
-      <div className="text-sm font-medium">{label}</div>
+      {!label && <div className="text-xs font-medium">All</div>}
+      <div className="flex justify-center text-sm font-medium">{label}</div>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { toast } from "sonner";
 import { useLoginModal } from "./modal";
+import { getOrganizationByListingIdAction } from "@/actions/listing";
 
 export const useAddFavorites = (userId: string, listingId: string) => {
   const { open } = useLoginModal();
@@ -61,5 +62,16 @@ export const useAddFavorites = (userId: string, listingId: string) => {
     removeFavoriteMutate,
     isRemovingFavorite,
     favorites,
+  };
+};
+
+export const useGetOrganizationByListingId = (listingId: string) => {
+  const { data } = useQuery({
+    queryKey: ["organization", listingId],
+    queryFn: async () => await getOrganizationByListingIdAction(listingId),
+  });
+  const organization = data?.organization;
+  return {
+    organization,
   };
 };
