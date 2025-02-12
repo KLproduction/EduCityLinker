@@ -1,6 +1,6 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
-import { ageGroups } from "@/data/data";
+import { ageGroups, courseLevels } from "@/data/data";
 import {
   parseAsBoolean,
   parseAsString,
@@ -11,32 +11,33 @@ import {
 import { useEffect, useState } from "react";
 type Props = {};
 
-const AgeGroupFilter = (props: Props) => {
-  const [selectedAgeGroups, setSelectedAgeGroups] = useState<string[]>([]);
+const CourseLevelsFilter = (props: Props) => {
+  const [selectedCourseLevels, setSelectedCourseLevels] = useState<string[]>(
+    [],
+  );
   const toggleSelection = (label: string) => {
-    setSelectedAgeGroups((prev) =>
+    setSelectedCourseLevels((prev) =>
       prev.includes(label)
         ? prev.filter((item) => item !== label)
         : [...prev, label],
     );
   };
   const [labels, setLabels] = useQueryState(
-    "age-groups",
+    "course-levels",
     parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
   );
 
   useEffect(() => {
-    setLabels(selectedAgeGroups.join(","));
-  }, [selectedAgeGroups]);
+    setLabels(selectedCourseLevels.join(","));
+  }, [selectedCourseLevels]);
 
   return (
     <div className="space-y-3">
-      <h1 className="text-lg font-bold">Age Groups</h1>
-
-      {ageGroups.map((group) => (
+      <h1 className="text-lg font-bold">Course Levels</h1>
+      {courseLevels.map((group) => (
         <div key={group.label} className="flex items-start">
           <Checkbox
-            checked={selectedAgeGroups.includes(group.label)}
+            checked={selectedCourseLevels.includes(group.label)}
             onCheckedChange={() => toggleSelection(group.label)}
             className="mr-3 mt-1"
           />
@@ -50,4 +51,4 @@ const AgeGroupFilter = (props: Props) => {
   );
 };
 
-export default AgeGroupFilter;
+export default CourseLevelsFilter;

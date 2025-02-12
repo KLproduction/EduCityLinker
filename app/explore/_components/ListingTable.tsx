@@ -31,6 +31,8 @@ const ListingTable = ({ data, currentUser }: Props) => {
   const params = useSearchParams();
   const categoryFilter = params.get("category");
   const ageGroupsFilter = params.get("age-groups");
+  const courseLevelsFilter = params.get("course-levels");
+  const priceFilter = params.get("price");
 
   const [organizations, setOrganizations] =
     useState<(Organization & { listings: Listing[] })[]>(data);
@@ -62,13 +64,40 @@ const ListingTable = ({ data, currentUser }: Props) => {
         }))
         .filter((organization) => organization.listings.length > 0);
     }
+    if (courseLevelsFilter) {
+      const courseLevelsArr = courseLevelsFilter
+        .split(",")
+        .map((item) => decodeURIComponent(item).trim());
+      filteredData = filteredData
+        .map((organization) => ({
+          ...organization,
+          listings: organization.listings.filter((listing) =>
+            courseLevelsArr.includes(listing.courseLevels),
+          ),
+        }))
+        .filter((organization) => organization.listings.length > 0);
+    }
 
-    if (!categoryFilter && !ageGroupsFilter) {
-      filteredData = data;
+    if (priceFilter) {
+      filteredData = filteredData
+        .map((organization) => ({
+          ...organization,
+          listings: organization.listings.filter(
+            (listing) => listing.price <= parseInt(priceFilter),
+          ),
+        }))
+        .filter((organization) => organization.listings.length > 0);
     }
 
     setOrganizations(filteredData);
-  }, [data, categoryFilter, ageGroupsFilter, params]);
+  }, [
+    data,
+    categoryFilter,
+    ageGroupsFilter,
+    params,
+    courseLevelsFilter,
+    priceFilter,
+  ]);
 
   if (organizations.length === 0)
     return (
