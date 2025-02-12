@@ -1,4 +1,7 @@
-import { getListingByIdAction } from "@/actions/listing";
+import {
+  getListingByIdAction,
+  getOrganizationByIdAction,
+} from "@/actions/listing";
 import EmptyState from "@/app/explore/_components/EmptyState";
 import ClientOnly from "@/components/auth/global/ClientOnly";
 import { currentUser } from "@/lib/auth";
@@ -7,13 +10,15 @@ import ListingClient from "./_components/ListingClient";
 
 type Props = {
   params: {
-    listingId: string;
+    organizationId: string;
   };
 };
 
 const ListingPage = async ({ params }: Props) => {
-  const data = await getListingByIdAction(params.listingId);
+  const data = await getOrganizationByIdAction(params.organizationId);
   const user = await currentUser();
+
+  console.log(data?.status);
 
   if (data?.status !== 200) {
     <ClientOnly>
@@ -21,8 +26,8 @@ const ListingPage = async ({ params }: Props) => {
     </ClientOnly>;
   }
 
-  const listing = data?.listing;
-  const organizer = listing?.organization;
+  const listing = data?.organization?.listings;
+  const organizer = data?.organization;
 
   return (
     <ClientOnly>

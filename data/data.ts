@@ -233,13 +233,6 @@ export const courseTypes = [
     icon: FaWrench,
   },
   {
-    title: "TOEFL Preparation",
-    level: "Intermediate to Advanced",
-    description:
-      "An intensive course covering all TOEFL sections with practice tests to improve your score.",
-    icon: FaTrophy,
-  },
-  {
     title: "Advanced Writing Skills",
     level: "Advanced",
     description:

@@ -15,7 +15,7 @@ import ListingHead from "./ListingHead";
 import ListingInfo from "./ListingInfo";
 
 type Props = {
-  listing: Listing;
+  listing: Listing[];
   organizer: Organization;
   currentUser?: ExtenderUser | null;
   enrollment?: Enrollment;
@@ -27,31 +27,34 @@ const ListingClient = ({
   organizer,
   enrollment,
 }: Props) => {
-  const courseType = useMemo(() => {
-    return courseTypes.find((item) => item.title === listing.courseType);
-  }, [listing]);
-
   return (
     <MyContainer>
       <div className="mx-auto">
         <div className="flex flex-col gap-6">
           <ListingHead
-            title={listing.title}
-            id={listing.id}
+            title={organizer.name}
+            id={organizer.id}
             currentUser={currentUser || null}
             organizer={organizer}
           />
         </div>
         <div className="gird-cols-1 mt-6 grid md:grid-cols-7 md:gap-10">
-          <ListingInfo
-            organizer={organizer!}
-            courseType={listing.courseType}
-            description={listing.description}
-            courseLevels={listing.courseLevels}
-            ageGroups={listing.ageGroups}
-            durationWeeks={listing.durationWeeks}
-            maxStudents={listing.maxStudents}
-          />
+          {listing.map((listing) => (
+            <div
+              key={listing.id}
+              className="flex flex-col items-center justify-start gap-5"
+            >
+              {/* <ListingInfo
+                organizer={organizer!}
+                courseType={listing.courseType}
+                description={listing.description}
+                courseLevels={listing.courseLevels}
+                ageGroups={listing.ageGroups}
+                durationWeeks={listing.durationWeeks}
+                maxStudents={listing.maxStudents}
+              /> */}
+            </div>
+          ))}
         </div>
       </div>
     </MyContainer>

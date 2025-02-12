@@ -86,3 +86,24 @@ export const getOrganizationByListingIdAction = async (
     console.error(e);
   }
 };
+
+export const getOrganizationByIdAction = async (organizationId: string) => {
+  try {
+    const organization = await db.organization.findUnique({
+      where: { id: organizationId },
+      include: { listings: true },
+    });
+    if (organization) {
+      return {
+        organization,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Organization not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};

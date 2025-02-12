@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { formattedPrice } from "@/lib/formatPrice";
 import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   data: (Organization & { listings: Listing[] })[];
@@ -160,9 +161,11 @@ const ListingTable = ({ data, currentUser }: Props) => {
 
             {/* Button (Stacks on small screens) */}
             <div className="flex w-full justify-end sm:h-full sm:w-auto sm:items-center">
-              <Button variant="outline" className="w-full sm:w-auto">
-                View School
-              </Button>
+              <Link href={`/listing/${organizer.id}`}>
+                <Button variant="outline" className="w-full sm:w-auto">
+                  View School
+                </Button>
+              </Link>
             </div>
           </div>
 
