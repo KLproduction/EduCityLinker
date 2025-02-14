@@ -1,4 +1,5 @@
 "use client";
+import Link from "next/link";
 import { BiSearch } from "react-icons/bi";
 type Props = {};
 
@@ -11,7 +12,7 @@ const MySearch = (props: Props) => {
           Any Week
         </div>
         <div className="flex items-center gap-3 pl-6 pr-2 text-sm text-zinc-600">
-          <div className="hidden sm:block">Add Guests</div>
+          <Link href={"/explore"}>Explore</Link>
           <div className="rounded-full bg-rose-500 p-2 text-white">
             <BiSearch size={18} />
           </div>

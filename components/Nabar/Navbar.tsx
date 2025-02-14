@@ -64,9 +64,7 @@ const Navbar = async () => {
           <div>
             <MySearch />
           </div>
-          <div>
-            <Link href={"/explore"}>Explore</Link>
-          </div>
+
           {!user?.id ? (
             <div className="flex items-center gap-3 p-3">
               <LoginButtonProps mode="modal" asChild>

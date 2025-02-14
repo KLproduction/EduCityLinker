@@ -17,13 +17,13 @@ import { useEffect, useState } from "react";
 
 const MIN_PRICE = 0;
 const MAX_PRICE = 2000;
-const DEFAULT_PRICE = 2000 / 2;
+const DEFAULT_PRICE = MAX_PRICE;
 
 const PriceFilter = () => {
   const [selectedPrice, setSelectedPrice] = useState<number>(DEFAULT_PRICE);
   const [labels, setLabels] = useQueryState(
     "price",
-    parseAsInteger.withDefault(1000).withOptions({ clearOnDefault: true }),
+    parseAsInteger.withDefault(MAX_PRICE).withOptions({ clearOnDefault: true }),
   );
 
   const params = useSearchParams();
@@ -54,7 +54,7 @@ const PriceFilter = () => {
         />
         <div className="flex justify-between text-sm text-gray-500">
           <span>${MIN_PRICE}</span>
-          <span>${selectedPrice}</span>
+          {priceFilter && <span>${selectedPrice}</span>}
           <span>${MAX_PRICE}</span>
         </div>
       </div>
@@ -64,7 +64,7 @@ const PriceFilter = () => {
         className="flex w-full justify-center text-xs"
         disabled={!priceFilter}
       >
-        Reset
+        All Price
       </Button>
     </div>
   );

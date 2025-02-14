@@ -1,35 +1,65 @@
 "use client";
-import L from "leaflet";
-import { MapContainer, Marker, TileLayer } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import markerIcon2x from "leaflet/dist/images/marker-icon-2x.png";
-import markerIcon from "leaflet/dist/images/marker-icon.png";
-import markerShadow from "leaflet/dist/images/marker-shadow.png";
 
-//@ts-ignore
-delete L.Icon.Default.prototype._getIconUrl;
-L.Icon.Default.mergeOptions({
-  iconUrl: markerIcon.src,
-  iconRetinaUrl: markerIcon2x,
-  shadowUrl: markerShadow.src,
-});
+import { useEffect, useRef } from "react";
+import { Library } from "@googlemaps/js-api-loader";
+import { useJsApiLoader } from "@react-google-maps/api";
 
-type Props = {
-  center?: number[];
-};
+const LIBRARIES: Library[] = ["marker"];
 
-const Map = ({ center }: Props) => {
-  return (
-    <MapContainer
-      center={(center as L.LatLngExpression) || [51.4545, -2.5879]}
-      zoom={center ? 4 : 2}
-      scrollWheelZoom={false}
-      className="h-[35vh] rounded-lg"
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {center && <Marker position={center as L.LatLngExpression} />}
-    </MapContainer>
+interface GoogleMapProps {
+  lat: number;
+  lng: number;
+  className?: string;
+}
+
+const GoogleMap = ({ lat, lng, className }: GoogleMapProps) => {
+  const mapRef = useRef<HTMLDivElement | null>(null);
+  const mapInstanceRef = useRef<google.maps.Map | null>(null);
+  const markerRef = useRef<google.maps.Marker | null>(null);
+
+  const { isLoaded } = useJsApiLoader({
+    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
+    libraries: LIBRARIES,
+  });
+
+  // Initialize the map once when the API is loaded.
+  useEffect(() => {
+    if (isLoaded && mapRef.current && !mapInstanceRef.current) {
+      const initialCenter = { lat, lng };
+
+      mapInstanceRef.current = new google.maps.Map(mapRef.current, {
+        center: initialCenter,
+        zoom: 15,
+      });
+
+      markerRef.current = new google.maps.Marker({
+        map: mapInstanceRef.current,
+        position: initialCenter,
+        title: "Location Marker",
+      });
+    }
+  }, [isLoaded, lat, lng]);
+
+  // Update the map center and marker position if lat or lng props change.
+  useEffect(() => {
+    if (mapInstanceRef.current) {
+      const newCenter = { lat, lng };
+      mapInstanceRef.current.setCenter(newCenter);
+      if (markerRef.current) {
+        markerRef.current.setPosition(newCenter);
+      }
+    }
+  }, [lat, lng]);
+
+  return isLoaded ? (
+    <div
+      ref={mapRef}
+      style={{ height: "300px", width: "100%" }}
+      className={className}
+    />
+  ) : (
+    <p>Loading...</p>
   );
 };
 
-export default Map;
+export default GoogleMap;

@@ -8,23 +8,15 @@ import React from "react";
 import ListingGallery from "./ListingGallery";
 
 type Props = {
-  id: string;
   title: string;
-  currentUser?: ExtenderUser | null;
   organizer: Organization;
 };
 
-const ListingHead = ({ id, title, currentUser, organizer }: Props) => {
+const OrganizerGallery = ({ title, organizer }: Props) => {
   const coverPhotoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organizer.coverPhoto}/-/preview/600x600/`;
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
-      <div className="flex w-full flex-col justify-start">
-        <h1 className="text-2xl font-bold">{title}</h1>
-        <p className="mb-3 text-xl font-medium text-zinc-600">
-          {organizer.location}
-        </p>
-      </div>
       <ListingGallery
         coverPhoto={organizer.coverPhoto!}
         gallery={organizer.gallery}
@@ -37,4 +29,4 @@ const ListingHead = ({ id, title, currentUser, organizer }: Props) => {
   );
 };
 
-export default ListingHead;
+export default OrganizerGallery;

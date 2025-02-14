@@ -11,8 +11,11 @@ import {
 } from "@prisma/client";
 
 import React, { useMemo } from "react";
-import ListingHead from "./ListingHead";
 import ListingInfo from "./ListingInfo";
+import OrganizerGallery from "./OrganizerGallery";
+import ListingHeader from "./ListingHeader";
+import OrganizationInfo from "./OrganizationInfo";
+import ListingSection from "@/components/listing/ListingSection";
 
 type Props = {
   listing: Listing[];
@@ -28,37 +31,30 @@ const ListingClient = ({
   enrollment,
 }: Props) => {
   return (
-    <MyContainer>
-      <div className="mx-auto">
-        <div className="flex flex-col gap-6">
-          <ListingHead
-            title={organizer.name}
-            id={organizer.id}
-            currentUser={currentUser || null}
-            organizer={organizer}
-          />
-        </div>
-        <div className="gird-cols-1 mt-6 grid md:grid-cols-7 md:gap-10">
-          {listing.map((listing) => (
-            <div
-              key={listing.id}
-              className="flex flex-col items-center justify-start gap-5"
-            >
-              {/* <ListingInfo
-                organizer={organizer!}
-                courseType={listing.courseType}
-                description={listing.description}
-                courseLevels={listing.courseLevels}
-                ageGroups={listing.ageGroups}
-                durationWeeks={listing.durationWeeks}
-                maxStudents={listing.maxStudents}
-              /> */}
-            </div>
-          ))}
-        </div>
+    <div className="flex min-h-[500vh] flex-col gap-8">
+      <div>
+        <ListingHeader organization={organizer} />
       </div>
-    </MyContainer>
+      <MyContainer>
+        <div className="mx-auto">
+          <OrganizationInfo organization={organizer} />
+          <div className="mt-4 space-y-4">
+            {listing.map((listing) => (
+              <div key={listing.id}>
+                <ListingSection listing={listing} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </MyContainer>
+    </div>
   );
 };
 
 export default ListingClient;
+
+{
+  /* <div className="flex flex-col gap-6">
+  <OrganizerGallery title={organizer.name} organizer={organizer} />
+</div> */
+}
