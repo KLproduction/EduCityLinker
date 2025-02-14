@@ -16,6 +16,7 @@ import OrganizerGallery from "./OrganizerGallery";
 import ListingHeader from "./ListingHeader";
 import OrganizationInfo from "./OrganizationInfo";
 import ListingSection from "@/components/listing/ListingSection";
+import ListingSectionDropDown from "./ListingSectionDropDown";
 
 type Props = {
   listing: Listing[];
@@ -41,7 +42,7 @@ const ListingClient = ({
           <div className="mt-4 space-y-4">
             {listing.map((listing) => (
               <div key={listing.id}>
-                <ListingSection listing={listing} />
+                <ListingSectionDropDown listing={listing} />
               </div>
             ))}
           </div>

@@ -3,7 +3,7 @@ import {
   getOrganizationByIdAction,
 } from "@/actions/listing";
 import EmptyState from "@/app/explore/_components/EmptyState";
-import ClientOnly from "@/components/auth/global/ClientOnly";
+import ClientOnly from "@/components/global/ClientOnly";
 import { currentUser } from "@/lib/auth";
 import React from "react";
 import ListingClient from "./_components/ListingClient";

@@ -11,10 +11,10 @@ import { cn } from "@/lib/utils";
 
 import Image from "next/image";
 import React from "react";
-import { LoginButtonProps } from "../loginBtn";
+import { LoginButtonProps } from "../auth/loginBtn";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import SignOutBtn from "../SignOutBtn";
+import SignOutBtn from "../auth/SignOutBtn";
 import { signOutAction } from "@/actions/(auth)/signOut";
 import { CgLogOut } from "react-icons/cg";
 import { User } from "@prisma/client";

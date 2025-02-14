@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import ResponsiveModel from "../auth/global/responsive-model";
+import ResponsiveModel from "../global/responsive-model";
 import Modal from "./Modal";
 import { useCreateModal, useCreateOrganizerModal } from "@/hooks/modal";
 

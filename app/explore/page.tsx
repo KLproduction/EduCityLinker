@@ -1,4 +1,4 @@
-import ClientOnly from "@/components/auth/global/ClientOnly";
+import ClientOnly from "@/components/global/ClientOnly";
 import EmptyState from "./_components/EmptyState";
 import {
   getListingsAction,

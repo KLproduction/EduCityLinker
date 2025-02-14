@@ -17,7 +17,7 @@ const Categories = () => {
   if (!isMainPage) return null;
 
   return (
-    <div className="h-full w-full bg-white/75 backdrop-blur-md">
+    <div className="h-full w-full bg-transparent backdrop-blur-md">
       <MyContainer>
         <div className="flex items-center justify-between overflow-x-auto pt-4">
           {courseTypes.map((item) => (

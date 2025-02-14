@@ -5,7 +5,7 @@ import { auth } from "@/auth";
 import { LoginButtonProps } from "../auth/loginBtn";
 import SignOutBtn from "../auth/SignOutBtn";
 import { currentUser } from "@/lib/auth";
-import UserAvatar from "../auth/global/UserAvatar";
+import UserAvatar from "../global/UserAvatar";
 import MySearch from "./MySearch";
 import { cn } from "@/lib/utils";
 import MyContainer from "../Container";

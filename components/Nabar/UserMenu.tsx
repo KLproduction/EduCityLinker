@@ -2,7 +2,7 @@
 
 import { AiOutlineMenu } from "react-icons/ai";
 import { Button } from "../ui/button";
-import UserAvatar from "../auth/global/UserAvatar";
+import UserAvatar from "../global/UserAvatar";
 import { useEffect, useState } from "react";
 import { currentUser } from "@/lib/auth";
 import { ExtenderUser } from "@/next-auth";
