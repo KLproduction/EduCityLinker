@@ -15,7 +15,6 @@ const Categories = () => {
 
   const isMainPage = pathname === "/explore";
 
-  if (!isMainPage) return null;
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -30,6 +29,8 @@ const Categories = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+
+  if (!isMainPage) return null;
 
   return (
     <div
