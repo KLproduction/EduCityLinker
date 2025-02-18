@@ -5,7 +5,8 @@ import MyContainer from "../Container";
 
 import CategoryBox from "./CategoryBox";
 import { usePathname, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const Categories = () => {
   const params = useSearchParams();
@@ -15,9 +16,29 @@ const Categories = () => {
   const isMainPage = pathname === "/explore";
 
   if (!isMainPage) return null;
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 0);
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    // Check scroll position on mount
+    handleScroll();
+
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, []);
 
   return (
-    <div className="h-full w-full bg-transparent backdrop-blur-md">
+    <div
+      className={cn(
+        "h-full w-full bg-transparent backdrop-blur-md transition-all duration-500",
+        isScrolled ? "opacity-0" : "",
+      )}
+    >
       <MyContainer>
         <div className="flex items-center justify-between overflow-x-auto pt-4">
           {courseTypes.map((item) => (
