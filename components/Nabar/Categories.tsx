@@ -24,7 +24,6 @@ const Categories = () => {
     };
 
     window.addEventListener("scroll", handleScroll);
-    // Check scroll position on mount
     handleScroll();
 
     return () => {
