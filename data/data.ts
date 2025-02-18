@@ -186,11 +186,6 @@ export const schoolFacilities = [
 
 export const courseTypes = [
   {
-    label: null,
-    icon: AiOutlineGlobal,
-    description: "All",
-  },
-  {
     title: "General English",
     level: "Beginner to Advanced",
     description:
