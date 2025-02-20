@@ -1,18 +1,9 @@
 "use client";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
 import { Slider } from "@/components/ui/slider";
-import { ageGroups, courseLevels } from "@/data/data";
 import { cn } from "@/lib/utils";
 import { useSearchParams } from "next/navigation";
-import {
-  parseAsBoolean,
-  parseAsString,
-  parseAsStringEnum,
-  parseAsInteger,
-  useQueryState,
-  useQueryStates,
-} from "nuqs";
+import { parseAsInteger, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 
 const MIN_PRICE = 0;

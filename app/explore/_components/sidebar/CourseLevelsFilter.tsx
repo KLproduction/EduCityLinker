@@ -1,13 +1,7 @@
 "use client";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ageGroups, courseLevels } from "@/data/data";
-import {
-  parseAsBoolean,
-  parseAsString,
-  parseAsStringEnum,
-  useQueryState,
-  useQueryStates,
-} from "nuqs";
+import { parseAsString, useQueryState } from "nuqs";
 import { useEffect, useState } from "react";
 type Props = {};
 

@@ -12,6 +12,7 @@ import organizationSlice, {
   appendToGallery,
   appendToFeature,
   appendToFacility,
+  appendToRoomAmenities,
 } from "./slice/create-organizationSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
@@ -50,4 +51,5 @@ export {
   appendToGallery,
   appendToFeature,
   appendToFacility,
+  appendToRoomAmenities,
 };

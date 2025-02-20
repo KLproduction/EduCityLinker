@@ -24,6 +24,8 @@ import { z } from "zod";
 import { createOrganizerSchema } from "@/schemas";
 import CoverPhotoUpload from "../inputs/CoverPhotoUpload";
 import FacilitiesInput from "../inputs/FacilitiesInput";
+import AccommodationTypeInput from "../inputs/AccommodationTypeInput";
+import DistanceCounter from "../inputs/CreateOrganizationCounter";
 
 export enum STEPS {
   DESCRIPTION = 0,
@@ -34,6 +36,7 @@ export enum STEPS {
   INFO = 5,
   FACILITY = 6,
   FEATURE = 7,
+  ACCOMMODATION = 8,
 }
 
 export const CreateOrganizerModal = () => {
@@ -45,6 +48,10 @@ export const CreateOrganizerModal = () => {
     setStep: setStep,
   });
 
+  const organization = useAppSelector((state) => state.organization);
+
+  console.log(organization);
+
   const onBack = () => {
     setStep((perv) => perv - 1);
   };
@@ -53,7 +60,7 @@ export const CreateOrganizerModal = () => {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.FEATURE) {
+    if (step === STEPS.ACCOMMODATION) {
       return "Create Organization";
     }
     if (step === STEPS.GALLERY) {
@@ -73,28 +80,28 @@ export const CreateOrganizerModal = () => {
 
   let isDisabled = false;
 
-  if (step === STEPS.DESCRIPTION) {
-    isDisabled = !organizationData.name || !organizationData.description;
-  }
+  // if (step === STEPS.DESCRIPTION) {
+  //   isDisabled = !organizationData.name || !organizationData.description;
+  // }
 
-  if (step === STEPS.LOCATION) {
-    isDisabled =
-      !organizationData.location ||
-      !organizationData.lat ||
-      !organizationData.lng;
-  }
-  if (step === STEPS.LOGO) {
-    isDisabled = !organizationData.logo;
-  }
-  if (step === STEPS.COVER_PHOTO) {
-    isDisabled = !organizationData.coverPhoto;
-  }
-  if (step === STEPS.FACILITY) {
-    isDisabled = organizationData.facility?.length === 0;
-  }
-  if (step === STEPS.FEATURE) {
-    isDisabled = organizationData.feature?.length === 0;
-  }
+  // if (step === STEPS.LOCATION) {
+  //   isDisabled =
+  //     !organizationData.location ||
+  //     !organizationData.lat ||
+  //     !organizationData.lng;
+  // }
+  // if (step === STEPS.LOGO) {
+  //   isDisabled = !organizationData.logo;
+  // }
+  // if (step === STEPS.COVER_PHOTO) {
+  //   isDisabled = !organizationData.coverPhoto;
+  // }
+  // if (step === STEPS.FACILITY) {
+  //   isDisabled = organizationData.facility?.length === 0;
+  // }
+  // if (step === STEPS.FEATURE) {
+  //   isDisabled = organizationData.feature?.length === 0;
+  // }
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
@@ -234,9 +241,21 @@ export const CreateOrganizerModal = () => {
       </div>
     );
   }
+  if (step === STEPS.ACCOMMODATION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Accommodation</h1>
+        <p className="text-sm font-medium text-zinc-600">
+          Add accommodation types
+        </p>
+
+        <AccommodationTypeInput />
+      </div>
+    );
+  }
 
   const onSubmit = () => {
-    if (step !== STEPS.FEATURE) return onNext();
+    if (step !== STEPS.ACCOMMODATION) return onNext();
     return createOrganizationMutate(organizationData);
   };
   return (

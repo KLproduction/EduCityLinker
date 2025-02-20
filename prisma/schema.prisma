@@ -54,22 +54,25 @@ model Account {
 }
 
 model Organization {
-  id          String    @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  description String?
-  logo        String?
-  coverPhoto  String?
-  gallery     String[]  @default([])
-  feature     String[]  @default([])
-  facility    String[]  @default([])
-  location    String
-  lat         Float
-  lng         Float
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  listings    Listing[] @relation("OrganizationListings")
-  userId      String    @db.ObjectId
-  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                 String    @id @default(auto()) @map("_id") @db.ObjectId
+  name               String
+  description        String?
+  logo               String?
+  coverPhoto         String?
+  gallery            String[]  @default([])
+  feature            String[]  @default([])
+  facility           String[]  @default([])
+  accommodationTypes String
+  roomTypes          String?
+  roomAmenities      String[]  @default([])
+  location           String
+  lat                Float
+  lng                Float
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+  listings           Listing[] @relation("OrganizationListings")
+  userId             String    @db.ObjectId
+  user               User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("organizations")
 }

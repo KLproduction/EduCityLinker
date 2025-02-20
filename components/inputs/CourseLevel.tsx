@@ -4,24 +4,9 @@ import { cn } from "@/lib/utils";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { setCourseData } from "@/redux/slice/create-courseSlice";
 import React from "react";
+import { courseLevels } from "@/data/data";
 
 // Define course levels instead of categories
-const courseLevels = [
-  { label: "Beginner", description: "For new learners", icon: null },
-  { label: "Elementary", description: "Basic understanding", icon: null },
-  { label: "Intermediate", description: "Conversational skills", icon: null },
-  {
-    label: "Upper Intermediate",
-    description: "Fluent communication",
-    icon: null,
-  },
-  { label: "Advanced", description: "Near-native fluency", icon: null },
-  {
-    label: "Proficient",
-    description: "Academic/professional level",
-    icon: null,
-  },
-];
 
 const CourseLevelInput = () => {
   const courseData = useAppSelector((state) => state.createCourse);

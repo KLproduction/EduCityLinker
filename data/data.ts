@@ -7,19 +7,12 @@ import {
   GiBoatFishing,
   GiCastle,
   GiForestCamp,
-  GiCaveEntrance,
-  GiCactus,
   GiSofa,
+  GiFamilyHouse,
 } from "react-icons/gi";
 import { IoDiamond } from "react-icons/io5";
-import { BsSnow } from "react-icons/bs";
 import { MdOutlineVilla, MdPublic } from "react-icons/md";
-import {
-  MdOutlineApps,
-  MdLanguage,
-  MdLibraryBooks,
-  MdSchedule,
-} from "react-icons/md";
+import { MdLanguage, MdLibraryBooks, MdSchedule } from "react-icons/md";
 import { IoMdWifi, IoMdPeople, IoMdLaptop } from "react-icons/io";
 import {
   FaChalkboardTeacher,
@@ -32,12 +25,9 @@ import {
   FaDesktop,
   FaFutbol,
   FaParking,
-  FaComments,
-  FaUniversity,
-  FaWrench,
-  FaTrophy,
-  FaPencilAlt,
-  FaBookOpen,
+  FaSun,
+  FaBolt,
+  FaPlus,
 } from "react-icons/fa";
 import { GiForkKnifeSpoon } from "react-icons/gi";
 
@@ -187,84 +177,73 @@ export const schoolFacilities = [
 export const courseTypes = [
   {
     title: "General English",
-    level: "Beginner to Advanced",
     description:
-      "A comprehensive course covering all language skills including reading, writing, speaking, and listening.",
+      "A comprehensive course covering all language skills, from grammar and vocabulary to reading, writing, listening, and speaking.",
     icon: MdPublic,
   },
   {
-    title: "IELTS Preparation",
-    level: "Intermediate to Advanced",
-    description:
-      "Focused preparation with practice tests and strategies designed to boost your IELTS score.",
-    icon: FaGraduationCap,
-  },
-  {
     title: "Business English",
-    level: "Intermediate to Advanced",
     description:
-      "Tailored for professionals, this course covers business vocabulary, presentations, and negotiation skills.",
+      "Designed for professionals, this course focuses on business communication, negotiations, presentations, and corporate vocabulary.",
     icon: FaBriefcase,
   },
   {
-    title: "Conversational English",
-    level: "Beginner to Intermediate",
+    title: "Exam Preparation (IELTS, Cambridge)",
     description:
-      "Designed to boost your confidence in everyday communication and social interactions.",
-    icon: FaComments,
+      "Targeted exam preparation courses that boost performance in IELTS and Cambridge assessments with practice tests and proven strategies.",
+    icon: FaGraduationCap,
   },
   {
-    title: "Academic English",
-    level: "Intermediate to Advanced",
+    title: "Summer Schools",
     description:
-      "Focus on essay writing, critical reading, and research skills to prepare for academic studies.",
-    icon: FaUniversity,
+      "Engaging summer programs offering intensive language practice, cultural activities, and immersive learning experiences.",
+    icon: FaSun,
   },
   {
-    title: "English for Specific Purposes",
-    level: "Varies",
+    title: "Intensive Courses",
     description:
-      "Specialized courses addressing needs in fields such as medicine, law, technology, and more.",
-    icon: FaWrench,
+      "Accelerated courses designed to deliver in-depth language training in a condensed time frame for rapid improvement.",
+    icon: FaBolt,
   },
   {
-    title: "Advanced Writing Skills",
-    level: "Advanced",
+    title: "One-to-One Lessons",
     description:
-      "Enhance your writing techniques for academic, professional, or creative writing endeavors.",
-    icon: FaPencilAlt,
+      "Personalized tutoring sessions tailored to individual learning needs for focused improvement and progress.",
+    icon: FaChalkboardTeacher,
   },
   {
-    title: "Pronunciation and Accent Training",
-    level: "All Levels",
+    title: "English Plus",
     description:
-      "Targeted exercises and sessions aimed at improving clarity, accent, and overall pronunciation.",
-    icon: FaMicrophoneAlt,
+      "An enhanced curriculum that goes beyond the basics, incorporating extra skills and practical applications.",
+    icon: FaPlus,
   },
   {
-    title: "English Grammar Intensive",
-    level: "Beginner to Advanced",
+    title: "Family Courses",
     description:
-      "A deep dive into grammar rules through interactive sessions and practical exercises.",
-    icon: FaBookOpen,
+      "Family-friendly courses designed for groups, fostering a collaborative and supportive learning environment for all ages.",
+    icon: GiFamilyHouse,
   },
 ];
 
 export const courseLevels = [
-  { label: "Beginner", description: "For new learners", icon: null },
-  { label: "Elementary", description: "Basic understanding", icon: null },
-  { label: "Intermediate", description: "Conversational skills", icon: null },
+  { label: "Beginner (A1)", description: "Entry-level learners", icon: null },
   {
-    label: "Upper Intermediate",
-    description: "Fluent communication",
+    label: "Elementary (A2)",
+    description: "Basic language skills",
     icon: null,
   },
-  { label: "Advanced", description: "Near-native fluency", icon: null },
   {
-    label: "Proficient",
-    description: "Academic/professional level",
+    label: "Intermediate (B1)",
+    description: "Developing conversational abilities",
     icon: null,
   },
+  {
+    label: "Upper Intermediate (B2)",
+    description: "Advanced communication skills",
+    icon: null,
+  },
+  { label: "Advanced (C1)", description: "High-level proficiency", icon: null },
+  { label: "Proficiency (C2)", description: "Near-native fluency", icon: null },
 ];
 
 export const ageGroups = [
@@ -334,5 +313,55 @@ export const categories = [
     label: "Lux",
     icon: IoDiamond,
     description: "This is luxurious.",
+  },
+];
+
+export const accommodationTypes = [
+  {
+    label: "Home Stay",
+    description: "Experience living with a local host family.",
+  },
+  {
+    label: "Student Residence",
+    description: "On-campus or dedicated student residence accommodations.",
+  },
+  {
+    label: "Private Apartment",
+    description: "Rent a private apartment for greater independence.",
+  },
+  {
+    label: "No Accommodation",
+    description: "No accommodation provided.",
+  },
+];
+
+export const studentAccommodationDetails = {
+  roomTypes: [
+    { label: "Single", description: "Individual room for privacy" },
+    { label: "Shared", description: "Shared room with one or more roommates" },
+  ],
+  amenities: [
+    { label: "WiFi", description: "High-speed internet available" },
+    { label: "Laundry", description: "On-site laundry facilities" },
+    { label: "Meals", description: "Meal plans or cafeteria services offered" },
+    { label: "Study Space", description: "Study rooms or workspace available" },
+    { label: "Garden", description: "Garden or outdoor space" },
+    { label: "Dining", description: "Dining options available" },
+  ],
+};
+
+export const homeStayPreferences = [
+  {
+    label: "Half-Board",
+    description: "Includes breakfast and dinner.",
+  },
+  {
+    label: "Full-Board",
+    description: "All meals provided (breakfast, lunch, and dinner).",
+  },
+  {
+    label: "Self-Catering",
+    description:
+      "Students are responsible for preparing and serving their own meals.",
   },
 ];

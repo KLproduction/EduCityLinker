@@ -12,6 +12,10 @@ const initialState: organizationSliceState = {
   gallery: [],
   feature: [],
   facility: [],
+  accommodationTypes: "",
+  roomTypes: "",
+  roomAmenities: [],
+  distanceOfAmenities: 0,
   location: "",
   lat: 51.4545,
   lng: -2.5879,
@@ -42,6 +46,11 @@ const organizationSlice = createSlice({
         state.facility.push(action.payload);
       }
     },
+    appendToRoomAmenities: (state, action: PayloadAction<string>) => {
+      if (state.roomAmenities) {
+        state.roomAmenities.push(action.payload);
+      }
+    },
     resetOrganizationData: () => initialState,
   },
 });
@@ -53,6 +62,7 @@ export const {
   appendToGallery,
   appendToFeature,
   appendToFacility,
+  appendToRoomAmenities,
 } = organizationSlice.actions;
 
 // ✅ Export reducer

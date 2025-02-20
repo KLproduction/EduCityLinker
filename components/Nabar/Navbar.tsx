@@ -61,7 +61,7 @@ const Navbar = async () => {
           <div>
             <NavLogo />
           </div>
-          <div>
+          <div className="hidden md:block">
             <MySearch />
           </div>
 
@@ -80,7 +80,10 @@ const Navbar = async () => {
             </div>
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
-              <ModalBtn />
+              <div className="hidden md:block">
+                <ModalBtn />
+              </div>
+
               <UserAvatar
                 name={user?.name!}
                 userId={user?.id}

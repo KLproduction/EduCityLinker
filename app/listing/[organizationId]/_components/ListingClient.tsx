@@ -1,7 +1,6 @@
 "use client";
 
 import MyContainer from "@/components/Container";
-import { courseTypes } from "@/data/data";
 import { ExtenderUser } from "@/next-auth";
 import {
   Enrollment,
