@@ -14,7 +14,7 @@ const Categories = () => {
   const pathname = usePathname();
 
   const isMainPage = pathname === "/explore";
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
 
   useEffect(() => {
@@ -30,6 +30,16 @@ const Categories = () => {
     };
   }, []);
 
+  useEffect(() => {
+    const isModal =
+      params.get("create-course") || params.get("create-organizer");
+    if (isModal) {
+      setIsModalOpen(true);
+    } else {
+      setIsModalOpen(false);
+    }
+  }, [isModalOpen, params]);
+
   if (!isMainPage) return null;
 
   return (
@@ -37,6 +47,7 @@ const Categories = () => {
       className={cn(
         "h-full w-full bg-transparent backdrop-blur-md transition-all duration-500",
         isScrolled ? "opacity-0" : "",
+        isModalOpen ? "hidden" : "",
       )}
     >
       <MyContainer>

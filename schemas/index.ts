@@ -105,6 +105,7 @@ export const createOrganizerSchema = z.object({
   roomTypes: z.string().optional(),
   roomAmenities: z.array(z.string()).optional(),
   distanceOfAmenities: z.number().optional(),
+  amenityGallery: z.array(z.string()).optional(),
   location: z.string(),
   lat: z.number(),
   lng: z.number(),
