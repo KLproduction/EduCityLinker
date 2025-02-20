@@ -53,6 +53,9 @@ const AccommodationTypeInput = () => {
         }),
       );
     }
+    setOrganizationData({
+      distanceOfAmenities: 1,
+    });
   }, [noAccommodation, amenities, dispatch]);
 
   return (

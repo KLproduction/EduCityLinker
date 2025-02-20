@@ -15,11 +15,13 @@ const initialState: organizationSliceState = {
   accommodationTypes: "",
   roomTypes: "",
   roomAmenities: [],
-  distanceOfAmenities: 0,
-  amenityGallery: [],
   location: "",
   lat: 51.4545,
   lng: -2.5879,
+  distanceOfAmenities: 1,
+  amenityGallery: [],
+  rating: 0.5,
+  ratingDescription: "",
 };
 
 const organizationSlice = createSlice({
@@ -35,6 +37,11 @@ const organizationSlice = createSlice({
     appendToGallery: (state, action: PayloadAction<string>) => {
       if (state.gallery) {
         state.gallery.push(action.payload);
+      }
+    },
+    appendToAmenityGallery: (state, action: PayloadAction<string>) => {
+      if (state.amenityGallery) {
+        state.amenityGallery.push(action.payload);
       }
     },
     appendToFeature: (state, action: PayloadAction<string>) => {
@@ -64,6 +71,7 @@ export const {
   appendToFeature,
   appendToFacility,
   appendToRoomAmenities,
+  appendToAmenityGallery,
 } = organizationSlice.actions;
 
 // ✅ Export reducer

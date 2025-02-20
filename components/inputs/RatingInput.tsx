@@ -1,0 +1,114 @@
+"use client";
+
+import { Minus, Plus, Star } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useCallback, useState } from "react";
+import { Textarea } from "../ui/textarea";
+import {
+  setOrganizationData,
+  useAppDispatch,
+  useAppSelector,
+} from "@/redux/store";
+
+const RatingInput = () => {
+  const [rating, setRating] = useState(3);
+  const organizationData = useAppSelector((state) => state.organization);
+  const dispatch = useAppDispatch();
+
+  const handleChange = useCallback(
+    (value: number) => {
+      const clampedValue = Math.min(5, Math.max(0.5, value));
+      const roundedValue = Math.round(clampedValue * 2) / 2;
+      setRating(roundedValue);
+      dispatch(setOrganizationData({ rating: roundedValue }));
+    },
+    [dispatch],
+  );
+
+  const increment = () => handleChange(rating + 0.5);
+  const decrement = () => handleChange(rating - 0.5);
+
+  const onTextareaChange = (value: string) => {
+    dispatch(setOrganizationData({ ratingDescription: value }));
+  };
+
+  return (
+    <div className="flex w-full flex-col items-center justify-center gap-5">
+      <div className="flex w-full flex-col items-center justify-center gap-5">
+        <div className="flex flex-col justify-center gap-4">
+          <Label
+            htmlFor="rating"
+            className="text-center text-4xl font-bold text-primary underline underline-offset-4"
+          >
+            {organizationData.rating}
+          </Label>
+          <div className="flex items-center gap-2">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={decrement}
+              disabled={rating <= 0.5}
+              type="button"
+              aria-label="Decrease rating"
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
+
+            <Input
+              type="number"
+              min={0.5}
+              max={5}
+              step={0.5}
+              value={rating}
+              onChange={(e) =>
+                handleChange(Number.parseFloat(e.target.value) || 0.5)
+              }
+              className="hidden w-20 text-center [appearance:textfield] [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+            />
+
+            <div className="flex w-full justify-between">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  className={cn(
+                    "h-6 w-6",
+                    i < Math.floor(rating)
+                      ? "fill-primary text-primary"
+                      : i === Math.floor(rating) && rating % 1 !== 0
+                        ? "fill-primary/20 text-primary"
+                        : "fill-muted text-muted-foreground",
+                  )}
+                />
+              ))}
+            </div>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={increment}
+              disabled={rating >= 5}
+              type="button"
+              aria-label="Increase rating"
+            >
+              <Plus className="h-4 w-4" />
+            </Button>
+          </div>
+        </div>
+      </div>
+      <div className="flex w-full flex-col gap-3">
+        <h1>Description</h1>
+        <Textarea
+          rows={6}
+          className="w-full border-zinc-800"
+          placeholder="Describe the rating"
+          value={organizationData.ratingDescription}
+          onChange={(e) => onTextareaChange(e.target.value)}
+        />
+      </div>
+    </div>
+  );
+};
+
+export default RatingInput;

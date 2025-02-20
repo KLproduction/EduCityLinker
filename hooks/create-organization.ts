@@ -14,6 +14,7 @@ import { z } from "zod";
 import { useCreateOrganizerModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateOrganizerModal";
 import { useRouter } from "next/navigation";
+import { appendToAmenityGallery } from "@/redux/slice/create-organizationSlice";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();
@@ -68,6 +69,26 @@ export const useUploadGallery = () => {
     onSuccess: (data) => {
       dispatch(appendToGallery(data));
       console.log(organizationData);
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadImageMutate,
+    isPending,
+  };
+};
+export const useUploadRoomGallery = () => {
+  const dispatch = useAppDispatch();
+  const organizationData = useAppSelector((state) => state.organization);
+  const { mutate: uploadImageMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.uuid;
+    },
+    onError: (error) => toast.error(error.message),
+    onSuccess: (data) => {
+      dispatch(appendToAmenityGallery(data));
       toast.success("Image uploaded successfully!");
     },
   });

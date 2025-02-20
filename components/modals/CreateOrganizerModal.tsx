@@ -4,7 +4,6 @@ import { useEffect, useMemo, useState } from "react";
 import ResponsiveModel from "../global/responsive-model";
 import Modal from "./Modal";
 import { useCreateOrganizerModal } from "@/hooks/modal";
-
 import {
   useAppDispatch,
   useAppSelector,
@@ -20,12 +19,11 @@ import LogoUpload from "../inputs/LogoUpload";
 import GalleryUpload from "../inputs/GalleryUpload";
 import FeatureInput from "../inputs/FeaturesInput";
 import { useCreateOrganization } from "@/hooks/create-organization";
-import { z } from "zod";
-import { createOrganizerSchema } from "@/schemas";
 import CoverPhotoUpload from "../inputs/CoverPhotoUpload";
 import FacilitiesInput from "../inputs/FacilitiesInput";
 import AccommodationTypeInput from "../inputs/AccommodationTypeInput";
-import DistanceCounter from "../inputs/CreateOrganizationCounter";
+import AccommodationGalleryUpload from "../inputs/AccommodationGalleryUpload";
+import RatingInput from "../inputs/RatingInput";
 
 export enum STEPS {
   DESCRIPTION = 0,
@@ -37,6 +35,8 @@ export enum STEPS {
   FACILITY = 6,
   FEATURE = 7,
   ACCOMMODATION = 8,
+  ACCOMMODATION_GALLERY = 9,
+  RANKING = 10,
 }
 
 export const CreateOrganizerModal = () => {
@@ -60,7 +60,7 @@ export const CreateOrganizerModal = () => {
   };
 
   const actionLabel = useMemo(() => {
-    if (step === STEPS.ACCOMMODATION) {
+    if (step === STEPS.RANKING) {
       return "Create Organization";
     }
     if (step === STEPS.GALLERY) {
@@ -254,8 +254,31 @@ export const CreateOrganizerModal = () => {
     );
   }
 
+  if (step === STEPS.ACCOMMODATION_GALLERY) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Room Gallery </h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          {`Add a gallery photos for the rooms (Up to 10 images)`}
+        </p>
+        <AccommodationGalleryUpload />
+      </div>
+    );
+  }
+  if (step === STEPS.RANKING) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Rating </h1>
+        <p className="mb-3 text-sm font-medium text-zinc-600">
+          Describe the the rate for the center.
+        </p>
+        <RatingInput />
+      </div>
+    );
+  }
+
   const onSubmit = () => {
-    if (step !== STEPS.ACCOMMODATION) return onNext();
+    if (step !== STEPS.RANKING) return onNext();
     return createOrganizationMutate(organizationData);
   };
   return (
