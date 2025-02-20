@@ -1,12 +1,12 @@
 "use client";
 
-import { useCreateModal } from "@/hooks/modal";
+import { useCreateCourseModal } from "@/hooks/modal";
 import { Button } from "../ui/button";
 
 type Props = {};
 
 const ModalBtn = (props: Props) => {
-  const { open } = useCreateModal();
+  const { open } = useCreateCourseModal();
   return <Button onClick={open}>Create Course</Button>;
 };
 

@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import ResponsiveModel from "../global/responsive-model";
 import Modal from "./Modal";
-import { useCreateModal } from "@/hooks/modal";
+import { useCreateCourseModal } from "@/hooks/modal";
 
 import { setCourseData, useAppDispatch, useAppSelector } from "@/redux/store";
 import Counter from "../inputs/Counter";
@@ -27,7 +27,7 @@ export enum STEPS {
 export const CreateCourseModal = () => {
   const user = useCurrentUser();
   const courseData = useAppSelector((state) => state.createCourse);
-  const { isOpen, setIsOpen } = useCreateModal();
+  const { isOpen, setIsOpen } = useCreateCourseModal();
   const [step, setStep] = useState(STEPS.CATEGORY);
 
   const dispatch = useAppDispatch();

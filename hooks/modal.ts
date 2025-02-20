@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { createCourseSchema } from "@/schemas";
 import { z } from "zod";
 
-export const useCreateModal = () => {
+export const useCreateCourseModal = () => {
   const [isOpen, setIsOpen] = useQueryState(
     "create-course",
     parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),

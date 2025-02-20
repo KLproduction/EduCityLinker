@@ -9,7 +9,8 @@ type Props = {
 };
 
 const ResponsiveModel = ({ children, isOpen, onOpenChange }: Props) => {
-  const isDesktop = useMedia("(min-width: 1024px)", true);
+  // const isDesktop = useMedia("(min-width: 1024px)", true);
+  const isDesktop = true;
   if (isDesktop) {
     return (
       <Dialog open={isOpen} onOpenChange={onOpenChange}>
@@ -23,18 +24,18 @@ const ResponsiveModel = ({ children, isOpen, onOpenChange }: Props) => {
     );
   }
 
-  return (
-    <Drawer open={isOpen} onOpenChange={onOpenChange}>
-      <DrawerTitle>
-        <DialogDescription></DialogDescription>
-      </DrawerTitle>
-      <DrawerContent>
-        <div className="hide-scrollbar z-[9999] max-h-[70vh] overflow-y-auto">
-          {children}
-        </div>
-      </DrawerContent>
-    </Drawer>
-  );
+  // return (
+  //   <Drawer open={isOpen} onOpenChange={onOpenChange}>
+  //     <DrawerTitle>
+  //       <DialogDescription></DialogDescription>
+  //     </DrawerTitle>
+  //     <DrawerContent>
+  //       <div className="hide-scrollbar z-[99999] max-h-[95vh] overflow-y-auto">
+  //         {children}
+  //       </div>
+  //     </DrawerContent>
+  //   </Drawer>
+  // );
 };
 
 export default ResponsiveModel;

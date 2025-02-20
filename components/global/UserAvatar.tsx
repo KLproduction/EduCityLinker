@@ -18,7 +18,7 @@ import SignOutBtn from "../auth/SignOutBtn";
 import { signOutAction } from "@/actions/(auth)/signOut";
 import { CgLogOut } from "react-icons/cg";
 import { User } from "@prisma/client";
-import { useCreateOrganizerModal } from "@/hooks/modal";
+import { useCreateCourseModal, useCreateOrganizerModal } from "@/hooks/modal";
 
 type Props = {
   image?: string;
@@ -43,6 +43,7 @@ const UserAvatar = ({
   };
 
   const { open: openCreateOrganizerModal } = useCreateOrganizerModal();
+  const { open: openCreateCourseModal } = useCreateCourseModal();
 
   if (!userId) return;
 
@@ -109,6 +110,15 @@ const UserAvatar = ({
             className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
           >
             Create Organization
+            <div className="mt-2 h-0.5 w-full bg-zinc-200" />
+          </DropdownMenuItem>
+        )}
+        {isAdmin && (
+          <DropdownMenuItem
+            onClick={() => openCreateCourseModal()}
+            className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
+          >
+            Create Course
             <div className="mt-2 h-0.5 w-full bg-zinc-200" />
           </DropdownMenuItem>
         )}

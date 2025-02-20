@@ -15,7 +15,7 @@ import { useState } from "react";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { googleLat } from "@/components/GoogleMapSimple";
 import { createCourseAction } from "@/actions/createCourse";
-import { useCreateModal } from "./modal";
+import { useCreateCourseModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateCourseModal";
 import { useRouter } from "next/navigation";
 
@@ -24,7 +24,7 @@ export const useCreateCourse = (
   setStep: (step: STEPS) => void,
 ) => {
   const dispatch = useAppDispatch();
-  const { close } = useCreateModal();
+  const { close } = useCreateCourseModal();
   const router = useRouter();
   const { mutate: createCourseMutate, isPending: isCreatingCourse } =
     useMutation({
