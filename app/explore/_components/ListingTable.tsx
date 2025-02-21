@@ -22,6 +22,7 @@ import { Separator } from "@/components/ui/separator";
 import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ListingSection from "@/components/listing/ListingSection";
+import StarRating from "@/components/StarRating";
 
 type Props = {
   data: (Organization & { listings: Listing[] })[];
@@ -35,6 +36,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
   const ageGroupsFilter = params.get("age-groups");
   const courseLevelsFilter = params.get("course-levels");
   const priceFilter = params.get("price");
+  const accommodationFilter = params.get("accommodation-types");
 
   const [organizations, setOrganizations] =
     useState<(Organization & { listings: Listing[] })[]>(data);
@@ -79,6 +81,23 @@ const ListingTable = ({ data, currentUser }: Props) => {
         }))
         .filter((organization) => organization.listings.length > 0);
     }
+    if (accommodationFilter) {
+      const accommodationArr = accommodationFilter
+        .split(",")
+        .map((item) => decodeURIComponent(item).trim());
+
+      filteredData = filteredData.filter((organization) => {
+        const orgAccommodationTypes = organization.accommodationTypes
+          ? organization.accommodationTypes
+              .split(",")
+              .map((type) => type.trim())
+          : [];
+
+        return orgAccommodationTypes.some((type) =>
+          accommodationArr.includes(type),
+        );
+      });
+    }
 
     if (priceFilter) {
       filteredData = filteredData
@@ -99,6 +118,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
     params,
     courseLevelsFilter,
     priceFilter,
+    accommodationFilter,
   ]);
 
   if (organizations.length === 0)
@@ -138,8 +158,11 @@ const ListingTable = ({ data, currentUser }: Props) => {
 
             {/* Organizer Info */}
             <div className="flex w-full flex-col sm:w-2/3">
-              <CardTitle className="text-lg sm:text-xl">
-                {organizer.name}
+              <CardTitle className="flex items-center gap-10 text-lg sm:text-xl">
+                <div>{organizer.name}</div>
+                <div>
+                  <StarRating rating={organizer.rating} readOnly />
+                </div>
               </CardTitle>
               <div className="flex items-center text-sm text-gray-500">
                 <MapPin size={16} className="mr-1" />

@@ -22,6 +22,10 @@ type Props = {
   organizer: Organization;
   currentUser?: ExtenderUser | null;
   enrollment?: Enrollment;
+  studentNation?: {
+    nation: string;
+    count: number;
+  }[];
 };
 
 const ListingClient = ({
@@ -29,15 +33,19 @@ const ListingClient = ({
   currentUser,
   organizer,
   enrollment,
+  studentNation,
 }: Props) => {
   return (
-    <div className="flex min-h-[500vh] flex-col gap-8">
+    <div className="flex min-h-[300vh] flex-col gap-8">
       <div>
         <ListingHeader organization={organizer} />
       </div>
       <MyContainer>
         <div className="mx-auto">
-          <OrganizationInfo organization={organizer} />
+          <OrganizationInfo
+            organization={organizer}
+            studentNation={studentNation}
+          />
           <div className="mt-4 space-y-4">
             {listing.map((listing) => (
               <div key={listing.id}>

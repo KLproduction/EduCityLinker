@@ -16,19 +16,27 @@ import { Input } from "../ui/input";
 import GoogleMapWithAddressInput from "../GoogleMapWithAddressInput";
 import { useCreateCourse } from "@/hooks/create-course";
 import CourseTypeInput from "../inputs/CourseTypeInput";
+import OrganizerSelector from "../inputs/OrganizerSelector";
+import { ExtenderUser } from "@/next-auth";
+import { User } from "@prisma/client";
 
 export enum STEPS {
-  CATEGORY = 0,
-  INFO = 1,
-  DESCRIPTION = 2,
-  PRICE = 3,
+  ORGANIZER = 0,
+  CATEGORY = 1,
+  INFO = 2,
+  DESCRIPTION = 3,
+  PRICE = 4,
 }
 
-export const CreateCourseModal = () => {
-  const user = useCurrentUser();
+type Props = {
+  user?: User | null;
+  organizationId?: string;
+};
+
+export const CreateCourseModal = ({ user, organizationId }: Props) => {
   const courseData = useAppSelector((state) => state.createCourse);
   const { isOpen, setIsOpen } = useCreateCourseModal();
-  const [step, setStep] = useState(STEPS.CATEGORY);
+  const [step, setStep] = useState(STEPS.ORGANIZER);
 
   const dispatch = useAppDispatch();
 
@@ -80,14 +88,34 @@ export const CreateCourseModal = () => {
     isDisabled = !courseData.price || courseData.price < 1;
   }
 
+  if (user?.role !== "ADMIN") {
+    setStep(STEPS.CATEGORY);
+    dispatch(setCourseData({ organizationId }));
+  }
+
   let bodyContent = (
     <div className="flex flex-col gap-8">
-      <h1 className="font-bold">Which of these best describes your course?</h1>
-      <p className="text-sm font-medium text-zinc-600">Pick a category</p>
+      <h1 className="font-bold">Organization</h1>
+      <p className="text-sm font-medium text-zinc-600">
+        Select an organization
+      </p>
 
-      <CourseTypeInput />
+      <OrganizerSelector />
     </div>
   );
+
+  if (step === STEPS.CATEGORY) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">
+          Which of these best describes your course?
+        </h1>
+        <p className="text-sm font-medium text-zinc-600">Pick a category</p>
+
+        <CourseTypeInput />
+      </div>
+    );
+  }
 
   if (step === STEPS.INFO) {
     bodyContent = (

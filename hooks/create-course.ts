@@ -2,7 +2,7 @@ import { createCourseSchema } from "@/schemas";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import countries from "world-countries";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { uploadImage } from "@/actions/uploadImage";
 import { toast } from "sonner";
 import {
@@ -14,7 +14,10 @@ import {
 import { useState } from "react";
 import { PlaceAutocompleteResult } from "@googlemaps/google-maps-services-js";
 import { googleLat } from "@/components/GoogleMapSimple";
-import { createCourseAction } from "@/actions/createCourse";
+import {
+  createCourseAction,
+  getOrganizationsAction,
+} from "@/actions/createCourse";
 import { useCreateCourseModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateCourseModal";
 import { useRouter } from "next/navigation";
@@ -94,4 +97,13 @@ export const useGoogleLocation = () => {
     center,
     setCenter,
   };
+};
+
+export const useGetOrganizations = () => {
+  const { data, isLoading } = useQuery({
+    queryKey: ["organizations"],
+    queryFn: async () => await getOrganizationsAction(),
+  });
+
+  return { data, isLoading };
 };

@@ -107,3 +107,29 @@ export const getOrganizationByIdAction = async (organizationId: string) => {
     console.error(e);
   }
 };
+
+export const getStudentNationByOrganizationIdAction = async (
+  organizationId: string,
+) => {
+  try {
+    const studentNations = await db.nationality.findMany({
+      where: { organizationId: organizationId },
+      select: {
+        nation: true,
+        count: true,
+      },
+    });
+    if (studentNations) {
+      return {
+        studentNations,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Student Nations not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};

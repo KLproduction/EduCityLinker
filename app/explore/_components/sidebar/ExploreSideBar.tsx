@@ -3,6 +3,7 @@ import AgeGroupFilter from "./AgeGroupFilter";
 import { Separator } from "@/components/ui/separator";
 import CourseLevelsFilter from "./CourseLevelsFilter";
 import PriceFilter from "./PriceFilter";
+import AccommodationTypeFilter from "./AccommodationTypeFilter";
 
 const ExploreSideBar = () => {
   return (
@@ -18,6 +19,8 @@ const ExploreSideBar = () => {
           <AgeGroupFilter />
           <Separator className="my-4" />
           <CourseLevelsFilter />
+          <Separator className="my-4" />
+          <AccommodationTypeFilter />
           <Separator className="my-4" />
         </CardContent>
       </Card>

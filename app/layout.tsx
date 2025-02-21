@@ -13,6 +13,8 @@ import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { CreateCourseModal } from "@/components/modals/CreateCourseModal";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { CreateOrganizerModal } from "@/components/modals/CreateOrganizerModal";
+import { currentUser } from "@/lib/auth";
+import { getUserById } from "@/data/user";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -28,6 +30,9 @@ export default async function RootLayout({
 }>) {
   const session = await auth();
 
+  const user = await getUserById(session?.user.id as string);
+  const organizationId = user?.organization[0].id;
+
   return (
     <SessionProvider session={session}>
       <html lang="en">
@@ -36,7 +41,10 @@ export default async function RootLayout({
             <ReduxProvider>
               <NuqsAdapter>
                 <Toaster />
-                <CreateCourseModal />
+                <CreateCourseModal
+                  user={user}
+                  organizationId={organizationId}
+                />
                 <CreateOrganizerModal />
                 <LoginModal />
                 {children}

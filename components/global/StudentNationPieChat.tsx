@@ -16,8 +16,11 @@ const COLORS = [
 
 const StudentNationPieChat = ({ data }: Props) => {
   return (
-    <div className="flex justify-center">
-      <PieChart width={400} height={400}>
+    <div className="flex h-full w-full justify-center overflow-hidden">
+      <PieChart
+        width={window.innerWidth < 640 ? 300 : 400}
+        height={window.innerWidth < 640 ? 400 : 400}
+      >
         <Pie
           data={data}
           dataKey="count"

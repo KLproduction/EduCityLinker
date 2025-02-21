@@ -34,7 +34,6 @@ export const createCourseAction = async (
     const course = await db.listing.create({
       data: {
         ...validationResult.data,
-        organizationId: organization.organization.id,
         userId: user.id,
       },
     });
@@ -60,6 +59,15 @@ export const deleteAllListingSuperAdminAction = async () => {
     if (result) {
       return { status: 200, message: "All listing deleted successfully!" };
     }
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getOrganizationsAction = async () => {
+  try {
+    const organizations = await db.organization.findMany();
+    return organizations;
   } catch (e) {
     console.error(e);
   }
