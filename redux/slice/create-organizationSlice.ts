@@ -20,8 +20,12 @@ const initialState: organizationSliceState = {
   lng: -2.5879,
   distanceOfAmenities: 1,
   amenityGallery: [],
-  rating: 0.5,
+  rating: 3,
   ratingDescription: "",
+  lessonDuration: 1,
+  studentMinAge: 1,
+  studentMaxAge: 1,
+  averageStudentPerClass: 1,
 };
 
 const organizationSlice = createSlice({

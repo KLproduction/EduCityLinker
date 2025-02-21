@@ -81,11 +81,11 @@ const AccommodationTypeInput = () => {
 
       <div
         className={cn(
-          "mt-4 space-y-4",
+          "mt-4 flex flex-col gap-8 space-y-4",
           noAccommodation && "pointer-events-none opacity-50",
         )}
       >
-        <div>
+        <div className="mt-4">
           <div className="text-sm font-medium">Room Type</div>
           <RadioGroup
             className="flex items-center gap-3"
@@ -122,7 +122,7 @@ const AccommodationTypeInput = () => {
             ))}
           </div>
         </div>
-        <div className="space-y-4">
+        <div className="mt-4">
           <CreateOrganizationCounter
             title="Distance from the center"
             subtitle="Distance between accommodation and center?"

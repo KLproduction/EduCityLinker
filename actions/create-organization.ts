@@ -2,11 +2,17 @@
 
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { createOrganizerSchema } from "@/schemas";
+import {
+  createOrganizerSchema,
+  nationalitySchema,
+  socialMediaSchema,
+} from "@/schemas";
 import { z } from "zod";
 
 export const onCreateOrganizationAction = async (
   organizationData: z.infer<typeof createOrganizerSchema>,
+  studentNationData: z.infer<typeof nationalitySchema>[] | [],
+  socialMediaData: z.infer<typeof socialMediaSchema>,
 ) => {
   const user = await currentUser();
 
@@ -26,12 +32,31 @@ export const onCreateOrganizationAction = async (
       message: "Invalid organization data",
     };
   }
+
   const organization = await db.organization.create({
     data: {
       ...validationResult.data,
-      userId: user.id!, // Ensure 'user' is included
+      userId: user.id!,
     },
   });
+  if (organization) {
+    if (studentNationData.length > 0) {
+      await db.nationality.createMany({
+        data: studentNationData.map((nation) => ({
+          ...nation,
+          organizationId: organization.id,
+        })),
+      });
+    }
+    if (socialMediaData) {
+      await db.socialMedia.create({
+        data: {
+          ...socialMediaData,
+          organizationId: organization.id,
+        },
+      });
+    }
+  }
   return {
     status: 200,
     message: "Organization created successfully!",

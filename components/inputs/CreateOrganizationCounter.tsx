@@ -11,12 +11,20 @@ import { Button } from "../ui/button";
 import { AiOutlineMinus, AiOutlinePlus } from "react-icons/ai";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
+import { Separator } from "../ui/separator";
 
 type Props = {
   title?: string;
   subtitle?: string;
   counterType?: string;
-  type?: "maxStudents" | "durationWeeks" | "price" | "distanceOfAmenities";
+  type?:
+    | "lessonDuration"
+    | "studentMinAge"
+    | "studentMaxAge"
+    | "distanceOfAmenities"
+    | "averageStudentPerClass"
+    | "averageNumberOfStudent"
+    | "price";
   disabled?: boolean;
 };
 
@@ -60,14 +68,16 @@ const CreateOrganizationCounter = ({
   }, [disabled, dispatch]);
 
   return (
-    <div className="flex w-full items-center justify-between gap-10">
-      <div className={"flex flex-col"}>
-        {title && <div className="font-medium">{title}</div>}
-        {subtitle && (
-          <p className="text-sm font-medium text-zinc-600">{subtitle}</p>
-        )}
+    <div className="flex w-full flex-col items-center justify-center gap-10">
+      <div className="flex w-full items-start justify-between">
+        <div className={"flex flex-col"}>
+          {title && <div className="font-medium">{title}</div>}
+          {subtitle && (
+            <p className="text-sm font-medium text-zinc-600">{subtitle}</p>
+          )}
+        </div>
       </div>
-      <div className={cn("flex w-full flex-1 flex-grow flex-col items-center")}>
+      <div className={cn("flex flex-1 flex-grow flex-col items-center")}>
         <div className="my-4 flex w-full items-center gap-4">
           <Button
             onClick={onReduce}
@@ -82,7 +92,7 @@ const CreateOrganizationCounter = ({
             {type === "price" && <p className="text-sm font-semibold">£</p>}
             <Input
               type="number"
-              value={organizationData.distanceOfAmenities}
+              value={organizationData[type as keyof typeof organizationData]}
               onChange={onChange}
               className={cn(
                 "rounded-lg border border-gray-300 bg-zinc-50 p-1 text-center",
@@ -105,6 +115,7 @@ const CreateOrganizationCounter = ({
         </div>
         <p className="text-sm text-zinc-600">{counterType}</p>
       </div>
+      <div className="h-[1px] w-full bg-zinc-700" />
     </div>
   );
 };

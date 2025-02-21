@@ -24,6 +24,9 @@ import FacilitiesInput from "../inputs/FacilitiesInput";
 import AccommodationTypeInput from "../inputs/AccommodationTypeInput";
 import AccommodationGalleryUpload from "../inputs/AccommodationGalleryUpload";
 import RatingInput from "../inputs/RatingInput";
+import StudentNationInput from "../inputs/studentNationInput";
+import CreateOrganizationCounter from "../inputs/CreateOrganizationCounter";
+import SocialMediaInput from "../inputs/SocialMediaInput";
 
 export enum STEPS {
   DESCRIPTION = 0,
@@ -32,11 +35,13 @@ export enum STEPS {
   COVER_PHOTO = 3,
   GALLERY = 4,
   INFO = 5,
-  FACILITY = 6,
-  FEATURE = 7,
-  ACCOMMODATION = 8,
-  ACCOMMODATION_GALLERY = 9,
-  RANKING = 10,
+  SOCIAL_MEDIA = 6,
+  NATION = 7,
+  FACILITY = 8,
+  FEATURE = 9,
+  ACCOMMODATION = 10,
+  ACCOMMODATION_GALLERY = 11,
+  RANKING = 12,
 }
 
 export const CreateOrganizerModal = () => {
@@ -49,6 +54,8 @@ export const CreateOrganizerModal = () => {
   });
 
   const organization = useAppSelector((state) => state.organization);
+  const studentNation = useAppSelector((state) => state.studentNation);
+  const socialMedia = useAppSelector((state) => state.socialMedia);
 
   console.log(organization);
 
@@ -181,42 +188,70 @@ export const CreateOrganizerModal = () => {
     bodyContent = (
       <div className="flex flex-col gap-8">
         <div>
-          <h1 className="font-bold">Introduction about your Center</h1>
+          <h1 className="font-bold">information about your Center</h1>
           <p className="mb-3 text-sm font-medium text-zinc-600">
             Details of the center
           </p>
         </div>
         <div>
-          <h1 className="font-bold">Distance from the city center</h1>
-          <p className="mb-3 text-sm font-medium text-zinc-600">
-            What age group is the course targeting?
-          </p>
-          <AgeGroupInput />
+          <CreateOrganizationCounter
+            title="Lesson Duration"
+            subtitle="Duration of a lesson?"
+            type="lessonDuration"
+            counterType="mins"
+          />
         </div>
         <div>
-          <h1 className="font-bold">Course Levels</h1>
-          <p className="mb-3 text-sm font-medium text-zinc-600">
-            What level is the course?
-          </p>
-          <CourseLevelInput />
+          <CreateOrganizationCounter
+            title="Minimum Age"
+            subtitle="Minimum age of a lesson?"
+            type="studentMinAge"
+            counterType="years old"
+          />
         </div>
-        <Counter
-          title="Number of student"
-          subtitle="How many students can join?"
-          type="maxStudents"
-          counterType="students"
-        />
-
-        <Counter
-          title="Duration of the course"
-          subtitle="How many days of the course?"
-          type="durationWeeks"
-          counterType="days"
-        />
+        <div>
+          <CreateOrganizationCounter
+            title="Maximum Age"
+            subtitle="Maximum age of a lesson?"
+            type="studentMaxAge"
+            counterType="years old"
+          />
+        </div>
+        <div>
+          <CreateOrganizationCounter
+            title="Average Number per Class"
+            subtitle="Average number of students per class?"
+            type="averageStudentPerClass"
+            counterType="students"
+          />
+        </div>
       </div>
     );
   }
 
+  if (step === STEPS.SOCIAL_MEDIA) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Social Media</h1>
+        <p className="text-sm font-medium text-zinc-600">
+          {` Provide your social media links (optional)`}
+        </p>
+        <SocialMediaInput />
+      </div>
+    );
+  }
+  if (step === STEPS.NATION) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">Student Nation in center</h1>
+        <p className="text-sm font-medium text-zinc-600">
+          Enter the numbers of different nationalities of the students
+        </p>
+
+        <StudentNationInput />
+      </div>
+    );
+  }
   if (step === STEPS.FACILITY) {
     bodyContent = (
       <div className="flex flex-col gap-8">
@@ -279,7 +314,11 @@ export const CreateOrganizerModal = () => {
 
   const onSubmit = () => {
     if (step !== STEPS.RANKING) return onNext();
-    return createOrganizationMutate(organizationData);
+    return createOrganizationMutate({
+      organizationData,
+      studentNationData: studentNation,
+      socialMediaData: socialMedia,
+    });
   };
   return (
     <ResponsiveModel isOpen={isOpen} onOpenChange={setIsOpen}>

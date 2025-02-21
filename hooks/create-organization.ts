@@ -7,7 +7,11 @@ import {
   useAppDispatch,
   useAppSelector,
 } from "@/redux/store";
-import { createOrganizerSchema } from "@/schemas";
+import {
+  createOrganizerSchema,
+  nationalitySchema,
+  socialMediaSchema,
+} from "@/schemas";
 import { useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -15,6 +19,7 @@ import { useCreateOrganizerModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateOrganizerModal";
 import { useRouter } from "next/navigation";
 import { appendToAmenityGallery } from "@/redux/slice/create-organizationSlice";
+import { resetStudentNationData } from "@/redux/slice/create-organizationNationSlice";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();
@@ -132,14 +137,27 @@ export const useCreateOrganization = ({
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { mutate: createOrganizationMutate, isPending } = useMutation({
-    mutationFn: async (data: z.infer<typeof createOrganizerSchema>) => {
-      const result = await onCreateOrganizationAction(data);
+    mutationFn: async ({
+      organizationData,
+      studentNationData,
+      socialMediaData,
+    }: {
+      organizationData: z.infer<typeof createOrganizerSchema>;
+      studentNationData: z.infer<typeof nationalitySchema>[] | [];
+      socialMediaData: z.infer<typeof socialMediaSchema>;
+    }) => {
+      const result = await onCreateOrganizationAction(
+        organizationData,
+        studentNationData,
+        socialMediaData,
+      );
       return result;
     },
     onError: (error) => console.error(error.message),
     onSuccess: (data) => {
       if (data?.status === 200) {
         dispatch(resetOrganizationData());
+        dispatch(resetStudentNationData());
         setStep(STEPS.DESCRIPTION);
         close();
         router.refresh();

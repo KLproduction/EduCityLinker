@@ -111,4 +111,22 @@ export const createOrganizerSchema = z.object({
   location: z.string(),
   lat: z.number(),
   lng: z.number(),
+  lessonDuration: z.number().min(1),
+  studentMinAge: z.number().min(1),
+  studentMaxAge: z.number().min(1),
+  averageStudentPerClass: z.number().min(1),
+});
+
+export const nationalitySchema = z.object({
+  nation: z.string().min(1, "Nation name is required"),
+  count: z
+    .number()
+    .int()
+    .positive("Number of students must be a positive integer"),
+});
+
+export const socialMediaSchema = z.object({
+  facebook: z.string().url().optional(),
+  instagram: z.string().url().optional(),
+  website: z.string().url().optional(),
 });

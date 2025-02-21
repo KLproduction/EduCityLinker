@@ -14,12 +14,16 @@ import organizationSlice, {
   appendToFacility,
   appendToRoomAmenities,
 } from "./slice/create-organizationSlice";
+import studentNationSlice from "./slice/create-organizationNationSlice";
+import socialMediaSlice from "./slice/create-organizationSocialMediaSlice";
 import { persistReducer, persistStore } from "redux-persist";
 import storage from "redux-persist/lib/storage";
 
 const rootReducer = combineReducers({
   createCourse: courseSlice,
   organization: organizationSlice,
+  studentNation: studentNationSlice,
+  socialMedia: socialMediaSlice,
 });
 const persisConfig = {
   key: "root",

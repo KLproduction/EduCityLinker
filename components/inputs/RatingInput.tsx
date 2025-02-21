@@ -14,15 +14,14 @@ import {
 } from "@/redux/store";
 
 const RatingInput = () => {
-  const [rating, setRating] = useState(3);
   const organizationData = useAppSelector((state) => state.organization);
+  const rating = organizationData.rating;
   const dispatch = useAppDispatch();
 
   const handleChange = useCallback(
     (value: number) => {
       const clampedValue = Math.min(5, Math.max(0.5, value));
       const roundedValue = Math.round(clampedValue * 2) / 2;
-      setRating(roundedValue);
       dispatch(setOrganizationData({ rating: roundedValue }));
     },
     [dispatch],
