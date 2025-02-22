@@ -61,35 +61,35 @@ const LogoScroll = () => {
             style={{ opacity: opacity0, scale }}
             className="fixed left-20 top-32 -translate-x-1/2 -translate-y-1/2 transform p-10 font-bold text-rose-500"
           >
-            Flexible Study
+            FLEXIBLE STUDY
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity1, scale }}
             className="fixed bottom-1/2 left-1/3 right-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 transform p-10 font-bold text-rose-500"
           >
-            Summer Exchange
+            SUMMER EXCHANGE
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity2, scale }}
             className="fixed right-24 top-1/4 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
-            English Course
+            ENGLISH COURSE
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity3, scale }}
             className="fixed left-24 top-3/4 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
-            Skilled Teachers
+            SKILLED TEACHERS
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity4, scale }}
             className="fixed bottom-48 right-48 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
-            Discover UK
+            DISCOVER UK
           </motion.h1>
         </div>
       </div>

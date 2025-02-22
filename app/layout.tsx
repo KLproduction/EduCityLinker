@@ -4,17 +4,14 @@ import "./globals.css";
 import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
 import { Toaster } from "@/components/ui/sonner";
-import Navbar from "@/components/Nabar/Navbar";
 import { ReactQueryProvider } from "@/react-query/provider";
 import { ReduxProvider } from "@/redux/provider";
-import NewNav from "@/components/Nabar/newNav";
-import Modal from "@/components/modals/Modal";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { CreateCourseModal } from "@/components/modals/CreateCourseModal";
 import { LoginModal } from "@/components/auth/LoginModal";
 import { CreateOrganizerModal } from "@/components/modals/CreateOrganizerModal";
-import { currentUser } from "@/lib/auth";
 import { getUserById } from "@/data/user";
+import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -48,6 +45,7 @@ export default async function RootLayout({
                 <CreateOrganizerModal />
                 <LoginModal />
                 {children}
+                <Analytics />
               </NuqsAdapter>
             </ReduxProvider>
           </ReactQueryProvider>
