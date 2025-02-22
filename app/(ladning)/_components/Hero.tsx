@@ -3,11 +3,13 @@
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import Image from "next/image";
+import CaptionText from "./caption-text/CaptionText";
+import Link from "next/link";
 
 export default function Hero() {
   return (
     <section className="relative flex min-h-screen flex-col items-center justify-center py-20 text-center">
-      <Image
+      {/* <Image
         src="/pexels-olly-3776180.jpg"
         alt="background"
         fill
@@ -16,10 +18,10 @@ export default function Hero() {
           background:
             "linear-gradient(to bottom, rgba(0, 0, 50, 0.5), rgba(0, 0, 100, 0.7))",
         }}
-      />
+      /> */}
 
       <div className="flex min-h-screen w-full flex-col items-center justify-center">
-        <motion.h1
+        {/* <motion.h1
           className="z-10 mb-4 text-5xl font-bold text-zinc-50"
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -35,18 +37,21 @@ export default function Hero() {
         >
           Connecting Students with the Best English Learning Centers in Your
           City
-        </motion.p>
+        </motion.p> */}
+        <CaptionText text="Connecting Students with the Best English Learning Centers in Your City" />
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.4 }}
         >
-          <Button
-            size="lg"
-            className="transform rounded-full bg-red-600 px-6 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-700"
-          >
-            Explore Now
-          </Button>
+          <Link href="/explore">
+            <Button
+              size="lg"
+              className="transform rounded-full bg-red-600 px-6 py-3 font-bold text-white transition duration-300 ease-in-out hover:scale-105 hover:bg-blue-700"
+            >
+              Explore Now
+            </Button>
+          </Link>
         </motion.div>
       </div>
     </section>

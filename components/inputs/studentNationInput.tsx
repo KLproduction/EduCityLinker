@@ -55,10 +55,15 @@ const StudentNationInput = () => {
       {nationalities.map((item, index) => (
         <Card
           key={index}
-          className="flex items-center gap-4 border-none bg-none p-4 shadow-none"
+          className="relative flex flex-col items-center gap-4 border-none bg-none p-4 shadow-none"
         >
+          <div className="absolute right-2 top-2">
+            <Button variant="ghost" onClick={() => handleRemove(index)}>
+              <TrashIcon size={16} className="text-red-500" />
+            </Button>
+          </div>
           <Input
-            placeholder="Nation"
+            placeholder="Enter Nationality"
             value={item.nation}
             onChange={(e) => handleChange(index, "nation", e.target.value)}
             className="w-1/2"
@@ -80,9 +85,6 @@ const StudentNationInput = () => {
               +
             </Button>
           </div>
-          <Button variant="ghost" onClick={() => handleRemove(index)}>
-            <TrashIcon size={16} className="text-red-500" />
-          </Button>
         </Card>
       ))}
       <Button onClick={handleAdd} className="mt-2">

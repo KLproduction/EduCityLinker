@@ -19,7 +19,7 @@ import { Badge, Book, Calendar, Check, MapPin, Users } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { formattedPrice } from "@/lib/formatPrice";
 import { Separator } from "@/components/ui/separator";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import ListingSection from "@/components/listing/ListingSection";
 import StarRating from "@/components/StarRating";
@@ -32,6 +32,7 @@ type Props = {
 
 const ListingTable = ({ data, currentUser }: Props) => {
   const params = useSearchParams();
+  const pathname = usePathname();
   const categoryFilter = params.get("category");
   const ageGroupsFilter = params.get("age-groups");
   const courseLevelsFilter = params.get("course-levels");
@@ -128,6 +129,18 @@ const ListingTable = ({ data, currentUser }: Props) => {
       </div>
     );
 
+  const viewSchool = () => {
+    const queryParams = new URLSearchParams();
+    params.forEach((value, key) => {
+      if (value) {
+        queryParams.append(key, value);
+      }
+    });
+    const fullUrl = `${pathname}?${queryParams.toString()}`;
+    sessionStorage.setItem("previousExploreUrl", fullUrl);
+    console.log(fullUrl);
+  };
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
       {organizations.map((organizer) => (
@@ -185,7 +198,10 @@ const ListingTable = ({ data, currentUser }: Props) => {
 
             {/* Button (Stacks on small screens) */}
             <div className="flex w-full justify-end sm:h-full sm:w-auto sm:items-center">
-              <Link href={`/listing/${organizer.id}`}>
+              <Link
+                href={`/listing/${organizer.id}`}
+                onClick={() => viewSchool()}
+              >
                 <Button variant="outline" className="w-full sm:w-auto">
                   View School
                 </Button>

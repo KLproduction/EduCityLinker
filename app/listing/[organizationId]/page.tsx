@@ -1,6 +1,7 @@
 import {
   getListingByIdAction,
   getOrganizationByIdAction,
+  getSocialMediaByOrganizationIdAction,
   getStudentNationByOrganizationIdAction,
 } from "@/actions/listing";
 import EmptyState from "@/app/explore/_components/EmptyState";
@@ -21,6 +22,9 @@ const ListingPage = async ({ params }: Props) => {
   const studentNation = await getStudentNationByOrganizationIdAction(
     params.organizationId,
   );
+  const socialMediaData = await getSocialMediaByOrganizationIdAction(
+    params.organizationId,
+  );
 
   if (data?.status !== 200) {
     <ClientOnly>
@@ -31,8 +35,7 @@ const ListingPage = async ({ params }: Props) => {
   const listing = data?.organization?.listings;
   const organizer = data?.organization;
   const studentNations = studentNation?.studentNations;
-
-  console.log(studentNations);
+  const socialMedia = socialMediaData?.socialMedia;
 
   return (
     <ClientOnly>
@@ -41,6 +44,7 @@ const ListingPage = async ({ params }: Props) => {
         organizer={organizer!}
         currentUser={user}
         studentNation={studentNations}
+        socialMedia={socialMedia}
       />
     </ClientOnly>
   );

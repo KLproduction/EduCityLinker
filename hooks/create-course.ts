@@ -46,7 +46,6 @@ export const useCreateCourse = (
       },
       onSuccess: (data) => {
         if (data.status === 200) {
-          console.log("Mutation Success Data:", data);
           toast.success("Course created successfully!");
           dispatch(resetCourseData());
           setStep(STEPS.CATEGORY);
@@ -54,7 +53,6 @@ export const useCreateCourse = (
           router.refresh();
         }
         toast.error(data.message);
-        console.log(data.message);
       },
     });
 

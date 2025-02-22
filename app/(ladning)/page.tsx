@@ -13,6 +13,7 @@ import ParallaxBg from "./_components/parallex-bg/ParallaxBg";
 import { motion } from "framer-motion";
 import DragAndDrop from "./_components/drag-and-drop-hero/DragAndDrop";
 import NewNav from "@/components/Nabar/newNav";
+import HeroSearchBar from "./_components/HeroSearchBar";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -36,10 +37,11 @@ export default function LandingPage() {
   return (
     <div className="h-full w-full">
       <LogoScroll />
-      <Hero />
-      <DragAndDrop className="z-[200] bg-zinc-800" />
+      <HeroSearchBar />
       <FeaturesPage />
-      <ParallaxBg />
+      {/* <ParallaxBg /> */}
+      {/* <Hero /> */}
+      {/* <DragAndDrop className="z-[200] bg-zinc-800" /> */}
       {/* <ELearningPage /> */}
       {/* <PartnershipSlider /> */}
       {/* <MapPreview />

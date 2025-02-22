@@ -57,8 +57,6 @@ export const CreateOrganizerModal = () => {
   const studentNation = useAppSelector((state) => state.studentNation);
   const socialMedia = useAppSelector((state) => state.socialMedia);
 
-  console.log(organization);
-
   const onBack = () => {
     setStep((perv) => perv - 1);
   };

@@ -113,7 +113,7 @@ export const getStudentNationByOrganizationIdAction = async (
 ) => {
   try {
     const studentNations = await db.nationality.findMany({
-      where: { organizationId: organizationId },
+      where: { organizationId },
       select: {
         nation: true,
         count: true,
@@ -128,6 +128,25 @@ export const getStudentNationByOrganizationIdAction = async (
     return {
       status: 404,
       message: "Student Nations not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const getSocialMediaByOrganizationIdAction = async (
+  organizationId: string,
+) => {
+  try {
+    const socialMedia = await db.socialMedia.findFirst({
+      where: { organizationId },
+    });
+
+    if (!socialMedia) return;
+
+    return {
+      socialMedia,
+      status: 200,
     };
   } catch (e) {
     console.error(e);

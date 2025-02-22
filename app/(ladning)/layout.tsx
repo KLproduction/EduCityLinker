@@ -6,7 +6,7 @@ type Props = {
   children: React.ReactNode;
 };
 
-const ExploreLayout = ({ children }: Props) => {
+const LandingLayout = ({ children }: Props) => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
       <Navbar />
@@ -16,4 +16,4 @@ const ExploreLayout = ({ children }: Props) => {
   );
 };
 
-export default ExploreLayout;
+export default LandingLayout;

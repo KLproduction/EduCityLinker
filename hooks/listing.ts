@@ -31,7 +31,6 @@ export const useAddFavorites = (userId: string, listingId: string) => {
         toast.error(error.message);
       },
       onSuccess: (data) => {
-        console.log("Mutation Success Data:", data);
         if (data?.message) {
           toast.success(data.message);
         }
@@ -50,7 +49,6 @@ export const useAddFavorites = (userId: string, listingId: string) => {
         toast.error(error.message);
       },
       onSuccess: (data) => {
-        console.log("Mutation Success Data:", data);
         toast.success(data?.message);
         queryClient.invalidateQueries({ queryKey: ["favorites", userId] });
       },

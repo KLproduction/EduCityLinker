@@ -45,9 +45,6 @@ const CoverPhotoUpload = () => {
   const { onDeleteUploadcare, isPending: isDeleting } = useDeleteUploadcare();
   const photoId = useAppSelector((state) => state.organization.coverPhoto);
   const photoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${photoId}/-/preview/300x300/`;
-  useEffect(() => {
-    console.log("IMG", photoSrc);
-  }, [handleImageChange]);
 
   const handleImageDelete = (id: string) => {
     if (photoId) {

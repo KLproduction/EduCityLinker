@@ -4,14 +4,13 @@ import { useAppDispatch, useAppSelector } from "@/redux/store";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { setSocialMediaData } from "@/redux/slice/create-organizationSocialMediaSlice";
-import { Globe } from "lucide-react"; // Import icons
+import { Globe } from "lucide-react";
 import { BiLogoFacebookCircle } from "react-icons/bi";
 import { TbBrandInstagramFilled } from "react-icons/tb";
 
 const SocialMediaInput = () => {
   const dispatch = useAppDispatch();
   const socialMedia = useAppSelector((state) => state.socialMedia);
-  console.log(socialMedia);
 
   return (
     <div className="space-y-4 p-4">

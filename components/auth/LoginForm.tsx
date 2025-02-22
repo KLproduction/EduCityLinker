@@ -159,7 +159,7 @@ export const LoginForm = () => {
             disabled={isPending}
             onClick={() => {
               {
-                route.refresh(), console.log("REFRESH");
+                route.refresh();
               }
             }}
           >

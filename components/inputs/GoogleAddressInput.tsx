@@ -44,7 +44,6 @@ const GoogleAddressInput = (props: Props) => {
   useEffect(() => {
     const fetchGeometry = async (placeId: string) => {
       const data = await getGeometry(placeId);
-      console.log("g", data);
 
       if (data) {
         setCenter({
@@ -59,6 +58,8 @@ const GoogleAddressInput = (props: Props) => {
 
   const handleSelectLocation = (prediction: PlaceAutocompleteResult) => {
     setLocation(prediction);
+    const city = prediction.description.split(",").slice(-2)[0];
+    console.log("city", city);
     setInput(prediction.description);
 
     setSessionToken(generateSessionToken());

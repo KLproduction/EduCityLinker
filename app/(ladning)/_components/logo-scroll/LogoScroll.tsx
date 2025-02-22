@@ -1,3 +1,4 @@
+import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
 
@@ -12,7 +13,7 @@ const LogoScroll = () => {
   const transform = useTransform(
     scrollYProgress,
     [0, 0.5],
-    ["translate(45%, 45%)", "translate(0%, 0%)"],
+    ["translate(40%, 45%)", "translate(0%, 0%)"],
   );
   const transformMobile = useTransform(
     scrollYProgress,
@@ -25,15 +26,15 @@ const LogoScroll = () => {
   const height = useTransform(scrollYProgress, [0, 0.5], [800, 0]);
   const mobileHeight = useTransform(scrollYProgress, [0, 0.5], [400, 0]);
 
-  const opacity0 = useTransform(scrollYProgress, [0.4, 0.8, 1], [0, 1, 0]);
-  const opacity1 = useTransform(scrollYProgress, [0, 0.8, 1], [0, 1, 0]);
-  const opacity2 = useTransform(scrollYProgress, [0.2, 0.8, 1], [0, 1, 0]);
-  const opacity3 = useTransform(scrollYProgress, [0.3, 0.8, 1], [0, 1, 0]);
-  const opacity4 = useTransform(scrollYProgress, [0.4, 0.8, 1], [0, 1, 0]);
+  const opacity0 = useTransform(scrollYProgress, [0.4, 0.6, 1], [0, 1, 0]);
+  const opacity1 = useTransform(scrollYProgress, [0, 0.6, 1], [0, 1, 0]);
+  const opacity2 = useTransform(scrollYProgress, [0.2, 0.6, 1], [0, 1, 0]);
+  const opacity3 = useTransform(scrollYProgress, [0.3, 0.6, 1], [0, 1, 0]);
+  const opacity4 = useTransform(scrollYProgress, [0.4, 0.6, 1], [0, 1, 0]);
 
   return (
     <motion.div
-      className="relative min-h-[300vh] w-full overflow-hidden bg-zinc-800"
+      className="relative hidden min-h-[300vh] w-full overflow-hidden bg-white lg:block"
       ref={sectionRef}
     >
       <div className="h-full w-full">
@@ -52,53 +53,41 @@ const LogoScroll = () => {
           >
             <h2 className="pointer-events-none">AMIO</h2>
           </motion.div>
-
-          {/* MOBILE LOGO */}
-          <motion.div
-            style={{
-              scale: scaleMobile,
-              transform: transformMobile,
-              height: mobileHeight,
-            }}
-            className="pointer-events-none fixed left-0 top-0 p-3 text-5xl sm:hidden"
-          >
-            <h2>AMIO</h2>
-          </motion.div>
         </motion.div>
 
         {/* SCREEN CAPTION */}
-        <div>
+        <div className={cn("pointer-events-none hidden text-6xl sm:block")}>
           <motion.h1
             style={{ opacity: opacity0, scale }}
-            className="fixed left-20 top-32 -translate-x-1/2 -translate-y-1/2 transform p-10 text-6xl font-bold text-zinc-50"
+            className="fixed left-20 top-32 -translate-x-1/2 -translate-y-1/2 transform p-10 font-bold text-rose-500"
           >
             Flexible Study
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity1, scale }}
-            className="fixed bottom-1/2 left-1/3 right-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 transform p-10 text-6xl font-bold text-zinc-50"
+            className="fixed bottom-1/2 left-1/3 right-1/2 top-1/3 -translate-x-1/2 -translate-y-1/2 transform p-10 font-bold text-rose-500"
           >
             Summer Exchange
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity2, scale }}
-            className="fixed right-24 top-1/4 -translate-x-1/2 -translate-y-1/2 transform text-6xl font-bold text-zinc-50"
+            className="fixed right-24 top-1/4 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
             English Course
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity3, scale }}
-            className="fixed left-24 top-3/4 -translate-x-1/2 -translate-y-1/2 transform text-6xl font-bold text-zinc-50"
+            className="fixed left-24 top-3/4 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
             Skilled Teachers
           </motion.h1>
 
           <motion.h1
             style={{ opacity: opacity4, scale }}
-            className="fixed bottom-48 right-48 -translate-x-1/2 -translate-y-1/2 transform text-6xl font-bold text-zinc-50"
+            className="fixed bottom-48 right-48 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
             Discover UK
           </motion.h1>

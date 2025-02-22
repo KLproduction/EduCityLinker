@@ -32,7 +32,7 @@ export const useUploadLogo = () => {
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
       dispatch(setOrganizationData({ logo: data }));
-      console.log(organizationData);
+
       toast.success("Image uploaded successfully!");
     },
   });
@@ -73,7 +73,6 @@ export const useUploadGallery = () => {
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
       dispatch(appendToGallery(data));
-      console.log(organizationData);
       toast.success("Image uploaded successfully!");
     },
   });
@@ -112,7 +111,7 @@ export const useDeleteUploadcare = () => {
     },
     onError: (error) => console.error(error.message),
     onSuccess: (data) => {
-      console.log(data), toast.success("Image deleted successfully!");
+      toast.success("Image deleted successfully!");
     },
   });
 
@@ -165,7 +164,6 @@ export const useCreateOrganization = ({
         toast.success(data.message);
       } else {
         toast.error(data.message);
-        console.log(data.message);
       }
     },
   });

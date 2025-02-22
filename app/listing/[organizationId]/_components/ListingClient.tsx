@@ -7,6 +7,7 @@ import {
   Listing,
   Organization,
   Listing as PrismaListing,
+  SocialMedia,
 } from "@prisma/client";
 
 import React, { useMemo } from "react";
@@ -26,6 +27,7 @@ type Props = {
     nation: string;
     count: number;
   }[];
+  socialMedia?: SocialMedia;
 };
 
 const ListingClient = ({
@@ -34,11 +36,12 @@ const ListingClient = ({
   organizer,
   enrollment,
   studentNation,
+  socialMedia,
 }: Props) => {
   return (
     <div className="flex min-h-[300vh] flex-col gap-8">
       <div>
-        <ListingHeader organization={organizer} />
+        <ListingHeader organization={organizer} socialMedia={socialMedia} />
       </div>
       <MyContainer>
         <div className="mx-auto">
