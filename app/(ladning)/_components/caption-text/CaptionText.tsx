@@ -33,9 +33,9 @@ const CaptionText: FC<CaptionTextProps> = ({ text, className }) => {
         style={{ opacity: mapOpacity }}
       >
         <img
-          src="/heroMap.svg"
+          src="/heroMap_upscayl_2x_upscayl-standard-4x.png"
           alt="background"
-          className="sticky top-0 object-cover"
+          className="object-fit sticky top-0"
         />
       </motion.div>
       <div

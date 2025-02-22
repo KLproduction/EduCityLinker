@@ -21,7 +21,6 @@ const HeartButton = ({ id, currentUser }: Props) => {
     favorites,
   } = useAddFavorites(currentUser?.id!, id);
 
-  // Sync favorite state with data from the server
   useEffect(() => {
     if (favorites && favorites.favoriteIds) {
       const hasId = favorites.favoriteIds.includes(id);

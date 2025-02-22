@@ -96,6 +96,7 @@ export const removeFavoriteAction = async (listingId: string) => {
 
 export const getFavoritesAction = async (userId: string) => {
   try {
+    if (!userId) return;
     const userData = await db.user.findUnique({
       where: {
         id: userId,
