@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import ResponsiveModel from "../global/responsive-model";
 import Modal from "./Modal";
 import { useCreateCourseModal } from "@/hooks/modal";
@@ -88,10 +88,12 @@ export const CreateCourseModal = ({ user, organizationId }: Props) => {
     isDisabled = !courseData.price || courseData.price < 1;
   }
 
-  if (user?.role !== "ADMIN") {
-    setStep(STEPS.CATEGORY);
-    dispatch(setCourseData({ organizationId }));
-  }
+  useEffect(() => {
+    if (user?.role !== "ADMIN") {
+      setStep(STEPS.CATEGORY);
+      dispatch(setCourseData({ organizationId }));
+    }
+  }, [user, dispatch, organizationId]);
 
   let bodyContent = (
     <div className="flex flex-col gap-8">
