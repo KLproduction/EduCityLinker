@@ -49,6 +49,7 @@ const Navbar = async () => {
     userDetails.organization[0].id
       ? true
       : false;
+
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
       <MyContainer>
@@ -80,8 +81,10 @@ const Navbar = async () => {
             </div>
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
-              <div className="hidden sm:block">
-                <ModalBtn />
+              <div className={cn("hidden sm:block")}>
+                <div className={cn(!isOrganizer && "hidden")}>
+                  <ModalBtn />
+                </div>
               </div>
 
               <UserAvatar

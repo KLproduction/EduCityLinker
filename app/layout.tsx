@@ -28,7 +28,6 @@ export default async function RootLayout({
   const session = await auth();
 
   const user = await getUserById(session?.user.id as string);
-  const organizationId = user?.organization[0].id;
 
   return (
     <SessionProvider session={session}>
@@ -38,10 +37,17 @@ export default async function RootLayout({
             <ReduxProvider>
               <NuqsAdapter>
                 <Toaster />
-                <CreateCourseModal
-                  user={user}
-                  organizationId={organizationId}
-                />
+                {user &&
+                  user?.organization.length > 0 &&
+                  (() => {
+                    const organizationId = user?.organization[0].id;
+                    return (
+                      <CreateCourseModal
+                        user={user}
+                        organizationId={organizationId}
+                      />
+                    );
+                  })()}
                 <CreateOrganizerModal />
                 <LoginModal />
                 {children}

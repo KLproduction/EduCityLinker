@@ -20,6 +20,7 @@ import { STEPS } from "@/components/modals/CreateOrganizerModal";
 import { useRouter } from "next/navigation";
 import { appendToAmenityGallery } from "@/redux/slice/create-organizationSlice";
 import { resetStudentNationData } from "@/redux/slice/create-organizationNationSlice";
+import { resetSocialMediaData } from "@/redux/slice/create-organizationSocialMediaSlice";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();
@@ -157,6 +158,7 @@ export const useCreateOrganization = ({
       if (data?.status === 200) {
         dispatch(resetOrganizationData());
         dispatch(resetStudentNationData());
+        dispatch(resetSocialMediaData());
         setStep(STEPS.DESCRIPTION);
         close();
         router.refresh();
