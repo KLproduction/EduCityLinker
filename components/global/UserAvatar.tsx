@@ -19,6 +19,7 @@ import { signOutAction } from "@/actions/(auth)/signOut";
 import { CgLogOut } from "react-icons/cg";
 import { User } from "@prisma/client";
 import { useCreateCourseModal, useCreateOrganizerModal } from "@/hooks/modal";
+import { useRouter } from "next/navigation";
 
 type Props = {
   image?: string;
@@ -41,6 +42,8 @@ const UserAvatar = ({
   const onClickHandler = async () => {
     await signOutAction();
   };
+
+  const router = useRouter();
 
   const { open: openCreateOrganizerModal } = useCreateOrganizerModal();
   const { open: openCreateCourseModal } = useCreateCourseModal();
@@ -90,7 +93,7 @@ const UserAvatar = ({
           <div className="mt-2 h-0.5 w-full bg-zinc-200" />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => console.log("clicked")}
+          onClick={() => router.push(`/favorites/${userId}`)}
           className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
         >
           My Reservations

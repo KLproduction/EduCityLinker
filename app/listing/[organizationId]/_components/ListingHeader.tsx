@@ -1,7 +1,9 @@
 import MyContainer from "@/components/Container";
+import HeartButton from "@/components/listing/HeartButton";
 import GoogleMap from "@/components/Map";
 import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
+import { ExtenderUser } from "@/next-auth";
 import { Organization, SocialMedia } from "@prisma/client";
 import { ArrowBigLeft, Globe } from "lucide-react";
 import Link from "next/link";
@@ -12,9 +14,10 @@ import { TbBrandInstagramFilled } from "react-icons/tb";
 type Props = {
   organization: Organization;
   socialMedia?: SocialMedia;
+  currentUser?: ExtenderUser | null;
 };
 
-const ListingHeader = ({ organization, socialMedia }: Props) => {
+const ListingHeader = ({ organization, socialMedia, currentUser }: Props) => {
   const router = useRouter();
   const goBack = () => {
     const prevUrl = sessionStorage.getItem("previousExploreUrl");
@@ -24,7 +27,10 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
   };
   return (
     <div>
-      <div className="relative h-[500px] w-[100vw] overflow-hidden">
+      <div className="relative h-[200px] w-[100vw] overflow-hidden md:h-[500px]">
+        <div className="absolute right-8 top-2 z-10">
+          <HeartButton id={organization.id} currentUser={currentUser || null} />
+        </div>
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organization.coverPhoto}/-/preview/1280x600/`}
@@ -83,7 +89,7 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
           </div>
         )}
       </div>
-      <div className="absolute left-12 top-32 z-50">
+      <div className="absolute left-6 top-24 z-50">
         <Button
           onClick={() => goBack()}
           className="flex items-center justify-center gap-3"
@@ -92,7 +98,7 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
           Back
         </Button>
       </div>
-      <div className="flex w-full flex-col items-center justify-center">
+      <div className="flex w-full flex-col items-center justify-center p-3">
         <div className="my-8 flex w-full max-w-3xl flex-col justify-center gap-3">
           <h1 className="text-lg font-bold md:text-3xl">
             {organization.location}

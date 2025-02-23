@@ -38,18 +38,24 @@ const ListingClient = ({
   return (
     <div className="flex min-h-[300vh] flex-col gap-8 overflow-hidden">
       <div>
-        <ListingHeader organization={organizer} socialMedia={socialMedia} />
+        <ListingHeader
+          organization={organizer}
+          socialMedia={socialMedia || undefined}
+          currentUser={currentUser || null}
+        />
       </div>
       <MyContainer>
         <div className="mx-auto">
-          <div className="mt-4 space-y-4">
-            <h1 className="text-2xl font-bold">Courses</h1>
-            {listing.map((listing) => (
-              <div key={listing.id}>
-                <ListingSectionDropDown listing={listing} />
-              </div>
-            ))}
-          </div>
+          {listing.length > 0 && (
+            <div className="mt-4 space-y-4">
+              <h1 className="text-2xl font-bold">Courses</h1>
+              {listing.map((listing) => (
+                <div key={listing.id}>
+                  <ListingSectionDropDown listing={listing} />
+                </div>
+              ))}
+            </div>
+          )}
           <OrganizationInfo
             organization={organizer}
             studentNation={studentNation}
