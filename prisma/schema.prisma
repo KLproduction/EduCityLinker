@@ -66,6 +66,8 @@ model Organization {
   roomTypes              String?
   roomAmenities          String[]      @default([])
   location               String
+  city                   String
+  country                String
   lat                    Float
   lng                    Float
   distanceOfAmenities    Int?

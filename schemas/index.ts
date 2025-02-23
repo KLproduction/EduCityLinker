@@ -110,6 +110,8 @@ export const createOrganizerSchema = z.object({
   rating: z.number().min(0.5),
   ratingDescription: z.string().optional(),
   location: z.string(),
+  city: z.string(),
+  country: z.string(),
   lat: z.number(),
   lng: z.number(),
   lessonDuration: z.number().min(1),

@@ -16,6 +16,8 @@ const initialState: organizationSliceState = {
   roomTypes: "",
   roomAmenities: [],
   location: "",
+  city: "",
+  country: "",
   lat: 51.4545,
   lng: -2.5879,
   distanceOfAmenities: 1,

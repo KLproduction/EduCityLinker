@@ -37,8 +37,13 @@ const ListingSection = ({ listing }: Props) => {
         </div>
 
         {/* Price (Always right-aligned) */}
-        <div className="text-right text-base font-bold text-green-600">
-          {formattedPrice(listing.price)}
+        <div className="flex flex-col items-end gap-3">
+          <div className="text-right text-sm text-zinc-500">
+            {`Original Price: ${" "}${formattedPrice(listing.price)}`}
+          </div>
+          <div className="text-right text-base font-bold text-rose-500">
+            {`Discount Offer: ${" "}${formattedPrice(listing.price * 0.9)}`}
+          </div>
         </div>
       </div>
     </div>

@@ -130,33 +130,27 @@ export const getFavoritesByUserIdAction = async (userId: string) => {
       },
     });
 
-    if (!userData || !userData.favoriteIds) {
-      return {
-        status: 404,
-        message: "User favorites not found.",
-      };
+    if (!userData) {
+      return { status: 404, message: "User not found" };
     }
-    userData.favoriteIds.map(async (id) => {
-      const organization = await db.organization.findUnique({
-        where: {
-          id,
-        },
-        include: {
-          listings: true,
-        },
-      });
-      if (organization) {
-        return {
-          organization,
-          status: 200,
-        };
-      } else {
-        return {
-          status: 404,
-          message: "Organization not found",
-        };
-      }
-    });
+
+    const favoriteOrganizations = await Promise.all(
+      userData.favoriteIds.map(async (id) => {
+        const organization = await db.organization.findUnique({
+          where: { id },
+          include: { listings: true },
+        });
+
+        return organization
+          ? { organization, status: 200 }
+          : { status: 404, message: "Organization not found" };
+      }),
+    );
+
+    return {
+      favoriteOrganizations,
+      status: 200,
+    };
   } catch (e) {
     console.error(e);
   }

@@ -11,7 +11,6 @@ import {
   CommandItem,
   CommandList,
 } from "./ui/command";
-import { useGoogleLocation } from "@/hooks/create-course";
 import { googleLat } from "./GoogleMapSimple";
 import { Library } from "@googlemaps/js-api-loader";
 import { useJsApiLoader } from "@react-google-maps/api";
@@ -147,6 +146,8 @@ const GoogleMapWithAddressInput = () => {
             location: prediction.description,
             lat: newCenter.lat, // ✅ Now using directly fetched lat/lng
             lng: newCenter.lng,
+            city: prediction.description.split(",").slice(-2)[0],
+            country: prediction.description.split(",").slice(-1)[0],
           }),
         );
       }, 100); // Delay dispatch slightly to allow state update

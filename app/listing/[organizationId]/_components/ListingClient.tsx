@@ -35,6 +35,13 @@ const ListingClient = ({
   studentNation,
   socialMedia,
 }: Props) => {
+  if (!organizer) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center">
+        No Organization Found.
+      </div>
+    );
+  }
   return (
     <div className="flex min-h-[300vh] flex-col gap-8 overflow-hidden">
       <div>

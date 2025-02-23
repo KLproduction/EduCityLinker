@@ -86,14 +86,14 @@ const UserAvatar = ({
           <div className="mt-2 h-0.5 w-full bg-zinc-200" />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => console.log("clicked")}
+          onClick={() => router.push(`/favorites/${userId}`)}
           className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
         >
           My Favorites
           <div className="mt-2 h-0.5 w-full bg-zinc-200" />
         </DropdownMenuItem>
         <DropdownMenuItem
-          onClick={() => router.push(`/favorites/${userId}`)}
+          onClick={() => console.log("clicked")}
           className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
         >
           My Reservations
