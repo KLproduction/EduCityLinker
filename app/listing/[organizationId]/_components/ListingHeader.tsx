@@ -39,7 +39,11 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
             <div className="flex items-center gap-4">
               {socialMedia.website && (
                 <Link
-                  href={socialMedia.website}
+                  href={
+                    socialMedia.website.startsWith("http")
+                      ? socialMedia.website
+                      : `https://${socialMedia.website}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-full bg-white/10 p-2 backdrop-blur-sm transition-colors hover:bg-white/20"
@@ -48,9 +52,12 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
                 </Link>
               )}
               {socialMedia.facebook && (
-                //href={socialMedia.facebook.startsWith("http") ? socialMedia.facebook : `https://${socialMedia.facebook}`}
                 <Link
-                  href={socialMedia.facebook}
+                  href={
+                    socialMedia.facebook.startsWith("http")
+                      ? socialMedia.facebook
+                      : `https://${socialMedia.facebook}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-full bg-white/10 p-2 backdrop-blur-sm transition-colors hover:bg-white/20"
@@ -60,7 +67,11 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
               )}
               {socialMedia.instagram && (
                 <Link
-                  href={socialMedia.instagram}
+                  href={
+                    socialMedia.instagram.startsWith("http")
+                      ? socialMedia.instagram
+                      : `https://${socialMedia.instagram}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="rounded-full bg-white/10 p-2 backdrop-blur-sm transition-colors hover:bg-white/20"

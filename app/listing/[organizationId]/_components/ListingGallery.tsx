@@ -14,7 +14,7 @@ const ListingGallery = ({ coverPhoto, gallery }: Props) => {
     <div className="flex flex-col gap-y-10">
       <div className="relative rounded-xl">
         <img
-          src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${active}/-/preview/600x600/`}
+          src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${active}/-/preview/800x600/`}
           alt="group-img"
           className="aspect-video z-20 max-h-[600px] w-full overflow-hidden rounded-t-xl object-cover object-center"
         />
@@ -27,7 +27,7 @@ const ListingGallery = ({ coverPhoto, gallery }: Props) => {
                 onClick={() => setActive(image)}
                 src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${image}/-/preview/300x300/`}
                 alt="gallery-img"
-                className="aspect-video h-36 w-36 cursor-pointer rounded-xl object-cover opacity-80 transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-70"
+                className="aspect-video h-24 w-24 cursor-pointer rounded-xl object-cover opacity-80 transition-all duration-300 ease-in-out hover:scale-110 hover:opacity-70 md:h-36 md:w-36"
               />
             </div>
           );

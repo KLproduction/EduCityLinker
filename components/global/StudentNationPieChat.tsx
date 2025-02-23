@@ -16,7 +16,7 @@ const COLORS = [
 
 const StudentNationPieChat = ({ data }: Props) => {
   return (
-    <div className="flex h-full w-full justify-center overflow-hidden">
+    <div className="my-8 flex h-full w-full flex-col justify-center gap-5 overflow-hidden md:flex-row">
       <PieChart
         width={window.innerWidth < 640 ? 300 : 400}
         height={window.innerWidth < 640 ? 400 : 400}
@@ -37,6 +37,21 @@ const StudentNationPieChat = ({ data }: Props) => {
         <Tooltip />
         <Legend />
       </PieChart>
+      <div>
+        <div className="flex flex-col gap-2">
+          {data.map((item, index) => (
+            <div key={index} className="flex items-center gap-2">
+              <div
+                className="h-3 w-3 rounded-full"
+                style={{ backgroundColor: COLORS[index % COLORS.length] }}
+              />
+              <span>
+                {item.nation}: {item.count}
+              </span>
+            </div>
+          ))}
+        </div>
+      </div>
     </div>
   );
 };

@@ -11,11 +11,8 @@ import {
 } from "@prisma/client";
 
 import React, { useMemo } from "react";
-import ListingInfo from "./ListingInfo";
-import OrganizerGallery from "./OrganizerGallery";
 import ListingHeader from "./ListingHeader";
 import OrganizationInfo from "./OrganizationInfo";
-import ListingSection from "@/components/listing/ListingSection";
 import ListingSectionDropDown from "./ListingSectionDropDown";
 
 type Props = {
@@ -64,9 +61,3 @@ const ListingClient = ({
 };
 
 export default ListingClient;
-
-{
-  /* <div className="flex flex-col gap-6">
-  <OrganizerGallery title={organizer.name} organizer={organizer} />
-</div> */
-}

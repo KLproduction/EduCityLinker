@@ -9,6 +9,7 @@ import { accommodationTypes, features, schoolFacilities } from "@/data/data";
 import { Organization } from "@prisma/client";
 import { Building2, Check, Clock, Users, Wifi } from "lucide-react";
 import React from "react";
+import OrganizationGallery from "./OrganizationGallery";
 
 type Props = {
   organization: Organization;
@@ -134,6 +135,9 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
             </div>
           </section>
         )}
+        <div>
+          <OrganizationGallery title="Gallery" organizer={organization} />
+        </div>
 
         <div>
           {studentNation && <StudentNationPieChat data={studentNation} />}

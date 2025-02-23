@@ -8,25 +8,24 @@ import React from "react";
 import ListingGallery from "./ListingGallery";
 
 type Props = {
-  title: string;
+  title?: string;
   organizer: Organization;
 };
 
-const OrganizerGallery = ({ title, organizer }: Props) => {
-  const coverPhotoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organizer.coverPhoto}/-/preview/600x600/`;
-
+const OrganizationGallery = ({ title, organizer }: Props) => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
+      {title && (
+        <h1 className="my-3 flex w-full justify-start text-3xl font-semibold">
+          {title}
+        </h1>
+      )}
       <ListingGallery
         coverPhoto={organizer.coverPhoto!}
         gallery={organizer.gallery}
       />
-
-      {/* <div className="absolute right-3 top-3">
-          <HeartButton id={id} currentUser={currentUser || null} />
-        </div> */}
     </div>
   );
 };
 
-export default OrganizerGallery;
+export default OrganizationGallery;
