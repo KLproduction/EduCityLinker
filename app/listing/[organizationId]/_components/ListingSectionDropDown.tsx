@@ -14,7 +14,6 @@ const ListingSectionDropdown = ({ listing }: Props) => {
 
   return (
     <div className="mt-4 h-full w-full">
-      {/* Trigger: Clicking ListingSection Toggles Dropdown */}
       <div
         className="relative cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
@@ -28,7 +27,6 @@ const ListingSectionDropdown = ({ listing }: Props) => {
       {/* Dropdown Content */}
       {isOpen && (
         <div className="mt-2 h-full w-full rounded-md border bg-white p-3 shadow-md transition duration-200 ease-in-out">
-          {/* <ListingDetailSection listing={listing} /> */}
           <CourseDetailDisplay
             {...listing}
             courseLevel={listing.courseLevels}

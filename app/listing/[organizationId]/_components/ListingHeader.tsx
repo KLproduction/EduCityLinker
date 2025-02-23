@@ -1,4 +1,6 @@
 import MyContainer from "@/components/Container";
+import GoogleMap from "@/components/Map";
+import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import { Organization, SocialMedia } from "@prisma/client";
 import { ArrowBigLeft, Globe } from "lucide-react";
@@ -13,7 +15,6 @@ type Props = {
 };
 
 const ListingHeader = ({ organization, socialMedia }: Props) => {
-  console.log(socialMedia);
   const router = useRouter();
   const goBack = () => {
     const prevUrl = sessionStorage.getItem("previousExploreUrl");
@@ -22,8 +23,8 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
     router.push(prevUrl!);
   };
   return (
-    <MyContainer>
-      <div className="relative h-[500px] w-screen">
+    <div>
+      <div className="relative h-[500px] w-[100vw] overflow-hidden">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organization.coverPhoto}/-/preview/1280x600/`}
@@ -47,6 +48,7 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
                 </Link>
               )}
               {socialMedia.facebook && (
+                //href={socialMedia.facebook.startsWith("http") ? socialMedia.facebook : `https://${socialMedia.facebook}`}
                 <Link
                   href={socialMedia.facebook}
                   target="_blank"
@@ -79,7 +81,29 @@ const ListingHeader = ({ organization, socialMedia }: Props) => {
           Back
         </Button>
       </div>
-    </MyContainer>
+      <div className="flex w-full flex-col items-center justify-center">
+        <div className="my-8 flex w-full max-w-3xl flex-col justify-center gap-3">
+          <h1 className="text-lg font-bold md:text-3xl">
+            {organization.location}
+          </h1>
+          <div className="flex w-full flex-col items-center justify-start gap-6 px-2">
+            {organization.description && (
+              <div className="flex w-full flex-col justify-start gap-4">
+                <p className="mb-6 text-muted-foreground">
+                  {organization.description}
+                </p>
+                <StarRating rating={organization.rating} readOnly />
+              </div>
+            )}
+            <GoogleMap
+              lat={organization.lat}
+              lng={organization.lng}
+              className="md:max-w-2/3"
+            />
+          </div>
+        </div>
+      </div>
+    </div>
   );
 };
 

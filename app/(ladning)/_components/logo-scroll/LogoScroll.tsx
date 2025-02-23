@@ -51,7 +51,7 @@ const LogoScroll = () => {
             style={{ scale }}
             className="fixed left-0 top-0 hidden p-3 sm:block"
           >
-            <h2 className="pointer-events-none">AMIO</h2>
+            <h4 className="pointer-events-none">AMIO</h4>
           </motion.div>
         </motion.div>
 

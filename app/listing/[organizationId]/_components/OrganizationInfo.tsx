@@ -20,28 +20,8 @@ type Props = {
 
 const OrganizationInfo = ({ organization, studentNation }: Props) => {
   return (
-    <div className="flex h-full w-full flex-col flex-wrap">
+    <div className="my-8 flex h-full w-full flex-col flex-wrap">
       <MyContainer>
-        <div className="flex w-full flex-col justify-center gap-3">
-          <h1 className="text-lg font-bold md:text-3xl">
-            {organization.location}
-          </h1>
-          <div className="flex flex-col items-center justify-center gap-8 md:flex-row">
-            {organization.description && (
-              <div className="flex w-full flex-col justify-start gap-4 md:w-1/2">
-                <p className="mb-6 text-muted-foreground">
-                  {organization.description}
-                </p>
-                <StarRating rating={organization.rating} readOnly />
-              </div>
-            )}
-            <GoogleMap
-              lat={organization.lat}
-              lng={organization.lng}
-              className=""
-            />
-          </div>
-        </div>
         {/* FEATURES */}
         <div className="my-12 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
@@ -53,10 +33,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
                 return (
                   <div key={index} className="flex items-center">
                     {IconComponent && (
-                      <IconComponent
-                        size={24}
-                        className="mr-3 text-green-500"
-                      />
+                      <IconComponent size={24} className="mr-3 text-rose-500" />
                     )}
                     <p className="text-sm">{feature}</p>
                   </div>
@@ -75,10 +52,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
                 return (
                   <div key={index} className="flex items-center">
                     {IconComponent && (
-                      <IconComponent
-                        size={24}
-                        className="mr-3 text-green-500"
-                      />
+                      <IconComponent size={24} className="mr-3 text-rose-500" />
                     )}
                     <p className="text-sm">{fac}</p>
                   </div>
@@ -91,7 +65,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
           <Card className="p-6">
             <div className="flex items-center gap-2">
               <Users className="h-5 w-5 text-primary" />
-              <h4 className="font-semibold">Class Size</h4>
+              <h2 className="font-semibold">Class Size</h2>
             </div>
             <p className="mt-2 text-muted-foreground">
               Average {organization.averageStudentPerClass} students per class
@@ -101,7 +75,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
           <Card className="p-6">
             <div className="flex items-center gap-2">
               <Clock className="h-5 w-5 text-primary" />
-              <h4 className="font-semibold">Lesson Duration</h4>
+              <h2 className="font-semibold">Lesson Duration</h2>
             </div>
             <p className="mt-2 text-muted-foreground">
               {organization.lessonDuration}
@@ -117,7 +91,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
               <Card className="p-6">
                 <div className="flex items-center gap-2">
                   <Building2 className="h-5 w-5 text-primary" />
-                  <h4 className="font-semibold">Accommodation Type</h4>
+                  <h2 className="font-semibold">Accommodation Type</h2>
                 </div>
                 <p className="mt-2 text-muted-foreground">
                   {organization.accommodationTypes}
@@ -126,7 +100,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
                 <Separator className="my-4" />
 
                 <div className="space-y-2">
-                  <h4 className="font-semibold">Distance to Amenities</h4>
+                  <h2 className="font-semibold">Distance to Amenities</h2>
                   <p className="text-muted-foreground">
                     {organization.distanceOfAmenities} miles
                   </p>
@@ -136,7 +110,7 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
               <Card className="p-6">
                 <div className="flex items-center gap-2">
                   <Wifi className="h-5 w-5 text-primary" />
-                  <h4 className="font-semibold">Room Details</h4>
+                  <h2 className="font-semibold">Room Details</h2>
                 </div>
 
                 <div className="mt-2">

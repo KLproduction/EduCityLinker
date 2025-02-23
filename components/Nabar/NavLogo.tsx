@@ -16,7 +16,9 @@ const NavLogo = () => {
           !isMainPage ? "text-rose-500" : "text-transparent",
         )}
       >
-        <Link href="/">AMIO</Link>
+        <Link href="/">
+          <h4>AMIO</h4>
+        </Link>
       </h2>
     </div>
   );

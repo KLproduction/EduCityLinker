@@ -83,7 +83,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <IconComponent className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Course Type</h4>
+              <h1 className="font-medium">Course Type</h1>
               <p className="text-sm text-muted-foreground">{courseType}</p>
               <p className="mt-1 text-sm">{courseTypeInfo.description}</p>
             </div>
@@ -92,7 +92,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <FaGraduationCap className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Course Level</h4>
+              <h1 className="font-medium">Course Level</h1>
               <p className="text-sm text-muted-foreground">{courseLevel}</p>
               <p className="mt-1 text-sm">{courseLevelInfo.description}</p>
             </div>
@@ -101,7 +101,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <FaUsers className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Age Group</h4>
+              <h1 className="font-medium">Age Group</h1>
               <p className="text-sm text-muted-foreground">{ageGroup}</p>
               <p className="mt-1 text-sm">{ageGroupInfo.description}</p>
             </div>
@@ -110,7 +110,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <FaClock className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Duration</h4>
+              <h1 className="font-medium">Duration</h1>
               <p className="text-sm text-muted-foreground">
                 {durationWeeks} weeks
               </p>
@@ -120,7 +120,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <FaUsers className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Max Students</h4>
+              <h1 className="font-medium">Max Students</h1>
               <p className="text-sm text-muted-foreground">{maxStudents}</p>
             </div>
           </div>
@@ -128,7 +128,7 @@ export default function CourseDetailDisplay({
           <div className="flex items-start space-x-2">
             <FaDollarSign className="mt-1 h-5 w-5 text-primary" />
             <div>
-              <h4 className="font-medium">Price</h4>
+              <h1 className="font-medium">Price</h1>
               <p className="text-sm text-muted-foreground">
                 {formattedPrice(price)}
               </p>
