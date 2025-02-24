@@ -106,7 +106,7 @@ const ListingHeader = ({ organization, socialMedia, currentUser }: Props) => {
           <div className="flex w-full flex-col items-center justify-start gap-6 px-2">
             {organization.description && (
               <div className="flex w-full flex-col justify-start gap-4">
-                <p className="mb-6 text-muted-foreground">
+                <p className="mb-6 whitespace-pre-line text-muted-foreground">
                   {organization.description}
                 </p>
                 <StarRating rating={organization.rating} readOnly />

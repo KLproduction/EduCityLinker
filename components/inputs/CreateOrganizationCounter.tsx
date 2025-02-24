@@ -24,7 +24,9 @@ type Props = {
     | "distanceOfAmenities"
     | "averageStudentPerClass"
     | "averageNumberOfStudent"
-    | "price";
+    | "accommodationHomeStayPrice"
+    | "accommodationStudentResidencePrice"
+    | "accommodationPrivateApartmentPrice";
   disabled?: boolean;
 };
 
@@ -89,14 +91,32 @@ const CreateOrganizationCounter = ({
             <AiOutlineMinus />
           </Button>
           <div className="flex w-full items-center justify-center gap-3">
-            {type === "price" && <p className="text-sm font-semibold">£</p>}
+            {(type === "accommodationHomeStayPrice" ||
+              type === "accommodationStudentResidencePrice" ||
+              type === "accommodationPrivateApartmentPrice") && (
+              <p className="text-sm font-semibold">£</p>
+            )}
             <Input
               type="number"
-              value={organizationData[type as keyof typeof organizationData]}
+              value={
+                typeof organizationData[
+                  type as keyof typeof organizationData
+                ] === "boolean"
+                  ? ""
+                  : (organizationData[type as keyof typeof organizationData] as
+                      | string
+                      | number
+                      | readonly string[]
+                      | undefined)
+              }
               onChange={onChange}
               className={cn(
                 "rounded-lg border border-gray-300 bg-zinc-50 p-1 text-center",
-                type === "price" ? "w-full" : "w-16",
+                type === "accommodationHomeStayPrice" ||
+                  type === "accommodationStudentResidencePrice" ||
+                  type === "accommodationPrivateApartmentPrice"
+                  ? "w-full"
+                  : "w-16",
               )}
               min={0}
               disabled={disabled}

@@ -28,6 +28,14 @@ const initialState: organizationSliceState = {
   studentMinAge: 1,
   studentMaxAge: 1,
   averageStudentPerClass: 1,
+  accommodationHomeStayPrice: 0,
+  accommodationStudentResidencePrice: 0,
+  accommodationPrivateApartmentPrice: 0,
+  homeStayPreference: [],
+  airportTransfers: false,
+  airportTransferOnArrivalAndDeparturePrice: 0,
+  airportTransferArrivalOnlyPrice: 0,
+  airportTransferDepartureOnlyPrice: 0,
 };
 
 const organizationSlice = createSlice({
@@ -65,6 +73,11 @@ const organizationSlice = createSlice({
         state.roomAmenities.push(action.payload);
       }
     },
+    appendHomeStayPreference: (state, action: PayloadAction<string>) => {
+      if (state.homeStayPreference) {
+        state.homeStayPreference.push(action.payload);
+      }
+    },
     resetOrganizationData: () => initialState,
   },
 });
@@ -78,6 +91,7 @@ export const {
   appendToFacility,
   appendToRoomAmenities,
   appendToAmenityGallery,
+  appendHomeStayPreference,
 } = organizationSlice.actions;
 
 // ✅ Export reducer

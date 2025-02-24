@@ -12,6 +12,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardFooter,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
@@ -31,6 +32,9 @@ import {
   FaWrench,
 } from "react-icons/fa";
 import { MdPublic } from "react-icons/md";
+import PriceCalculator from "./PriceCalculator";
+import { Button } from "@/components/ui/button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 const getIconComponent = (iconName: string) => {
   const icons: { [key: string]: React.ElementType } = {
@@ -73,12 +77,13 @@ export default function CourseDetailDisplay({
         <CardTitle className="text-2xl font-bold">{title}</CardTitle>
         <CardDescription>
           <div>
-            <h3 className="mb-2 text-lg font-semibold">Description</h3>
-            <p className="text-muted-foreground">{description}</p>
+            <p className="whitespace-pre-line text-muted-foreground">
+              {description}
+            </p>
           </div>
         </CardDescription>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="flex w-full flex-col items-center justify-center space-y-6 md:flex-row">
         <div className="grid grid-cols-1 gap-6">
           <div className="flex items-start space-x-2">
             <IconComponent className="mt-1 h-5 w-5 text-primary" />
@@ -135,7 +140,16 @@ export default function CourseDetailDisplay({
             </div>
           </div>
         </div>
+        <PriceCalculator basePrice={price} />
       </CardContent>
+      <CardFooter className="flex w-full justify-center">
+        <div className="flex w-full md:hidden">
+          <Button className="w-full">Enrollment</Button>
+        </div>
+        <div className="hidden md:block">
+          <InteractiveHoverButton text="Enrollment" />
+        </div>
+      </CardFooter>
     </Card>
   );
 }

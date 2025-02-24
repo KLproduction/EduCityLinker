@@ -27,6 +27,7 @@ import RatingInput from "../inputs/RatingInput";
 import StudentNationInput from "../inputs/studentNationInput";
 import CreateOrganizationCounter from "../inputs/CreateOrganizationCounter";
 import SocialMediaInput from "../inputs/SocialMediaInput";
+import AirportTransferInput from "../inputs/AirpostTransferInput";
 
 export enum STEPS {
   DESCRIPTION = 0,
@@ -39,9 +40,10 @@ export enum STEPS {
   NATION = 7,
   FACILITY = 8,
   FEATURE = 9,
-  ACCOMMODATION = 10,
-  ACCOMMODATION_GALLERY = 11,
-  RANKING = 12,
+  AIRPORT_TRANSFER = 10,
+  ACCOMMODATION = 11,
+  ACCOMMODATION_GALLERY = 12,
+  RANKING = 13,
 }
 
 export const CreateOrganizerModal = () => {
@@ -271,6 +273,18 @@ export const CreateOrganizerModal = () => {
         <p className="text-sm font-medium text-zinc-600">Add features</p>
 
         <FeatureInput />
+      </div>
+    );
+  }
+  if (step === STEPS.AIRPORT_TRANSFER) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <h1 className="font-bold">
+          Which of these best describes your course?
+        </h1>
+        <p className="text-sm font-medium text-zinc-600">Add features</p>
+
+        <AirportTransferInput />
       </div>
     );
   }

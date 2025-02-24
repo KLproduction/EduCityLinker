@@ -54,37 +54,45 @@ model Account {
 }
 
 model Organization {
-  id                     String        @id @default(auto()) @map("_id") @db.ObjectId
-  name                   String
-  description            String?
-  logo                   String?
-  coverPhoto             String?
-  gallery                String[]      @default([])
-  feature                String[]      @default([])
-  facility               String[]      @default([])
-  accommodationTypes     String
-  roomTypes              String?
-  roomAmenities          String[]      @default([])
-  location               String
-  city                   String
-  country                String
-  lat                    Float
-  lng                    Float
-  distanceOfAmenities    Int?
-  rating                 Float
-  ratingDescription      String?
-  amenityGallery         String[]      @default([])
-  lessonDuration         Int
-  studentMinAge          Int
-  studentMaxAge          Int
-  averageStudentPerClass Int
-  createdAt              DateTime      @default(now())
-  updatedAt              DateTime      @updatedAt
-  listings               Listing[]     @relation("OrganizationListings")
-  userId                 String        @db.ObjectId
-  user                   User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  nationalities          Nationality[]
-  socialMedia            SocialMedia[]
+  id                                        String        @id @default(auto()) @map("_id") @db.ObjectId
+  name                                      String
+  description                               String?
+  logo                                      String?
+  coverPhoto                                String?
+  gallery                                   String[]      @default([])
+  feature                                   String[]      @default([])
+  facility                                  String[]      @default([])
+  accommodationTypes                        String
+  roomTypes                                 String?
+  roomAmenities                             String[]      @default([])
+  accommodationHomeStayPrice                Int?
+  accommodationStudentResidencePrice        Int?
+  accommodationPrivateApartmentPrice        Int?
+  homeStayPreference                        String[]      @default([])
+  airportTransfers                          Boolean
+  airportTransferOnArrivalAndDeparturePrice Int?
+  airportTransferArrivalOnlyPrice           Int?
+  airportTransferDepartureOnlyPrice         Int?
+  location                                  String
+  city                                      String
+  country                                   String
+  lat                                       Float
+  lng                                       Float
+  distanceOfAmenities                       Int?
+  rating                                    Float
+  ratingDescription                         String?
+  amenityGallery                            String[]      @default([])
+  lessonDuration                            Int
+  studentMinAge                             Int
+  studentMaxAge                             Int
+  averageStudentPerClass                    Int
+  createdAt                                 DateTime      @default(now())
+  updatedAt                                 DateTime      @updatedAt
+  listings                                  Listing[]     @relation("OrganizationListings")
+  userId                                    String        @db.ObjectId
+  user                                      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  nationalities                             Nationality[]
+  socialMedia                               SocialMedia[]
 
   @@map("organizations")
 }

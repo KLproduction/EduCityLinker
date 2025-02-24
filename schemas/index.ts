@@ -118,6 +118,19 @@ export const createOrganizerSchema = z.object({
   studentMinAge: z.number().min(1),
   studentMaxAge: z.number().min(1),
   averageStudentPerClass: z.number().min(1),
+  // New Accommodation Pricing Fields
+  accommodationHomeStayPrice: z.number().optional(),
+  accommodationStudentResidencePrice: z.number().optional(),
+  accommodationPrivateApartmentPrice: z.number().optional(),
+
+  // Home Stay Preferences
+  homeStayPreference: z.array(z.string()).optional().default([]),
+
+  // Airport Transfers
+  airportTransfers: z.boolean(),
+  airportTransferOnArrivalAndDeparturePrice: z.number().optional(),
+  airportTransferArrivalOnlyPrice: z.number().optional(),
+  airportTransferDepartureOnlyPrice: z.number().optional(),
 });
 
 export const nationalitySchema = z.object({

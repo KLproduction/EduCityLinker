@@ -353,15 +353,97 @@ export const studentAccommodationDetails = {
 export const homeStayPreferences = [
   {
     label: "Half-Board",
-    description: "Includes breakfast and dinner.",
+    description: "Includes breakfast and dinner with your host family.",
   },
   {
     label: "Full-Board",
-    description: "All meals provided (breakfast, lunch, and dinner).",
+    description: "Includes all meals (breakfast, lunch, and dinner).",
   },
   {
     label: "Self-Catering",
-    description:
-      "Students are responsible for preparing and serving their own meals.",
+    description: "Prepare your own meals with kitchen access.",
+  },
+  {
+    label: "Vegetarian Meals",
+    description: "Vegetarian meal options available.",
+  },
+  {
+    label: "Vegan Meals",
+    description: "100% plant-based meal options provided.",
+  },
+  {
+    label: "Gluten-Free Meals",
+    description: "Meals tailored for gluten-free diets.",
+  },
+  {
+    label: "Halal Meals",
+    description: "Meals prepared according to Halal dietary guidelines.",
+  },
+  {
+    label: "Kosher Meals",
+    description: "Meals prepared following Kosher dietary laws.",
+  },
+  {
+    label: "Pet-Free Home",
+    description: "Stay in a home without pets.",
+  },
+  {
+    label: "Pet-Friendly Home",
+    description: "Stay in a home with pets, for those who love animals.",
+  },
+  {
+    label: "Host Family with Children",
+    description: "Live with a host family that has children.",
+  },
+  {
+    label: "Host Family without Children",
+    description: "Stay with a host family without children.",
+  },
+  {
+    label: "Non-Smoking Home",
+    description: "Stay in a household where smoking is not allowed.",
+  },
+  {
+    label: "Smoking Allowed Home",
+    description: "Stay in a home where smoking is permitted.",
+  },
+  {
+    label: "Private Bathroom",
+    description: "Ensuite or dedicated private bathroom access.",
+  },
+  {
+    label: "Wheelchair Accessible",
+    description: "Home with accessibility features for mobility needs.",
+  },
+  {
+    label: "Quiet Home",
+    description: "Stay in a peaceful, quiet environment.",
+  },
+  {
+    label: "Social & Interactive Home",
+    description: "Stay with a sociable host family that engages with students.",
+  },
+];
+
+export const airportTransfers = [
+  {
+    label: "Arrival & Departure",
+    description: "Round-trip airport transfers upon arrival and departure.",
+  },
+  {
+    label: "Arrival Only",
+    description: "One-way airport transfer upon arrival.",
+  },
+  {
+    label: "Departure Only",
+    description: "One-way airport transfer upon departure.",
+  },
+  {
+    label: "Private Transport",
+    description: "Book a private airport transfer for convenience.",
+  },
+  {
+    label: "Shared Transport",
+    description: "Economical shared airport transfer with other students.",
   },
 ];

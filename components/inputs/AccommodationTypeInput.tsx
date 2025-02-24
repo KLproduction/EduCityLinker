@@ -9,10 +9,15 @@ import {
   useAppSelector,
 } from "@/redux/store";
 import { setOrganizationData } from "@/redux/store";
-import { accommodationTypes, studentAccommodationDetails } from "@/data/data";
+import {
+  accommodationTypes,
+  studentAccommodationDetails,
+  homeStayPreferences,
+} from "@/data/data";
 import { useEffect } from "react";
 import { cn } from "@/lib/utils";
 import CreateOrganizationCounter from "./CreateOrganizationCounter";
+import { appendHomeStayPreference } from "@/redux/slice/create-organizationSlice";
 
 const AccommodationTypeInput = () => {
   const organizationData = useAppSelector((state) => state.organization);
@@ -23,7 +28,15 @@ const AccommodationTypeInput = () => {
   const roomAmenities = organizationData.roomAmenities;
 
   const handleSelect = (value: string) => {
-    dispatch(setOrganizationData({ accommodationTypes: value }));
+    dispatch(
+      setOrganizationData({
+        accommodationTypes: value,
+        accommodationHomeStayPrice: 0,
+        accommodationPrivateApartmentPrice: 0,
+        accommodationStudentResidencePrice: 0,
+        homeStayPreference: [],
+      }),
+    );
   };
 
   const handleRoomTypeChange = (value: string) => {
@@ -38,6 +51,16 @@ const AccommodationTypeInput = () => {
       dispatch(setOrganizationData({ roomAmenities: updatedAmenities }));
     } else {
       dispatch(appendToRoomAmenities(amenity));
+    }
+  };
+  const handleHomeStayPreferenceToggle = (preference: string) => {
+    if (organizationData.homeStayPreference?.includes(preference)) {
+      const updatedAmenities = organizationData.homeStayPreference.filter(
+        (item) => item !== preference,
+      );
+      dispatch(setOrganizationData({ homeStayPreference: updatedAmenities }));
+    } else {
+      dispatch(appendHomeStayPreference(preference));
     }
   };
 
@@ -78,6 +101,46 @@ const AccommodationTypeInput = () => {
           </Label>
         ))}
       </RadioGroup>
+
+      {amenities === "Home Stay" && (
+        <CreateOrganizationCounter
+          type="accommodationHomeStayPrice"
+          counterType="per week"
+        />
+      )}
+      {amenities === "Student Residence" && (
+        <CreateOrganizationCounter
+          type="accommodationStudentResidencePrice"
+          counterType="per week"
+        />
+      )}
+      {amenities === "Private Apartment" && (
+        <CreateOrganizationCounter
+          type="accommodationPrivateApartmentPrice"
+          counterType="per week"
+        />
+      )}
+      {amenities === "Home Stay" && (
+        <div className="space-y-4">
+          <div className="my-3 text-sm font-medium">Home Stay Preferences</div>
+          <div className="grid grid-cols-2 gap-5">
+            {homeStayPreferences.map((preference) => (
+              <Label key={preference.label} className="flex items-center gap-2">
+                <Checkbox
+                  checked={organizationData.homeStayPreference?.includes(
+                    preference.label,
+                  )}
+                  onCheckedChange={() =>
+                    handleHomeStayPreferenceToggle(preference.label)
+                  }
+                  disabled={noAccommodation}
+                />
+                <span className="text-sm">{preference.label}</span>
+              </Label>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div
         className={cn(
