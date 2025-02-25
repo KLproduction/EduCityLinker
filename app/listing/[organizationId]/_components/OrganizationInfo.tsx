@@ -3,13 +3,16 @@ import StudentNationPieChat from "@/components/global/StudentNationPieChat";
 import GoogleMap from "@/components/Map";
 import StarRating from "@/components/StarRating";
 import { Badge } from "@/components/ui/badge";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { accommodationTypes, features, schoolFacilities } from "@/data/data";
 import { Organization } from "@prisma/client";
 import { Building2, Check, Clock, Users, Wifi } from "lucide-react";
 import React from "react";
 import OrganizationGallery from "./OrganizationGallery";
+import { Button } from "@/components/ui/button";
+import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
+import { useAccommodationModal } from "@/hooks/modal";
 
 type Props = {
   organization: Organization;
@@ -20,6 +23,7 @@ type Props = {
 };
 
 const OrganizationInfo = ({ organization, studentNation }: Props) => {
+  const { open } = useAccommodationModal();
   return (
     <div className="my-8 flex h-full w-full flex-col flex-wrap">
       <MyContainer>
@@ -83,13 +87,21 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
             </p>
           </Card>
         </section>
+
+        <div>
+          <OrganizationGallery title="Gallery" organizer={organization} />
+        </div>
+
+        <div className="flex w-full items-center justify-center">
+          {studentNation && <StudentNationPieChat data={studentNation} />}
+        </div>
         {organization.accommodationTypes !== "No Accommodation" && (
-          <section className="my-12">
+          <section className="my-12 flex flex-col justify-center gap-5">
             <h3 className="mb-6 text-2xl font-semibold">
               Accommodation Details
             </h3>
-            <div className="grid gap-6 md:grid-cols-2">
-              <Card className="p-6">
+            <Card className="grid gap-6 md:grid-cols-2">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-2">
                   <Building2 className="h-5 w-5 text-primary" />
                   <h2 className="font-semibold">Accommodation Type</h2>
@@ -106,9 +118,9 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
                     {organization.distanceOfAmenities} miles
                   </p>
                 </div>
-              </Card>
+              </CardContent>
 
-              <Card className="p-6">
+              <CardContent className="p-6">
                 <div className="flex items-center gap-2">
                   <Wifi className="h-5 w-5 text-primary" />
                   <h2 className="font-semibold">Room Details</h2>
@@ -131,17 +143,18 @@ const OrganizationInfo = ({ organization, studentNation }: Props) => {
                     ))}
                   </div>
                 </div>
-              </Card>
-            </div>
+              </CardContent>
+              <CardFooter>
+                <div className="flex w-full justify-center md:justify-start">
+                  <InteractiveHoverButton
+                    text="Details"
+                    onClick={() => open()}
+                  />
+                </div>
+              </CardFooter>
+            </Card>
           </section>
         )}
-        <div>
-          <OrganizationGallery title="Gallery" organizer={organization} />
-        </div>
-
-        <div>
-          {studentNation && <StudentNationPieChat data={studentNation} />}
-        </div>
       </MyContainer>
     </div>
   );

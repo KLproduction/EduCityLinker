@@ -20,10 +20,7 @@ const OrganizationGallery = ({ title, organizer }: Props) => {
           {title}
         </h1>
       )}
-      <ListingGallery
-        coverPhoto={organizer.coverPhoto!}
-        gallery={organizer.gallery}
-      />
+      <ListingGallery gallery={organizer.gallery} />
     </div>
   );
 };

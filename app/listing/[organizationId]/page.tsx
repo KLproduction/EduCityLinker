@@ -9,6 +9,7 @@ import ClientOnly from "@/components/global/ClientOnly";
 import { currentUser } from "@/lib/auth";
 import React from "react";
 import ListingClient from "./_components/ListingClient";
+import AccommodationModal from "@/components/modals/AccommodationModal";
 
 type Props = {
   params: {
@@ -38,15 +39,18 @@ const ListingPage = async ({ params }: Props) => {
   const socialMedia = socialMediaData?.socialMedia;
 
   return (
-    <ClientOnly>
-      <ListingClient
-        listing={listing!}
-        organizer={organizer!}
-        currentUser={user}
-        studentNation={studentNations}
-        socialMedia={socialMedia}
-      />
-    </ClientOnly>
+    <>
+      <ClientOnly>
+        <ListingClient
+          listing={listing!}
+          organizer={organizer!}
+          currentUser={user}
+          studentNation={studentNations}
+          socialMedia={socialMedia}
+        />
+        <AccommodationModal organization={organizer!} />
+      </ClientOnly>
+    </>
   );
 };
 

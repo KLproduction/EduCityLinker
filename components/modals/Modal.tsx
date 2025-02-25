@@ -59,13 +59,15 @@ const Modal = ({
               >
                 {secondaryActionLabel}
               </Button>
-              <Button
-                className="flex w-full items-center justify-center gap-3"
-                disabled={disabled}
-                onClick={handleSubmit}
-              >
-                {actionLabel}
-              </Button>
+              {actionLabel && (
+                <Button
+                  className="flex w-full items-center justify-center gap-3"
+                  disabled={disabled}
+                  onClick={handleSubmit}
+                >
+                  {actionLabel}
+                </Button>
+              )}
             </div>
           </div>
         </div>
