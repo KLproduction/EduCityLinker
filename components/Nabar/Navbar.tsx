@@ -42,8 +42,6 @@ const Navbar = async () => {
   const user = await currentUser();
   const userDetails = await getUserById(user?.id!);
 
-  console.log(`sessionId, ${user?.id}, userDetails, ${userDetails?.id}`);
-
   const isAdmin = user?.role === "ADMIN" ? true : false;
   const isOrganizer =
     userDetails?.organization &&

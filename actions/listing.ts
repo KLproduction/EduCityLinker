@@ -88,6 +88,7 @@ export const getOrganizationByListingIdAction = async (
 };
 
 export const getOrganizationByIdAction = async (organizationId: string) => {
+  if (!organizationId) return;
   try {
     const organization = await db.organization.findUnique({
       where: { id: organizationId },
@@ -111,6 +112,7 @@ export const getOrganizationByIdAction = async (organizationId: string) => {
 export const getStudentNationByOrganizationIdAction = async (
   organizationId: string,
 ) => {
+  if (!organizationId) return;
   try {
     const studentNations = await db.nationality.findMany({
       where: { organizationId },
@@ -137,6 +139,7 @@ export const getStudentNationByOrganizationIdAction = async (
 export const getSocialMediaByOrganizationIdAction = async (
   organizationId: string,
 ) => {
+  if (!organizationId) return;
   try {
     const socialMedia = await db.socialMedia.findFirst({
       where: { organizationId },

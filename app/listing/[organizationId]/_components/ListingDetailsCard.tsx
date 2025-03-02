@@ -33,8 +33,6 @@ import {
 } from "react-icons/fa";
 import { MdPublic } from "react-icons/md";
 import PriceCalculator from "./PriceCalculator";
-import { Button } from "@/components/ui/button";
-import { InteractiveHoverButton } from "@/components/ui/interactive-hover-button";
 
 const getIconComponent = (iconName: string) => {
   const icons: { [key: string]: React.ElementType } = {
@@ -142,14 +140,6 @@ export default function CourseDetailDisplay({
         </div>
         <PriceCalculator basePrice={price} />
       </CardContent>
-      <CardFooter className="flex w-full justify-center">
-        <div className="flex w-full md:hidden">
-          <Button className="w-full">Enrollment</Button>
-        </div>
-        <div className="hidden md:block">
-          <InteractiveHoverButton text="Enrollment" />
-        </div>
-      </CardFooter>
     </Card>
   );
 }

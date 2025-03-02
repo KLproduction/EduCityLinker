@@ -1,7 +1,7 @@
 "use client";
 import { formattedPrice } from "@/lib/formatPrice";
 import { ExtenderUser } from "@/next-auth";
-import { Enrollment, Listing, Organization } from "@prisma/client";
+import { EnrollmentRequest, Listing, Organization } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useMemo } from "react";
 import { format } from "date-fns";
@@ -13,7 +13,7 @@ type Props = {
   organizer: Organization;
   data: Listing;
   currentUser?: ExtenderUser | null;
-  enrollment?: Enrollment;
+  enrollment?: EnrollmentRequest;
   onAction?: (id: string) => void;
   disabled?: boolean;
   actionLabel?: string;
@@ -48,15 +48,6 @@ const ListingCard = ({
     return formattedPrice(data.price);
   }, [enrollment, data.price]);
 
-  const enrollmentDate = useMemo(() => {
-    if (enrollment) {
-      const start = new Date(enrollment.startDate);
-      const end = new Date(enrollment.endDate);
-
-      return `${format(start, "PP")} - ${format(end, "PP")}`;
-    }
-    return null;
-  }, [enrollment]);
   return (
     <div className="group col-span-1 cursor-pointer justify-center">
       <div className="flex flex-col gap-2">
@@ -74,9 +65,7 @@ const ListingCard = ({
           </div>
         )}
         <div className="text-lg font-semibold">{organizer.location}</div>
-        <div className="font-light text-zinc-500">
-          {enrollmentDate || data.courseType}
-        </div>
+        <div className="font-light text-zinc-500">{data.courseType}</div>
         <div className="flex items-center gap-1">
           <div className="font-semibold">{formattedPrice(data.price)}</div>
           {!enrollment && <div className="font-light">people</div>}

@@ -18,6 +18,14 @@ type Props = {
 };
 
 const ListingPage = async ({ params }: Props) => {
+  if (!params?.organizationId || params.organizationId.length !== 24) {
+    return (
+      <ClientOnly>
+        <EmptyState />
+      </ClientOnly>
+    );
+  }
+
   const data = await getOrganizationByIdAction(params.organizationId);
   const user = await currentUser();
   const studentNation = await getStudentNationByOrganizationIdAction(

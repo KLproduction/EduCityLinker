@@ -146,3 +146,26 @@ export const socialMediaSchema = z.object({
   instagram: z.string().url().optional(),
   website: z.string().url().optional(),
 });
+
+export const enrollmentRequestSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  sureName: z.string().min(1, "Sure name is required"),
+  contactNumber: z.string().min(1, "Invalid contact number"),
+  emailAddress: z.string().email("Invalid email address"),
+  startDate: z.date().min(new Date(), "Start date must be in the future"),
+  weeks: z.number().int().positive("Weeks must be a positive integer"),
+  airportTransfer: z.boolean(),
+  airportTransfersType: z.string(), // Can be validated against an enum if needed
+  accommodation: z.boolean(),
+  accommodationPrice: z
+    .number()
+    .nonnegative("Accommodation price must be non-negative"),
+  airportTransferPrice: z
+    .number()
+    .nonnegative("Airport transfer price must be non-negative"),
+  totalPrice: z.number().nonnegative("Total price must be non-negative"),
+  createdAt: z.date().default(new Date()), // Defaults to now()
+  status: z.enum(["PENDING", "CONFIRMED", "CANCELLED"]), // Matches `EnrollmentRequestState`
+  centerConfirmed: z.boolean().nullable().default(false),
+  centerConfirmationDate: z.date().nullable().optional(),
+});

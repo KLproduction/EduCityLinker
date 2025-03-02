@@ -1,14 +1,8 @@
-import { useState } from "react";
-import {
-  parseAsBoolean,
-  parseAsString,
-  parseAsStringEnum,
-  useQueryState,
-  useQueryStates,
-} from "nuqs";
+import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
 import { useForm } from "react-hook-form";
 import { createCourseSchema } from "@/schemas";
 import { z } from "zod";
+import { useEffect } from "react";
 
 export const useCreateCourseModal = () => {
   const [isOpen, setIsOpen] = useQueryState(
@@ -83,5 +77,49 @@ export const useAccommodationModal = () => {
     open,
     close,
     setIsOpen,
+  };
+};
+export const useCreateEnrollmentModal = () => {
+  const [isOpen, setIsOpen] = useQueryState(
+    "create-enrollment-modal",
+    parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+  );
+
+  const [selectedListingId, setSelectedListingId] = useQueryState(
+    "enrollment-listing-id",
+    parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
+  );
+  const [selectedOrganizationId, setSelectedOrganizationId] = useQueryState(
+    "enrollment-organization-id",
+    parseAsString.withDefault("").withOptions({ clearOnDefault: true }),
+  );
+
+  const open = (listingId: string, organizationId: string) => {
+    setIsOpen(true);
+    setSelectedListingId(listingId);
+    setSelectedOrganizationId(organizationId);
+  };
+  const close = () => {
+    setIsOpen(false);
+    setSelectedListingId("");
+    setSelectedOrganizationId("");
+  };
+
+  // useEffect(() => {
+  //   if (isOpen) return;
+  //   if (!isOpen) {
+  //     setSelectedListingId("");
+  //     setSelectedOrganizationId("");
+  //   }
+  // }, [isOpen]);
+  return {
+    isOpen,
+    open,
+    close,
+    setIsOpen,
+    selectedListingId,
+    setSelectedListingId,
+    selectedOrganizationId,
+    setSelectedOrganizationId,
   };
 };

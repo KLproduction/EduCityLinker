@@ -12,6 +12,7 @@ import { LoginModal } from "@/components/auth/LoginModal";
 import { CreateOrganizerModal } from "@/components/modals/CreateOrganizerModal";
 import { getUserById } from "@/data/user";
 import { Analytics } from "@vercel/analytics/next";
+import { CreateEnrollmentModal } from "@/components/modals/CreateEnrollmentModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -49,6 +50,7 @@ export default async function RootLayout({
                     );
                   })()}
                 <CreateOrganizerModal />
+                <CreateEnrollmentModal />
                 <LoginModal />
                 {children}
                 <Analytics />

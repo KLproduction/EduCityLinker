@@ -3,10 +3,9 @@
 import MyContainer from "@/components/Container";
 import { ExtenderUser } from "@/next-auth";
 import {
-  Enrollment,
+  EnrollmentRequest,
   Listing,
   Organization,
-  Listing as PrismaListing,
   SocialMedia,
 } from "@prisma/client";
 
@@ -19,7 +18,7 @@ type Props = {
   listing: Listing[];
   organizer: Organization;
   currentUser?: ExtenderUser | null;
-  enrollment?: Enrollment;
+  enrollment?: EnrollmentRequest;
   studentNation?: {
     nation: string;
     count: number;

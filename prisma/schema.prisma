@@ -12,23 +12,46 @@ enum UserRole {
   USER
 }
 
+enum EnrollmentRequestState {
+  PENDING
+  CONFIRM_BY_CENTER
+  CANCELLED
+}
+
+enum EnrollmentConfirmationState {
+  AWAITING_USER
+  DEPOSIT_PENDING
+  DEPOSIT_PAID
+  CANCELLED
+}
+
+enum PaymentState {
+  DEPOSIT_PENDING
+  FULLY_PAID
+  CANCELLED
+}
+
 model User {
-  id                    String                 @id @default(auto()) @map("_id") @db.ObjectId
-  name                  String?
-  email                 String?                @unique
-  emailVerified         DateTime?              @map("email_verified")
-  image                 String?
-  password              String?
-  role                  UserRole               @default(USER)
-  accounts              Account[]
-  isTwoFactorEnabled    Boolean                @default(false)
-  twoFactorConfirmation TwoFactorConfirmation?
-  createdAt             DateTime               @default(now())
-  updatedAt             DateTime               @updatedAt
-  favoriteIds           String[]               @db.ObjectId
-  listing               Listing[]
-  enrollments           Enrollment[]
-  organization          Organization[]
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  name                   String?
+  email                  String?                  @unique
+  emailVerified          DateTime?                @map("email_verified")
+  image                  String?
+  password               String?
+  role                   UserRole                 @default(USER)
+  accounts               Account[]
+  isTwoFactorEnabled     Boolean                  @default(false)
+  twoFactorConfirmation  TwoFactorConfirmation?
+  createdAt              DateTime                 @default(now())
+  updatedAt              DateTime                 @updatedAt
+  favoriteIds            String[]                 @db.ObjectId
+  listing                Listing[]
+  enrollmentRequest      EnrollmentRequest[]
+  enrollmentConfirmation EnrollmentConfirmation[]
+  payment                EnrollmentPayment[]
+  organization           Organization[]
+  cancellation           EnrollmentCancellation[]
+  enrollmentReview       EnrollmentReview[]
 
   @@map("users")
 }
@@ -54,21 +77,21 @@ model Account {
 }
 
 model Organization {
-  id                                        String        @id @default(auto()) @map("_id") @db.ObjectId
+  id                                        String              @id @default(auto()) @map("_id") @db.ObjectId
   name                                      String
   description                               String?
   logo                                      String?
   coverPhoto                                String?
-  gallery                                   String[]      @default([])
-  feature                                   String[]      @default([])
-  facility                                  String[]      @default([])
+  gallery                                   String[]            @default([])
+  feature                                   String[]            @default([])
+  facility                                  String[]            @default([])
   accommodationTypes                        String
   roomTypes                                 String?
-  roomAmenities                             String[]      @default([])
+  roomAmenities                             String[]            @default([])
   accommodationHomeStayPrice                Int?
   accommodationStudentResidencePrice        Int?
   accommodationPrivateApartmentPrice        Int?
-  homeStayPreference                        String[]      @default([])
+  homeStayPreference                        String[]            @default([])
   airportTransfers                          Boolean
   airportTransferOnArrivalAndDeparturePrice Int?
   airportTransferArrivalOnlyPrice           Int?
@@ -81,18 +104,20 @@ model Organization {
   distanceOfAmenities                       Int?
   rating                                    Float
   ratingDescription                         String?
-  amenityGallery                            String[]      @default([])
+  amenityGallery                            String[]            @default([])
   lessonDuration                            Int
   studentMinAge                             Int
   studentMaxAge                             Int
   averageStudentPerClass                    Int
-  createdAt                                 DateTime      @default(now())
-  updatedAt                                 DateTime      @updatedAt
-  listings                                  Listing[]     @relation("OrganizationListings")
-  userId                                    String        @db.ObjectId
-  user                                      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt                                 DateTime            @default(now())
+  updatedAt                                 DateTime            @updatedAt
+  listings                                  Listing[]           @relation("OrganizationListings")
+  userId                                    String              @db.ObjectId
+  user                                      User                @relation(fields: [userId], references: [id], onDelete: Cascade)
   nationalities                             Nationality[]
   socialMedia                               SocialMedia[]
+  enrollments                               EnrollmentRequest[]
+  enrollmentReview                          EnrollmentReview[]
 
   @@map("organizations")
 }
@@ -130,26 +155,105 @@ model Listing {
   userId         String   @db.ObjectId
   organizationId String   @db.ObjectId
 
-  organization Organization? @relation("OrganizationListings", fields: [organizationId], references: [id], onDelete: Cascade)
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  enrollments  Enrollment[]
+  organization Organization?       @relation("OrganizationListings", fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollments  EnrollmentRequest[]
 
   @@map("listings")
 }
 
-model Enrollment {
-  id         String   @id @default(auto()) @map("_id") @db.ObjectId
-  listingId  String   @db.ObjectId
-  userId     String   @db.ObjectId
-  startDate  DateTime
-  endDate    DateTime
-  totalPrice Int
-  createdAt  DateTime @default(now())
+model EnrollmentRequest {
+  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String                   @db.ObjectId
+  listingId              String                   @db.ObjectId
+  organizationId         String                   @db.ObjectId
+  firstName              String
+  sureName               String
+  contactNumber          String
+  emailAddress           String
+  startDate              DateTime
+  weeks                  Int
+  airportTransfer        Boolean
+  airportTransfersType   String
+  accommodation          Boolean
+  totalPrice             Float
+  accommodationPrice     Float
+  airportTransferPrice   Float
+  addOnPrice             Float
+  createdAt              DateTime                 @default(now())
+  status                 EnrollmentRequestState   @default(PENDING)
+  centerConfirmed        Boolean?                 @default(false)
+  centerConfirmationDate DateTime?
+  organization           Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  listing                Listing                  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentConfirmation EnrollmentConfirmation[]
 
-  listing Listing @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@map("enrollment_requests")
+}
 
-  @@map("reservations")
+model EnrollmentConfirmation {
+  id                   String                      @id @default(auto()) @map("_id") @db.ObjectId
+  requestId            String                      @db.ObjectId // Links back to EnrollmentRequest
+  userId               String                      @db.ObjectId
+  confirmedByUser      Boolean?                    @default(false)
+  userConfirmationDate DateTime?
+  status               EnrollmentConfirmationState @default(AWAITING_USER)
+  request              EnrollmentRequest           @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  user                 User                        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  payment              EnrollmentPayment[]
+
+  @@map("enrollment_confirmations")
+}
+
+model EnrollmentPayment {
+  id                 String                   @id @default(auto()) @map("_id") @db.ObjectId
+  confirmationId     String                   @db.ObjectId
+  userId             String                   @db.ObjectId
+  depositAmount      Int
+  depositPaid        Boolean?                 @default(false)
+  depositPaymentDate DateTime?
+  remainingBalance   Int
+  fullPaymentDueDate DateTime?
+  fullPaymentPaid    Boolean?                 @default(false)
+  fullPaymentDate    DateTime?
+  paymentMethod      String? // ["credit_card", "bank_transfer", "PayPal"]
+  transactionId      String?
+  invoiceUrl         String?
+  status             PaymentState             @default(DEPOSIT_PENDING)
+  confirmation       EnrollmentConfirmation   @relation(fields: [confirmationId], references: [id], onDelete: Cascade)
+  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cancellation       EnrollmentCancellation[]
+
+  @@map("enrollment_payments")
+}
+
+model EnrollmentCancellation {
+  id              String            @id @default(auto()) @map("_id") @db.ObjectId
+  paymentId       String            @db.ObjectId
+  userId          String            @db.ObjectId
+  reason          String
+  cancelledAt     DateTime          @default(now())
+  refundAmount    Int?
+  refundProcessed Boolean?          @default(false)
+  payment         EnrollmentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("enrollment_cancellations")
+}
+
+model EnrollmentReview {
+  id             String   @id @default(auto()) @map("_id") @db.ObjectId
+  userId         String   @db.ObjectId
+  organizationId String   @db.ObjectId
+  rating         Int
+  reviewText     String?
+  reviewDate     DateTime @default(now())
+
+  organization Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("enrollment_reviews")
 }
 
 model VerificationToken {

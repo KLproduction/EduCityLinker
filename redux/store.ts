@@ -14,6 +14,11 @@ import organizationSlice, {
   appendToFacility,
   appendToRoomAmenities,
 } from "./slice/create-organizationSlice";
+import createEnrollmentSlice, {
+  setEnrollmentData,
+  resetEnrollmentRequestData,
+} from "./slice/create-enrollmentRequestSlice";
+
 import studentNationSlice from "./slice/create-organizationNationSlice";
 import socialMediaSlice from "./slice/create-organizationSocialMediaSlice";
 import { persistReducer, persistStore } from "redux-persist";
@@ -24,10 +29,12 @@ const rootReducer = combineReducers({
   organization: organizationSlice,
   studentNation: studentNationSlice,
   socialMedia: socialMediaSlice,
+  createEnrollmentRequest: createEnrollmentSlice,
 });
 const persisConfig = {
   key: "root",
   storage,
+  whitelist: ["createCourse", "organization", "studentNation", "socialMedia"],
 };
 const persistedReducer = persistReducer(persisConfig, rootReducer);
 

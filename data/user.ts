@@ -19,7 +19,7 @@ export const getUserById = async (id: string) => {
         id,
       },
       include: {
-        enrollments: true,
+        enrollmentRequest: true,
         organization: true,
       },
     });
