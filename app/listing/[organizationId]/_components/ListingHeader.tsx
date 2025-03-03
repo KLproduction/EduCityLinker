@@ -20,10 +20,7 @@ type Props = {
 const ListingHeader = ({ organization, socialMedia, currentUser }: Props) => {
   const router = useRouter();
   const goBack = () => {
-    const prevUrl = sessionStorage.getItem("previousExploreUrl");
-    console.log(prevUrl);
-
-    router.push(prevUrl!);
+    router.push(`/explore`);
   };
   return (
     <div>

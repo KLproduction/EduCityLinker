@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import ResponsiveModel from "../global/responsive-model";
 import Modal from "./Modal";
 import { useCreateEnrollmentModal } from "@/hooks/modal";
@@ -44,6 +44,8 @@ import { Dialog, DialogContent, DialogTrigger } from "../ui/dialog";
 import { formattedPrice } from "@/lib/formatPrice";
 import EnrollmentPriceSelector from "./EnrollmentPriceSelector";
 import { RadioGroup, RadioGroupItem } from "../ui/radio-group";
+import { useSearchParams } from "next/navigation";
+import MyLoader from "@/loader/MyLoader";
 
 export enum ENROLLMENT_STEPS {
   USER_DETAILS = 0,
@@ -52,17 +54,36 @@ export enum ENROLLMENT_STEPS {
 }
 
 export const CreateEnrollmentModal = () => {
+  const params = useSearchParams();
+
+  const listingId = params.get("enrollment-listing-id");
+  const organizationId = params.get("enrollment-organization-id");
+
   const enrollmentData = useAppSelector(
     (state) => state.createEnrollmentRequest,
   );
   const { isOpen, setIsOpen, selectedListingId } = useCreateEnrollmentModal();
-  const { data: organizationData } = useGetOrganizationByEnrollmentModal();
+  const { data: organizationData, isPending: isGettingOrganization } =
+    useGetOrganizationByEnrollmentModal(organizationId!);
   const organization = organizationData?.organization;
-  const { data: listingData } = useGetListingByEnrollmentModal();
+  const { data: listingData, isPending: isGettingListing } =
+    useGetListingByEnrollmentModal(listingId!);
   const listing = listingData?.listing;
+
+  const isPending = isGettingOrganization || isGettingListing;
 
   const [step, setStep] = useState(ENROLLMENT_STEPS.USER_DETAILS);
   const dispatch = useAppDispatch();
+  console.log(enrollmentData);
+  useEffect(() => {
+    if (listing?.price) {
+      dispatch(
+        setEnrollmentData({
+          totalPrice: listing?.price * enrollmentData.weeks,
+        }),
+      );
+    }
+  }, [listing]);
 
   const onBack = () => {
     setStep((prev) => prev - 1);
@@ -83,25 +104,16 @@ export const CreateEnrollmentModal = () => {
   }, [step]);
 
   const secondaryActionLabel = useMemo(() => {
-    if (step === ENROLLMENT_STEPS.USER_DETAILS) {
+    if (
+      step === ENROLLMENT_STEPS.USER_DETAILS ||
+      step === ENROLLMENT_STEPS.FINAL_MESSAGE
+    ) {
       return undefined;
     }
     return "Back";
   }, [step]);
 
   let isDisabled = false;
-
-  if (step === ENROLLMENT_STEPS.USER_DETAILS) {
-    isDisabled =
-      !enrollmentData.firstName ||
-      !enrollmentData.sureName ||
-      !enrollmentData.contactNumber ||
-      !enrollmentData.emailAddress ||
-      !enrollmentData.startDate ||
-      (enrollmentData.airportTransfer &&
-        !enrollmentData.airportTransfersType) ||
-      enrollmentData.weeks < 1;
-  }
 
   const { createEnrollmentMutate, isCreatingEnrollment } =
     useCreateEnrollmentRequest(enrollmentData, selectedListingId, setStep);
@@ -112,324 +124,363 @@ export const CreateEnrollmentModal = () => {
       createEnrollmentMutate();
     } else {
       setIsOpen(false);
+      setStep(ENROLLMENT_STEPS.USER_DETAILS);
       dispatch(resetEnrollmentRequestData());
     }
   };
 
-  let bodyContent = (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-lg font-semibold">Personal Information</h2>
-        <p className="text-sm text-muted-foreground">
-          Please provide your contact details
-        </p>
-      </div>
+  const [emailError, setEmailError] = useState("");
 
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="firstName">First Name</Label>
-          <Input
-            id="userName"
-            placeholder="Enter your full name"
-            value={enrollmentData.firstName}
-            onChange={(e) =>
-              dispatch(setEnrollmentData({ firstName: e.target.value }))
-            }
-            className="bg-white"
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="sureName">Sure Name</Label>
-          <Input
-            id="userName"
-            placeholder="Enter your full name"
-            value={enrollmentData.sureName}
-            onChange={(e) =>
-              dispatch(setEnrollmentData({ sureName: e.target.value }))
-            }
-            className="bg-white"
-          />
+  const validateEmail = (email: string) => {
+    // Simple regex for email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setEmailError("Invalid email format");
+    } else {
+      setEmailError(""); // Clear error if valid
+    }
+  };
+  const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const email = e.target.value;
+    dispatch(setEnrollmentData({ emailAddress: email }));
+    validateEmail(email);
+  };
+  let bodyContent;
+
+  if (isPending) {
+    bodyContent = <MyLoader />;
+  }
+
+  if (step === ENROLLMENT_STEPS.USER_DETAILS) {
+    bodyContent = (
+      <div className="space-y-6">
+        <div>
+          <h2 className="text-lg font-semibold">Personal Information</h2>
+          <p className="text-sm text-muted-foreground">
+            Please provide your contact details
+          </p>
         </div>
 
-        <div className="space-y-2">
-          <Label htmlFor="contactNumber">Contact Number</Label>
-          <Input
-            id="contactNumber"
-            placeholder="Enter your phone number"
-            value={enrollmentData.contactNumber}
-            onChange={(e) =>
-              dispatch(setEnrollmentData({ contactNumber: e.target.value }))
-            }
-            className="bg-white"
-          />
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="emailAddress">Email Address</Label>
-          <Input
-            id="emailAddress"
-            type="email"
-            placeholder="Enter your email address"
-            value={enrollmentData.emailAddress}
-            onChange={(e) =>
-              dispatch(setEnrollmentData({ emailAddress: e.target.value }))
-            }
-            className="bg-white"
-          />
-        </div>
-      </div>
-
-      <Separator />
-
-      <div>
-        <h2 className="text-lg font-semibold">Program Details</h2>
-        <p className="text-sm text-muted-foreground">
-          Specify your program preferences
-        </p>
-      </div>
-
-      <div className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="startDate">Start Date</Label>
-          <Dialog>
-            <DialogTrigger asChild>
-              <Button
-                id="startDate"
-                variant="outline"
-                className={cn(
-                  "w-full justify-start text-left font-normal",
-                  !enrollmentData.startDate && "text-muted-foreground",
-                )}
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {enrollmentData.startDate ? (
-                  format(enrollmentData.startDate, "PPP")
-                ) : (
-                  <span>Select a date</span>
-                )}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="z-[999999] w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={enrollmentData.startDate}
-                onSelect={(date) =>
-                  dispatch(setEnrollmentData({ startDate: date ?? new Date() }))
-                }
-                initialFocus
-                className="w-full rounded-md bg-white p-3 shadow-md"
-                disabled={(date) => {
-                  const isMonday = date.getDay() === 1;
-                  const isUpcoming =
-                    date > new Date(new Date().setHours(0, 0, 0, 0));
-                  return !isMonday || !isUpcoming;
-                }}
-              />
-            </DialogContent>
-          </Dialog>
-        </div>
-
-        <div className="space-y-2">
-          <EnrollmentPriceSelector basePrice={listing?.price || 0} />
-        </div>
-      </div>
-
-      <Separator />
-
-      <Card>
-        <CardHeader>
-          <CardTitle>Accommodation</CardTitle>
-          <CardDescription>
-            Do you need accommodation during your stay?
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="accommodation" className="flex-1">
-              Request accommodation
-            </Label>
-            <Switch
-              id="accommodation"
-              checked={enrollmentData.accommodation}
-              onCheckedChange={(checked) => {
-                dispatch(setEnrollmentData({ accommodation: checked }));
-
-                const accommodationPrice =
-                  organization?.accommodationHomeStayPrice ??
-                  organization?.accommodationStudentResidencePrice ??
-                  organization?.accommodationPrivateApartmentPrice ??
-                  0;
-
-                dispatch(
-                  setEnrollmentData({
-                    accommodationPrice: checked
-                      ? enrollmentData.accommodationPrice + accommodationPrice
-                      : enrollmentData.accommodationPrice - accommodationPrice,
-                  }),
-                );
-              }}
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="firstName">First Name</Label>
+            <Input
+              id="userName"
+              placeholder="Enter your full name"
+              value={enrollmentData.firstName}
+              onChange={(e) =>
+                dispatch(setEnrollmentData({ firstName: e.target.value }))
+              }
+              className="bg-white"
+            />
+          </div>
+          <div className="space-y-2">
+            <Label htmlFor="sureName">Sure Name</Label>
+            <Input
+              id="userName"
+              placeholder="Enter your full name"
+              value={enrollmentData.sureName}
+              onChange={(e) =>
+                dispatch(setEnrollmentData({ sureName: e.target.value }))
+              }
+              className="bg-white"
             />
           </div>
 
-          {enrollmentData.accommodation && organization && (
-            <div className="mt-4 space-y-2 rounded-md bg-muted p-3">
-              <p className="text-sm font-medium">Available options:</p>
-              <div className="ml-4 list-disc text-sm">
-                {organization.accommodationPrivateApartmentPrice && (
-                  <div className="flex gap-8">
-                    <p>Private Apartment</p>
+          <div className="space-y-2">
+            <Label htmlFor="contactNumber">Contact Number</Label>
+            <Input
+              id="contactNumber"
+              placeholder="Enter your phone number"
+              value={enrollmentData.contactNumber}
+              onChange={(e) =>
+                dispatch(setEnrollmentData({ contactNumber: e.target.value }))
+              }
+              className="bg-white"
+            />
+          </div>
 
-                    <p>
-                      {formattedPrice(
-                        organization.accommodationPrivateApartmentPrice,
-                      )}
-                    </p>
-                  </div>
-                )}
-                {organization.accommodationStudentResidencePrice && (
-                  <div className="flex gap-8">
-                    <p>Student Residence</p>
+          <div className="space-y-2">
+            <Label htmlFor="emailAddress">Email Address</Label>
+            <Input
+              id="emailAddress"
+              type="email"
+              placeholder="Enter your email address"
+              value={enrollmentData.emailAddress}
+              onChange={handleEmailChange}
+              className={`bg-white ${emailError ? "border-red-500" : ""}`}
+            />
+            {emailError && <p className="text-sm text-red-500">{emailError}</p>}
+          </div>
+        </div>
 
-                    <p>
-                      {formattedPrice(
-                        organization.accommodationStudentResidencePrice,
-                      )}
-                    </p>
-                  </div>
-                )}
-                {organization.accommodationHomeStayPrice && (
-                  <div className="flex gap-8">
-                    <p>Home Stay</p>
+        <Separator />
 
-                    <p>
-                      {formattedPrice(organization.accommodationHomeStayPrice)}
-                    </p>
-                  </div>
-                )}
-              </div>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+        <div>
+          <h2 className="text-lg font-semibold">Program Details</h2>
+          <p className="text-sm text-muted-foreground">
+            Specify your program preferences
+          </p>
+        </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Airport Transfer</CardTitle>
-          <CardDescription>
-            Do you need transportation from the airport?
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="airportTransfer" className="flex-1">
-              Request airport transfer
-            </Label>
-            <Switch
-              id="airportTransfer"
-              checked={enrollmentData.airportTransfer}
-              onCheckedChange={(checked) => {
-                dispatch(setEnrollmentData({ airportTransfer: checked }));
-                if (!checked) {
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor="startDate">Start Date</Label>
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button
+                  id="startDate"
+                  variant="outline"
+                  className={cn(
+                    "w-full justify-start text-left font-normal",
+                    !enrollmentData.startDate && "text-muted-foreground",
+                  )}
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {enrollmentData.startDate ? (
+                    format(enrollmentData.startDate, "PPP")
+                  ) : (
+                    <span>Select a date</span>
+                  )}
+                </Button>
+              </DialogTrigger>
+              <DialogContent className="z-[999999] w-auto p-0">
+                <Calendar
+                  mode="single"
+                  selected={enrollmentData.startDate}
+                  onSelect={(date) =>
+                    dispatch(
+                      setEnrollmentData({ startDate: date ?? new Date() }),
+                    )
+                  }
+                  initialFocus
+                  className="w-full rounded-md bg-white p-3 shadow-md"
+                  disabled={(date) => {
+                    const isMonday = date.getDay() === 1;
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+
+                    const sevenDaysFromNow = new Date(today);
+                    sevenDaysFromNow.setDate(today.getDate() + 7);
+
+                    const isWithinNextSevenDays =
+                      date >= today && date < sevenDaysFromNow;
+
+                    return !isMonday || isWithinNextSevenDays || date < today;
+                  }}
+                />
+              </DialogContent>
+            </Dialog>
+          </div>
+
+          <div className="space-y-2">
+            <EnrollmentPriceSelector basePrice={listing?.price || 0} />
+          </div>
+        </div>
+
+        <Separator />
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Accommodation</CardTitle>
+            <CardDescription>
+              Do you need accommodation during your stay?
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="accommodation" className="flex-1">
+                Request accommodation
+              </Label>
+              <Switch
+                id="accommodation"
+                checked={enrollmentData.accommodation}
+                onCheckedChange={(checked) => {
+                  dispatch(setEnrollmentData({ accommodation: checked }));
+
+                  const accommodationPrice =
+                    organization?.accommodationHomeStayPrice ??
+                    organization?.accommodationStudentResidencePrice ??
+                    organization?.accommodationPrivateApartmentPrice ??
+                    0;
+
                   dispatch(
                     setEnrollmentData({
-                      airportTransfersType: "",
-                      airportTransferPrice: 0,
+                      accommodationPrice: checked
+                        ? enrollmentData.accommodationPrice + accommodationPrice
+                        : enrollmentData.accommodationPrice -
+                          accommodationPrice,
                     }),
                   );
-                }
-              }}
-            />
-          </div>
+                }}
+              />
+            </div>
 
-          {enrollmentData.airportTransfer && organization && (
-            <div className="mt-4 space-y-4">
-              <div className="rounded-md bg-white p-4">
-                <RadioGroup
-                  value={enrollmentData.airportTransfersType}
-                  onValueChange={(value) => {
-                    dispatch(
-                      setEnrollmentData({ airportTransfersType: value }),
-                    );
+            {enrollmentData.accommodation && organization && (
+              <div className="mt-4 space-y-2 rounded-md bg-muted p-3">
+                <p className="text-sm font-medium">Available options:</p>
+                <div className="ml-4 list-disc text-sm">
+                  {organization.accommodationPrivateApartmentPrice && (
+                    <div className="flex gap-8">
+                      <p>Private Apartment</p>
 
-                    // Calculate the new airport transfer price based on selection
-                    let newPrice = 0;
-                    if (value === "Arrival and Departure") {
-                      newPrice =
-                        organization.airportTransferOnArrivalAndDeparturePrice ??
-                        0;
-                    } else if (value === "Arrival Only") {
-                      newPrice =
-                        organization.airportTransferArrivalOnlyPrice ?? 0;
-                    } else if (value === "Departure Only") {
-                      newPrice =
-                        organization.airportTransferDepartureOnlyPrice ?? 0;
-                    }
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationPrivateApartmentPrice,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  {organization.accommodationStudentResidencePrice && (
+                    <div className="flex gap-8">
+                      <p>Student Residence</p>
 
-                    // Update the addOnPrice with the new transfer price
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationStudentResidencePrice,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  {organization.accommodationHomeStayPrice && (
+                    <div className="flex gap-8">
+                      <p>Home Stay</p>
+
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationHomeStayPrice,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Airport Transfer</CardTitle>
+            <CardDescription>
+              Do you need transportation from the airport?
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="airportTransfer" className="flex-1">
+                Request airport transfer
+              </Label>
+              <Switch
+                id="airportTransfer"
+                checked={enrollmentData.airportTransfer}
+                onCheckedChange={(checked) => {
+                  dispatch(setEnrollmentData({ airportTransfer: checked }));
+                  if (!checked) {
                     dispatch(
                       setEnrollmentData({
-                        airportTransferPrice: newPrice,
+                        airportTransfersType: "",
+                        airportTransferPrice: 0,
                       }),
                     );
-                  }}
-                >
-                  {organization.airportTransferOnArrivalAndDeparturePrice && (
-                    <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="Arrival and Departure"
-                          id="arrivalAndDeparture"
-                        />
-                        <Label htmlFor="arrivalAndDeparture">
-                          Arrival & Departure Transfer
-                        </Label>
-                      </div>
-                      <span className="font-medium">
-                        {formattedPrice(
-                          organization.airportTransferOnArrivalAndDeparturePrice,
-                        )}
-                      </span>
-                    </div>
-                  )}
-
-                  {organization.airportTransferArrivalOnlyPrice && (
-                    <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem value="Arrival Only" id="arrivalOnly" />
-                        <Label htmlFor="arrivalOnly">Arrival Only</Label>
-                      </div>
-                      <span className="font-medium">
-                        {formattedPrice(
-                          organization.airportTransferArrivalOnlyPrice,
-                        )}
-                      </span>
-                    </div>
-                  )}
-
-                  {organization.airportTransferDepartureOnlyPrice && (
-                    <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
-                      <div className="flex items-center space-x-2">
-                        <RadioGroupItem
-                          value="Departure Only"
-                          id="departureOnly"
-                        />
-                        <Label htmlFor="departureOnly">Departure Only</Label>
-                      </div>
-                      <span className="font-medium">
-                        {formattedPrice(
-                          organization.airportTransferDepartureOnlyPrice,
-                        )}
-                      </span>
-                    </div>
-                  )}
-                </RadioGroup>
-              </div>
+                  }
+                }}
+              />
             </div>
-          )}
-        </CardContent>
-      </Card>
-    </div>
-  );
+
+            {enrollmentData.airportTransfer && organization && (
+              <div className="mt-4 space-y-4">
+                <div className="rounded-md bg-white p-4">
+                  <RadioGroup
+                    value={enrollmentData.airportTransfersType}
+                    onValueChange={(value) => {
+                      dispatch(
+                        setEnrollmentData({ airportTransfersType: value }),
+                      );
+
+                      // Calculate the new airport transfer price based on selection
+                      let newPrice = 0;
+                      if (value === "Arrival and Departure") {
+                        newPrice =
+                          organization.airportTransferOnArrivalAndDeparturePrice ??
+                          0;
+                      } else if (value === "Arrival Only") {
+                        newPrice =
+                          organization.airportTransferArrivalOnlyPrice ?? 0;
+                      } else if (value === "Departure Only") {
+                        newPrice =
+                          organization.airportTransferDepartureOnlyPrice ?? 0;
+                      }
+
+                      // Update the addOnPrice with the new transfer price
+                      dispatch(
+                        setEnrollmentData({
+                          airportTransferPrice: newPrice,
+                        }),
+                      );
+                    }}
+                  >
+                    {organization.airportTransferOnArrivalAndDeparturePrice && (
+                      <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="Arrival and Departure"
+                            id="arrivalAndDeparture"
+                          />
+                          <Label htmlFor="arrivalAndDeparture">
+                            Arrival & Departure Transfer
+                          </Label>
+                        </div>
+                        <span className="font-medium">
+                          {formattedPrice(
+                            organization.airportTransferOnArrivalAndDeparturePrice,
+                          )}
+                        </span>
+                      </div>
+                    )}
+
+                    {organization.airportTransferArrivalOnlyPrice && (
+                      <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="Arrival Only"
+                            id="arrivalOnly"
+                          />
+                          <Label htmlFor="arrivalOnly">Arrival Only</Label>
+                        </div>
+                        <span className="font-medium">
+                          {formattedPrice(
+                            organization.airportTransferArrivalOnlyPrice,
+                          )}
+                        </span>
+                      </div>
+                    )}
+
+                    {organization.airportTransferDepartureOnlyPrice && (
+                      <div className="flex items-center justify-between space-x-2 rounded-md border p-3">
+                        <div className="flex items-center space-x-2">
+                          <RadioGroupItem
+                            value="Departure Only"
+                            id="departureOnly"
+                          />
+                          <Label htmlFor="departureOnly">Departure Only</Label>
+                        </div>
+                        <span className="font-medium">
+                          {formattedPrice(
+                            organization.airportTransferDepartureOnlyPrice,
+                          )}
+                        </span>
+                      </div>
+                    )}
+                  </RadioGroup>
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    );
+  }
 
   if (step === ENROLLMENT_STEPS.CONFIRMATION) {
     bodyContent = (
@@ -521,7 +572,7 @@ export const CreateEnrollmentModal = () => {
                 </>
               )}
               <Separator className="my-4" />
-              <div className="space-y-2">
+              <div className="flex flex-col gap-2">
                 <div className="flex justify-between">
                   <dt className="font-medium text-muted-foreground">
                     Course Fee:
@@ -530,26 +581,33 @@ export const CreateEnrollmentModal = () => {
                     {formattedPrice(enrollmentData.totalPrice)}
                   </dd>
                 </div>
-                {enrollmentData.accommodationPrice ||
-                  (enrollmentData.airportTransferPrice > 0 && (
-                    <div className="flex justify-between">
-                      <dt className="font-medium text-muted-foreground">
-                        Add-ons:
-                      </dt>
-                      <dd className="font-semibold">
-                        {formattedPrice(
-                          enrollmentData.accommodationPrice +
-                            enrollmentData.airportTransferPrice,
-                        )}
-                      </dd>
-                    </div>
-                  ))}
+                {enrollmentData.airportTransferPrice > 0 && (
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-muted-foreground">
+                      Airport Transfer Fee:
+                    </dt>
+                    <dd className="font-semibold">
+                      {formattedPrice(enrollmentData.airportTransferPrice)}
+                    </dd>
+                  </div>
+                )}
+                {enrollmentData.accommodationPrice > 0 && (
+                  <div className="flex justify-between">
+                    <dt className="font-medium text-muted-foreground">
+                      Accommodation Fee:
+                    </dt>
+                    <dd className="font-semibold">
+                      {formattedPrice(enrollmentData.accommodationPrice)}
+                    </dd>
+                  </div>
+                )}
+
                 <Separator className="my-2" />
                 <div className="flex justify-between">
                   <dt className="font-medium">Total Price:</dt>
                   <dd className="text-lg font-bold text-primary">
                     {formattedPrice(
-                      enrollmentData.totalPrice +
+                      enrollmentData.totalPrice * 0.9 +
                         enrollmentData.accommodationPrice +
                         enrollmentData.airportTransferPrice,
                     )}
@@ -565,24 +623,39 @@ export const CreateEnrollmentModal = () => {
 
   if (step === ENROLLMENT_STEPS.FINAL_MESSAGE) {
     bodyContent = (
-      <div className="flex flex-col items-center justify-center space-y-6 py-8">
-        <div className="rounded-full bg-green-100 p-3">
-          <CheckCircle2 className="h-12 w-12 text-green-600" />
-        </div>
-        <div className="space-y-4 text-center">
-          <h2 className="text-2xl font-bold">{`You're All Set!`}</h2>
-          <div className="space-y-2 text-muted-foreground">
-            <p>Your enrollment request has been successfully submitted.</p>
-            <p>
-              We'll be in touch soon to confirm availability and next steps.
-            </p>
-            <p className="text-sm">
-              {`If you don’t receive an email within 24 hours, please check your spam folder or contact us for assistance.`}
-            </p>
+      <Card className="flex flex-col items-center justify-center space-y-6 py-8">
+        <div className="p-5">
+          <div className="mx-auto flex items-center justify-center gap-3 rounded-full p-3">
+            <CheckCircle2 className="h-12 w-12 text-green-600" />
+            <h2 className="text-2xl font-bold">{`You're All Set!`}</h2>
+          </div>
+          <div className="space-y-4 text-center">
+            <div className="space-y-5 text-muted-foreground">
+              <p>Your enrollment request has been successfully submitted.</p>
+              <p>
+                We'll be in touch soon to confirm availability and next steps.
+              </p>
+              <p className="text-sm">
+                {`If you don’t receive an email within 24 hours, please check your spam folder or contact us for assistance.`}
+              </p>
+            </div>
           </div>
         </div>
-      </div>
+      </Card>
     );
+  }
+
+  if (step === ENROLLMENT_STEPS.USER_DETAILS) {
+    isDisabled =
+      !enrollmentData.firstName ||
+      !enrollmentData.sureName ||
+      !enrollmentData.contactNumber ||
+      !enrollmentData.emailAddress ||
+      emailError !== "" ||
+      !enrollmentData.startDate ||
+      (enrollmentData.airportTransfer &&
+        !enrollmentData.airportTransfersType) ||
+      enrollmentData.weeks < 1;
   }
 
   return (
@@ -592,7 +665,10 @@ export const CreateEnrollmentModal = () => {
         actionLabel={actionLabel}
         secondaryActionLabel={secondaryActionLabel}
         secondaryAction={
-          step === ENROLLMENT_STEPS.USER_DETAILS ? undefined : onBack
+          step === ENROLLMENT_STEPS.USER_DETAILS ||
+          step === ENROLLMENT_STEPS.FINAL_MESSAGE
+            ? undefined
+            : onBack
         }
         body={bodyContent}
         onSubmit={onSubmit}

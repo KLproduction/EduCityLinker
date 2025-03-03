@@ -438,12 +438,4 @@ export const airportTransfers = [
     label: "Departure Only",
     description: "One-way airport transfer upon departure.",
   },
-  {
-    label: "Private Transport",
-    description: "Book a private airport transfer for convenience.",
-  },
-  {
-    label: "Shared Transport",
-    description: "Economical shared airport transfer with other students.",
-  },
 ];

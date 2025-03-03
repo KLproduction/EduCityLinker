@@ -17,14 +17,13 @@ interface PriceCalculatorProps {
 export default function EnrollmentPriceSelector({
   basePrice,
 }: PriceCalculatorProps) {
-  const [week, setWeek] = useState(1);
-
-  const originalPrice = basePrice * week;
-  const discountPrice = originalPrice * 0.9;
   const enrollmentData = useAppSelector(
     (state) => state.createEnrollmentRequest,
   );
   const dispatch = useAppDispatch();
+  const [week, setWeek] = useState(enrollmentData.weeks);
+  const originalPrice = basePrice * week;
+  const discountPrice = originalPrice * 0.9;
 
   const handleWeekChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value);

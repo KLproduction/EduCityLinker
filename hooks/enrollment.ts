@@ -50,31 +50,30 @@ export const useCreateEnrollmentRequest = (
   };
 };
 
-export const useGetOrganizationByEnrollmentModal = () => {
-  const { selectedOrganizationId, selectedListingId } =
-    useCreateEnrollmentModal();
-  const { data } = useQuery({
-    queryKey: ["organization", selectedListingId],
+export const useGetOrganizationByEnrollmentModal = (organizationId: string) => {
+  const { data, isPending } = useQuery({
+    queryKey: ["organization", organizationId],
     queryFn: async () => {
-      const result = await getOrganizationByIdAction(selectedOrganizationId);
+      const result = await getOrganizationByIdAction(organizationId);
       return result;
     },
   });
   return {
     data,
+    isPending,
   };
 };
 
-export const useGetListingByEnrollmentModal = () => {
-  const { selectedListingId } = useCreateEnrollmentModal();
-  const { data } = useQuery({
-    queryKey: [selectedListingId],
+export const useGetListingByEnrollmentModal = (listingId: string) => {
+  const { data, isPending } = useQuery({
+    queryKey: ["course", listingId],
     queryFn: async () => {
-      const result = await getListingByIdAction(selectedListingId);
+      const result = await getListingByIdAction(listingId);
       return result;
     },
   });
   return {
     data,
+    isPending,
   };
 };

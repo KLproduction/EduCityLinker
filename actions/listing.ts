@@ -25,6 +25,7 @@ export const getListingsAction = async () => {
 };
 
 export const getListingByIdAction = async (listingId: string) => {
+  if (!listingId) return;
   try {
     const listing = await db.listing.findUnique({
       where: { id: listingId },

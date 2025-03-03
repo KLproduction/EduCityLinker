@@ -5,13 +5,27 @@ import { enrollmentRequestSchema } from "@/schemas";
 // Define TypeScript type from Zod schema
 export type EnrollmentRequestState = z.infer<typeof enrollmentRequestSchema>;
 
-// Define initial state
+const getNextMondayAfterSevenDays = () => {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0); // Reset time to midnight
+
+  const futureDate = new Date(today);
+  futureDate.setDate(today.getDate() + 7); // Move forward 7 days
+
+  // Find the next Monday (1 = Monday, 0 = Sunday, ..., 6 = Saturday)
+  while (futureDate.getDay() !== 1) {
+    futureDate.setDate(futureDate.getDate() + 1);
+  }
+
+  return futureDate;
+};
+
 const initialState: EnrollmentRequestState = {
   firstName: "",
   sureName: "",
   contactNumber: "",
   emailAddress: "",
-  startDate: new Date(),
+  startDate: getNextMondayAfterSevenDays(),
   weeks: 1,
   airportTransfer: false,
   airportTransfersType: "",

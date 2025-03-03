@@ -1,7 +1,4 @@
 import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
-import { useForm } from "react-hook-form";
-import { createCourseSchema } from "@/schemas";
-import { z } from "zod";
 import { useEffect } from "react";
 
 export const useCreateCourseModal = () => {
@@ -105,13 +102,17 @@ export const useCreateEnrollmentModal = () => {
     setSelectedOrganizationId("");
   };
 
-  // useEffect(() => {
-  //   if (isOpen) return;
-  //   if (!isOpen) {
-  //     setSelectedListingId("");
-  //     setSelectedOrganizationId("");
-  //   }
-  // }, [isOpen]);
+  useEffect(() => {
+    if (!isOpen) {
+      const timeout = setTimeout(() => {
+        setSelectedListingId("");
+        setSelectedOrganizationId("");
+      }, 300); // Delay to match modal closing animation duration
+
+      return () => clearTimeout(timeout); // Cleanup if modal reopens quickly
+    }
+  }, [isOpen]);
+
   return {
     isOpen,
     open,

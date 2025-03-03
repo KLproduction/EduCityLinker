@@ -39,7 +39,12 @@ const ListingSectionDropdown = ({ listing }: Props) => {
           />
           <div className="flex w-full justify-center">
             <div className="flex w-full md:hidden">
-              <Button className="w-full">Enrollment</Button>
+              <Button
+                className="w-full"
+                onClick={() => open(listing.id, listing.organizationId)}
+              >
+                Enrollment
+              </Button>
             </div>
             <div className="hidden md:block">
               <InteractiveHoverButton
