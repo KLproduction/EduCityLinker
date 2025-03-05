@@ -71,10 +71,12 @@ export const Timeline = ({ data }: { data: TimelineEntry[] }) => {
             </div>
 
             <div className="relative w-full pl-20 pr-4 md:pl-4">
-              <h3 className="mb-4 block text-left text-2xl font-black text-neutral-500 dark:text-neutral-500 md:hidden">
+              <h3 className="mb-4 block text-left text-4xl font-black text-neutral-500 dark:text-neutral-500 md:hidden">
                 {item.title}
               </h3>
-              <div className="font-bold">{item.content} </div>
+              <div className="text-xs font-bold leading-loose">
+                {item.content}{" "}
+              </div>
             </div>
           </motion.div>
         ))}

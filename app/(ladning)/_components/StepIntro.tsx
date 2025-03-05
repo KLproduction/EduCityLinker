@@ -25,8 +25,8 @@ export default function StepIntro() {
           <p className="text-neutral-600 dark:text-neutral-300">
             Use our <span className="font-bold">smart search tool</span> to
             explore top-rated English learning centers in{" "}
-            <span className="font-bold">your preferred location</span>. Find the
-            perfect match based on your goals, schedule, and budget.
+            <span className="font-bold">your preferred location</span>.<br />{" "}
+            Find the perfect match based on your goals, schedule, and budget.
           </p>
         </div>
       ),
@@ -67,8 +67,8 @@ export default function StepIntro() {
             Enroll in your chosen course with{" "}
             <span className="font-bold">no upfront payment</span>. We will
             confirm course availability with the center and provide you with the
-            next steps. Our team will contact you to ensure a smooth enrollment
-            process.
+            next steps. <br />
+            Our team will contact you to ensure a smooth enrollment process.
           </p>
         </div>
       ),
@@ -85,9 +85,10 @@ export default function StepIntro() {
           </div>
           <p className="text-neutral-600 dark:text-neutral-300">
             Receive an <span className="font-bold">email confirmation</span>{" "}
-            with all your course details. Our{" "}
-            <span className="font-bold">expert advisors</span> will connect with
-            you to discuss flexible booking options and answer any questions.
+            with all your course details. <br />
+            Our <span className="font-bold">expert advisors</span> will connect
+            with you to discuss flexible booking options and answer any
+            questions.
           </p>
         </div>
       ),
@@ -99,14 +100,16 @@ export default function StepIntro() {
           <div className="mb-4 flex items-center text-rose-500">
             <CreditCard className="mr-2 h-6 w-6" />
             <h1 className="text-xl font-semibold text-rose-500">
-              Secure Your Spot – Pay & Confirm
+              {`Secure Your Spot – Pay & Confirm`}
             </h1>
           </div>
           <p className="text-neutral-600 dark:text-neutral-300">
             Complete your <span className="font-bold">deposit payment</span> by
-            the due date to secure your spot. Confirm your{" "}
-            <span className="font-bold">course start date</span> and stay on
-            track with a clear final payment deadline.
+            the due date to secure your spot. <br />
+            Confirm your <span className="font-bold">
+              course start date
+            </span>{" "}
+            and stay on track with a clear final payment deadline.
           </p>
         </div>
       ),
