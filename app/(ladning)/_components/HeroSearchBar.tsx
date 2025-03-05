@@ -16,7 +16,7 @@ const HeroSearchBar = () => {
 
   return (
     <motion.section
-      className="relative flex min-h-screen flex-col items-center justify-center py-20 text-center"
+      className="relative my-20 flex min-h-screen flex-col items-center justify-center py-20 text-center"
       ref={targetRef}
       style={{ scale }}
     >

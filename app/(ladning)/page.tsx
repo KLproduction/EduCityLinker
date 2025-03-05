@@ -14,6 +14,7 @@ import { motion } from "framer-motion";
 import DragAndDrop from "./_components/drag-and-drop-hero/DragAndDrop";
 import NewNav from "@/components/Nabar/newNav";
 import HeroSearchBar from "./_components/HeroSearchBar";
+import StepIntro from "./_components/StepIntro";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -38,7 +39,8 @@ export default function LandingPage() {
     <div className="h-full w-full">
       <LogoScroll />
       <HeroSearchBar />
-      <FeaturesPage />
+      <StepIntro />
+      {/* <FeaturesPage /> */}
       {/* <ParallaxBg /> */}
       {/* <Hero /> */}
       {/* <DragAndDrop className="z-[200] bg-zinc-800" /> */}
