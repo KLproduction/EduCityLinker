@@ -105,3 +105,18 @@ export const createEnrollmentRequestAction = async (
     return { status: 500, message: error.message || "Database error" };
   }
 };
+
+export const getEnrollmentRequestsByUserIdAction = async (userId: string) => {
+  try {
+    const enrollmentRequests = await db.enrollmentRequest.findMany({
+      where: { userId },
+    });
+    if (enrollmentRequests.length > 0) {
+      return { enrollmentRequests, status: 200 };
+    }
+    return { status: 404, message: "Enrollment requests not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};

@@ -9,7 +9,7 @@ type Props = {
 const ListingSection = ({ listing }: Props) => {
   return (
     <div className="mt-4 space-y-4">
-      <div className="grid w-full gap-4 rounded-md border p-4 sm:grid-cols-[1fr_2fr_auto]">
+      <div className="grid w-full gap-4 rounded-md border-2 border-rose-200 p-4 sm:grid-cols-[1fr_2fr_auto]">
         {/* Course Type (Stacks on small screens) */}
         <div className="flex items-center whitespace-nowrap text-base font-semibold">
           <Book size={16} className="mr-2 flex-shrink-0" />
@@ -41,8 +41,12 @@ const ListingSection = ({ listing }: Props) => {
           <div className="text-right text-sm text-zinc-500">
             {`Original Price: ${" "}${formattedPrice(listing.price)}`}
           </div>
-          <div className="text-right text-base font-bold text-rose-500">
-            {`Discount Offer: ${" "}${formattedPrice(listing.price * 0.9)}`}
+          <div className="flex items-end gap-5 text-right text-base font-bold text-rose-500">
+            <div className="flex items-end gap-2">
+              <h4 className="text-xl">AMIO</h4>
+              Price:
+            </div>
+            {formattedPrice(listing.price * 0.9)}
           </div>
         </div>
       </div>

@@ -1,15 +1,7 @@
 import { getFavoritesByUserIdAction } from "@/actions/favorites";
 import ListingTable from "@/app/explore/_components/ListingTable";
-import HeartButton from "@/components/listing/HeartButton";
-import ListingSection from "@/components/listing/ListingSection";
-import StarRating from "@/components/StarRating";
-import { Button } from "@/components/ui/button";
-import { Card, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+import BackToExploreBtn from "@/components/global/BackToExploreBtn";
 import { currentUser } from "@/lib/auth";
-import { Check, MapPin } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
 import { redirect } from "next/navigation";
 
 type Props = {
@@ -38,7 +30,10 @@ const FavoritePage = async ({ params }: Props) => {
     ?.filter((org): org is NonNullable<typeof org> => org !== undefined);
 
   return (
-    <div>
+    <div className="flex flex-col">
+      <div className="flex w-full justify-start">
+        <BackToExploreBtn variant="outline" />
+      </div>
       <ListingTable data={organization || []} currentUser={user} />
     </div>
   );

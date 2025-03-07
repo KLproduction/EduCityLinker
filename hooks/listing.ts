@@ -7,7 +7,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
 import { toast } from "sonner";
 import { useLoginModal } from "./modal";
-import { getOrganizationByListingIdAction } from "@/actions/listing";
+import {
+  getListingByIdAction,
+  getOrganizationByListingIdAction,
+} from "@/actions/listing";
 
 export const useAddFavorites = (userId: string, listingId: string) => {
   const { open } = useLoginModal();
@@ -71,5 +74,16 @@ export const useGetOrganizationByListingId = (listingId: string) => {
   const organization = data?.organization;
   return {
     organization,
+  };
+};
+
+export const useGetListingById = (listingId: string) => {
+  const { data } = useQuery({
+    queryKey: ["listing", listingId],
+    queryFn: async () => await getListingByIdAction(listingId),
+  });
+  const listing = data?.listing;
+  return {
+    listing,
   };
 };

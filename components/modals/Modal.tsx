@@ -42,7 +42,7 @@ const Modal = ({
       <div>
         <div className="translate relative flex h-full w-full flex-col rounded-lg border-0 bg-zinc-200 shadow-lg outline-none focus:outline-none md:h-auto lg:h-auto">
           <div className="relative flex items-center justify-center rounded-t border-b-[1px] p-6">
-            <div className="mx-auto text-center text-lg font-semibold">
+            <div className="mx-auto text-center text-xl font-bold text-rose-500">
               {title}
             </div>
           </div>
