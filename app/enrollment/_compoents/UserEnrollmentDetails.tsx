@@ -30,19 +30,18 @@ type Props = {
 };
 
 const UserEnrollmentDetails = ({ enrollmentData }: Props) => {
+  const router = useRouter();
   const organization = useGetOrganizationByListingId(
     enrollmentData.organizationId,
   );
+  const listingData = useGetListingById(enrollmentData.listingId);
   const organizations = [organization.organization];
   if (!organizations) return null;
 
-  const listingData = useGetListingById(enrollmentData.listingId);
   const listing = listingData.listing;
-  console.log(listing);
   if (!listing) return null;
 
   const viewSchool = () => {
-    const router = useRouter();
     router.push(`/listing/${enrollmentData.organizationId}`);
   };
 
