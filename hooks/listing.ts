@@ -66,24 +66,33 @@ export const useAddFavorites = (userId: string, listingId: string) => {
   };
 };
 
-export const useGetOrganizationByListingId = (listingId: string) => {
-  const { data } = useQuery({
-    queryKey: ["organization", listingId],
-    queryFn: async () => await getOrganizationByListingIdAction(listingId),
+export const useGetOrganizationByListingId = (organizationId: string) => {
+  const { data, isPending, isLoading } = useQuery({
+    queryKey: ["organization", organizationId],
+    queryFn: async () => {
+      return await getOrganizationByListingIdAction(organizationId);
+    },
   });
+  if (data?.status !== 200) {
+    console.log(data?.message);
+  }
   const organization = data?.organization;
   return {
     organization,
+    isPending,
+    isLoading,
   };
 };
 
 export const useGetListingById = (listingId: string) => {
-  const { data } = useQuery({
+  const { data, isPending, isLoading } = useQuery({
     queryKey: ["listing", listingId],
     queryFn: async () => await getListingByIdAction(listingId),
   });
   const listing = data?.listing;
   return {
     listing,
+    isPending,
+    isLoading,
   };
 };

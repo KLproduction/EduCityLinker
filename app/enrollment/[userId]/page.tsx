@@ -3,6 +3,7 @@ import BackToExploreBtn from "@/components/global/BackToExploreBtn";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import UserEnrollmentDetails from "../_compoents/UserEnrollmentDetails";
+import { getOrganizationByListingIdAction } from "@/actions/listing";
 
 type Props = {
   params: { userId: string };
@@ -17,7 +18,7 @@ const UserEnrollmentPage = async ({ params }: Props) => {
   const enrollmentData = await getEnrollmentRequestsByUserIdAction(
     params.userId,
   );
-  const enrollment = enrollmentData.enrollmentRequests;
+  const enrollment = enrollmentData?.enrollmentRequests;
   if (enrollment?.length === 0 || !enrollment) {
     return (
       <div className="flex h-full w-full flex-col items-center justify-center">

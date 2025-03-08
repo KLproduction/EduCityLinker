@@ -74,11 +74,14 @@ export const getOrganizationByListingIdAction = async (
       where: { id: organizationId },
     });
     if (organization) {
+      console.log("Organization found");
+
       return {
         organization,
         status: 200,
       };
     }
+    console.log("Organization not found");
     return {
       status: 404,
       message: "Organization not found",
