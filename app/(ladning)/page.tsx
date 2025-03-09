@@ -15,6 +15,7 @@ import DragAndDrop from "./_components/drag-and-drop-hero/DragAndDrop";
 import NewNav from "@/components/Nabar/newNav";
 import HeroSearchBar from "./_components/HeroSearchBar";
 import StepIntro from "./_components/StepIntro";
+import WhyUsSection from "./_components/WhyUsSection";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -36,10 +37,11 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="h-full w-full">
+    <div className="h-full w-full bg-white">
       <LogoScroll />
       <HeroSearchBar />
       <StepIntro />
+      <WhyUsSection />
       {/* <FeaturesPage /> */}
       {/* <ParallaxBg /> */}
       {/* <Hero /> */}

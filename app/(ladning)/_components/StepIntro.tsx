@@ -139,7 +139,7 @@ export default function StepIntro() {
   ];
 
   return (
-    <div className="mt-32 min-h-screen overflow-hidden bg-neutral-50 dark:bg-neutral-950">
+    <div className="mt-32 min-h-screen overflow-hidden bg-white pt-24 dark:bg-neutral-950">
       {/* Timeline */}
       <Timeline data={timelineData} />
     </div>

@@ -42,6 +42,8 @@ const UserEnrollmentDetailsSection = ({
 }: Props) => {
   const router = useRouter();
 
+  if (enrollmentData.status === "CANCELLED") return null;
+
   return (
     <>
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
