@@ -16,6 +16,7 @@ import NewNav from "@/components/Nabar/newNav";
 import HeroSearchBar from "./_components/HeroSearchBar";
 import StepIntro from "./_components/StepIntro";
 import WhyUsSection from "./_components/WhyUsSection";
+import MobileTop from "./_components/MobileTop";
 
 export default function LandingPage() {
   useEffect(() => {
@@ -41,8 +42,10 @@ export default function LandingPage() {
       <div className="hidden md:block">
         <LogoScroll />
       </div>
-
-      <DragAndDrop className="z-[200] bg-zinc-50 md:hidden" />
+      <div className="md:hidden">
+        <MobileTop />
+      </div>
+      {/* <DragAndDrop className="z-[200] bg-zinc-50 md:hidden" /> */}
       <HeroSearchBar />
       <StepIntro />
       <WhyUsSection />

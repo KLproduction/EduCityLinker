@@ -1,4 +1,8 @@
-import { onCreateOrganizationAction } from "@/actions/create-organization";
+import {
+  getOrganizationByIdAction,
+  onCreateOrganizationAction,
+  updateOrganizationAction,
+} from "@/actions/create-organization";
 import { deleteUploadcare, uploadImage } from "@/actions/uploadImage";
 import {
   appendToGallery,
@@ -12,7 +16,7 @@ import {
   nationalitySchema,
   socialMediaSchema,
 } from "@/schemas";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useCreateOrganizerModal } from "./modal";
@@ -21,6 +25,9 @@ import { useRouter } from "next/navigation";
 import { appendToAmenityGallery } from "@/redux/slice/create-organizationSlice";
 import { resetStudentNationData } from "@/redux/slice/create-organizationNationSlice";
 import { resetSocialMediaData } from "@/redux/slice/create-organizationSocialMediaSlice";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect } from "react";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();
@@ -173,5 +180,96 @@ export const useCreateOrganization = ({
   return {
     createOrganizationMutate,
     isPending,
+  };
+};
+
+export const useEditOrganization = (organizationId: string) => {
+  const { data } = useQuery({
+    queryKey: ["edit-organization", organizationId],
+    queryFn: async () => {
+      const result = await getOrganizationByIdAction(organizationId);
+      console.log(result);
+      return result;
+    },
+  });
+
+  const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
+    z.infer<typeof createOrganizerSchema>
+  >({
+    resolver: zodResolver(createOrganizerSchema),
+    defaultValues: {
+      name: "",
+      description: "",
+      logo: "",
+      coverPhoto: "",
+      gallery: [],
+      feature: [],
+      facility: [],
+      accommodationTypes: "",
+      roomTypes: "",
+      roomAmenities: [],
+      location: "",
+      city: "",
+      country: "",
+      lat: 0,
+      lng: 0,
+      distanceOfAmenities: 0,
+      amenityGallery: [],
+      rating: 0,
+      ratingDescription: "",
+      lessonDuration: 0,
+      studentMinAge: 0,
+      studentMaxAge: 0,
+      averageStudentPerClass: 0,
+      accommodationHomeStayPrice: 0,
+      accommodationStudentResidencePrice: 0,
+      accommodationPrivateApartmentPrice: 0,
+      homeStayPreference: [],
+      airportTransfers: false,
+      airportTransferOnArrivalAndDeparturePrice: 0,
+      airportTransferArrivalOnlyPrice: 0,
+      airportTransferDepartureOnlyPrice: 0,
+    },
+  });
+
+  // ✅ Use useEffect to update form when data is fetched
+  useEffect(() => {
+    if (data) {
+      reset({
+        ...data,
+      });
+    }
+  }, [data, reset]);
+
+  const { mutate: updateOrganizationMutate, isPending } = useMutation({
+    mutationFn: async (
+      organizationData: z.infer<typeof createOrganizerSchema>,
+    ) => {
+      const result = await updateOrganizationAction(
+        organizationId,
+        organizationData,
+      );
+      return result;
+    },
+    onError: (error) => console.error(error.message),
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+  });
+
+  const submit = handleSubmit((data) => updateOrganizationMutate(data));
+
+  return {
+    register,
+    submit,
+    setValue,
+    reset,
+    watch,
+    isPending,
+    getValues,
   };
 };

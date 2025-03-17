@@ -159,3 +159,28 @@ export const getSocialMediaByOrganizationIdAction = async (
     console.error(e);
   }
 };
+
+export const getListingByOrganizationIdAction = async (
+  organizationId: string,
+) => {
+  if (!organizationId) return;
+  try {
+    const listing = await db.listing.findMany({
+      where: { organizationId },
+    });
+
+    if (listing) {
+      return {
+        listing,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Listing not found",
+    };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};

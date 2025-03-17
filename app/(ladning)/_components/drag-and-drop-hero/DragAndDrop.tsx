@@ -5,7 +5,7 @@ function DragAndDrop({ className }: { className?: string }) {
   return (
     <div
       className={cn(
-        "font-azeretMono relative z-[999] flex h-full min-h-screen w-full flex-col overflow-hidden",
+        "font-azeretMono relative z-0 flex h-full min-h-screen w-full flex-col overflow-hidden",
         className,
       )}
     >
