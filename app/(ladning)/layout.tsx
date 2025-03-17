@@ -1,4 +1,4 @@
-import Categories from "@/components/Nabar/Categories";
+import MobileNavbar from "@/components/Nabar/MobileNavbar";
 import Navbar from "@/components/Nabar/Navbar";
 import React from "react";
 
@@ -9,7 +9,12 @@ type Props = {
 const LandingLayout = ({ children }: Props) => {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center">
-      <Navbar />
+      <div className="hidden md:block">
+        <Navbar />
+      </div>
+      <div className="md:hidden">
+        <MobileNavbar />
+      </div>
 
       {children}
     </div>

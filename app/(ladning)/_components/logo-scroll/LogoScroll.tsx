@@ -34,7 +34,7 @@ const LogoScroll = () => {
 
   return (
     <motion.div
-      className="relative hidden min-h-[300vh] w-full overflow-hidden bg-white lg:block"
+      className="relative min-h-[300vh] w-full overflow-hidden bg-white"
       ref={sectionRef}
     >
       <div className="h-full w-full">
@@ -56,7 +56,11 @@ const LogoScroll = () => {
         </motion.div>
 
         {/* SCREEN CAPTION */}
-        <div className={cn("pointer-events-none hidden text-6xl sm:block")}>
+        <div
+          className={cn(
+            "pointer-events-none hidden sm:block md:text-4xl lg:text-6xl",
+          )}
+        >
           <motion.h1
             style={{ opacity: opacity0, scale }}
             className="fixed left-20 top-32 -translate-x-1/2 -translate-y-1/2 transform p-10 font-bold text-rose-500"
@@ -73,7 +77,7 @@ const LogoScroll = () => {
 
           <motion.h1
             style={{ opacity: opacity2, scale }}
-            className="fixed right-24 top-1/4 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
+            className="fixed right-24 top-56 -translate-x-1/2 -translate-y-1/2 transform font-bold text-rose-500"
           >
             ENGLISH COURSE
           </motion.h1>

@@ -38,14 +38,17 @@ export default function LandingPage() {
 
   return (
     <div className="h-full w-full bg-white">
-      <LogoScroll />
+      <div className="hidden md:block">
+        <LogoScroll />
+      </div>
+
+      <DragAndDrop className="z-[200] bg-zinc-50 md:hidden" />
       <HeroSearchBar />
       <StepIntro />
       <WhyUsSection />
       {/* <FeaturesPage /> */}
       {/* <ParallaxBg /> */}
       {/* <Hero /> */}
-      {/* <DragAndDrop className="z-[200] bg-zinc-800" /> */}
       {/* <ELearningPage /> */}
       {/* <PartnershipSlider /> */}
       {/* <MapPreview />
