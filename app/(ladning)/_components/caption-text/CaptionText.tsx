@@ -21,6 +21,7 @@ const CaptionText: FC<CaptionTextProps> = ({ text, className }) => {
 
   // Opacity transitions from 0 → 1 as user scrolls down
   const mapOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.3]);
+  const mobileMapOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.5]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [0, 1]);
 
   return (
@@ -28,14 +29,26 @@ const CaptionText: FC<CaptionTextProps> = ({ text, className }) => {
       ref={targetRef}
       className={cn("relative z-0 h-[200vh] w-full", className)}
     >
+      {/* Laptop Screen */}
       <motion.div
-        className="absolute left-0 top-1/4 z-0 h-full w-full"
+        className="absolute left-0 top-1/4 z-0 hidden h-full w-full md:block"
         style={{ opacity: mapOpacity }}
       >
         <img
           src="/heroMap_upscayl_2x_upscayl-standard-4x.png"
           alt="background"
           className="object-fit sticky top-0"
+        />
+      </motion.div>
+      {/* Mobile Screen */}
+      <motion.div
+        className="absolute left-0 top-2/4 z-0 h-full w-full overflow-hidden md:hidden"
+        style={{ opacity: mobileMapOpacity }}
+      >
+        <img
+          src="/heroMap_upscayl_2x_upscayl-standard-4x.png"
+          alt="background"
+          className="sticky top-[15%] scale-125 object-cover object-center"
         />
       </motion.div>
       <div

@@ -43,6 +43,12 @@ const MobileTop = (props: Props) => {
     [0.95, 0.975, 1.0],
     [0, 1, 0],
   );
+  const scrollLineWidth = useTransform(scrollYProgress, [0, 1], ["0%", "100%"]);
+  const scrollLineOpacity = useTransform(
+    scrollYProgress,
+    [0, 0.9, 1],
+    [1, 1, 0],
+  );
 
   return (
     <motion.div
@@ -91,6 +97,11 @@ const MobileTop = (props: Props) => {
           </div>
         </div>
       </div>
+      {/* Scroll Line */}
+      <motion.div
+        className="fixed bottom-0 left-0 h-2 w-full bg-rose-500"
+        style={{ width: scrollLineWidth, opacity: scrollLineOpacity }}
+      />
     </motion.div>
   );
 };

@@ -1,100 +1,106 @@
 "use client";
 
-import { useEditOrganization } from "@/hooks/create-organization";
-import { useEffect } from "react";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  useEditOrganization,
+  useEditOrganizationFromDB,
+} from "@/hooks/create-organization";
+import { useEffect, useState } from "react";
+import EditGoogleMapWithAddressInput from "./EditGoogleMapWithAddressInput";
+import { Organization } from "@prisma/client";
+import { Separator } from "@radix-ui/react-select";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import EditLogoUpload from "./EditLogoUpload";
+import { Button } from "@/components/ui/button";
 
 const EditOrganizationForm = ({
-  organizationId,
+  organizationData,
 }: {
-  organizationId: string;
+  organizationData: Organization;
 }) => {
   const { register, submit, setValue, watch, reset, getValues, isPending } =
-    useEditOrganization(organizationId);
+    useEditOrganizationFromDB(organizationData);
 
-  // Reset form when organization data changes
+  const [lat, setLat] = useState<number>(() => getValues("lat") ?? 0);
+  const [lng, setLng] = useState<number>(() => getValues("lng") ?? 0);
+  const [location, setLocation] = useState<string>(
+    () => getValues("location") ?? "",
+  );
+  const [logo, setLogo] = useState(() => getValues("logo") ?? "");
+
   useEffect(() => {
-    reset();
-  }, [reset]);
-
-  console.log(getValues);
+    setValue("lat", lat);
+    setValue("lng", lng);
+    setValue("location", location);
+    setValue("logo", logo);
+  }, [setValue, lat, lng, location, logo, reset]);
 
   return (
-    <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 shadow-md">
+    <div className="mx-auto min-w-full max-w-4xl rounded-lg bg-white p-6">
       <h1 className="mb-4 text-2xl font-semibold">Edit Organization</h1>
 
       <form onSubmit={submit} className="space-y-4">
-        {/* Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            {getValues("name")}
-          </label>
-          <input
-            type="text"
-            {...register("name")}
-            className="mt-1 block w-full rounded-md border p-2"
-            placeholder={getValues("name")}
-          />
-        </div>
+        <Card className="flex flex-col gap-8">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">
+              Organization Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-3 text-sm font-medium text-zinc-600">
+              Organization Name
+            </p>
+            <Input
+              {...register("name")}
+              className="mb-4 border-zinc-500 bg-zinc-50"
+              placeholder="Center Name"
+            />
+            <p className="mb-3 text-sm font-medium text-zinc-600">
+              Organization Description
+            </p>
+            <Textarea
+              {...register("description")}
+              className="border-zinc-500 bg-zinc-50"
+              rows={6}
+              placeholder="Center description"
+            />
+          </CardContent>
+        </Card>
 
-        {/* Description */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Description
-          </label>
-          <textarea
-            {...register("description")}
-            className="mt-1 block w-full rounded-md border p-2"
-            rows={3}
-          ></textarea>
-        </div>
-
-        {/* Location */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Location
-          </label>
-          <input
-            type="text"
-            {...register("location")}
-            className="mt-1 block w-full rounded-md border p-2"
-          />
-        </div>
-
-        {/* Rating */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700">
-            Rating
-          </label>
-          <input
-            type="number"
-            step="0.1"
-            min="0.5"
-            {...register("rating")}
-            className="mt-1 block w-full rounded-md border p-2"
-          />
-        </div>
-
-        {/* Airport Transfers */}
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            checked={watch("airportTransfers")}
-            onChange={(e) => setValue("airportTransfers", e.target.checked)}
-            className="mr-2"
-          />
-          <label className="text-sm font-medium text-gray-700">
-            Airport Transfers
-          </label>
-        </div>
+        <Card className="flex flex-col gap-8">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">
+              Location Details
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <p className="mb-3 text-sm font-medium text-zinc-600">
+              Organization Location
+            </p>
+            <EditGoogleMapWithAddressInput
+              centerLocation={location ?? getValues("location")}
+              centerLat={lat ?? getValues("lat")}
+              centerLng={lng ?? getValues("lng")}
+              setLat={setLat}
+              setLng={setLng}
+              setLocation={setLocation}
+            />
+          </CardContent>
+        </Card>
+        <Card className="flex flex-col gap-8">
+          <CardHeader>
+            <CardTitle className="text-2xl font-bold">Logo</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <EditLogoUpload logoSrcId={logo} setLogoSrcId={setLogo} />
+          </CardContent>
+        </Card>
 
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isPending}
-          className="rounded-md bg-blue-600 px-4 py-2 text-white"
-        >
+        <Button type="submit" disabled={isPending} className="px-4 py-2">
           {isPending ? "Saving..." : "Save Changes"}
-        </button>
+        </Button>
       </form>
     </div>
   );

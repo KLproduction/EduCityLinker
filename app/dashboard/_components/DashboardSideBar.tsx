@@ -12,11 +12,14 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
+import Link from "next/link";
 
-const DashboardContent = () => {
+const DashboardContent = ({ organizationId }: { organizationId: string }) => {
   return (
     <div className="flex flex-col justify-start gap-8">
-      <h1>Dashboard Content</h1>
+      <Link href={`dashboard/organization/${organizationId}`}>
+        Edit Organization
+      </Link>
       <Separator />
       <h1>Dashboard Content</h1>
       <Separator />
@@ -35,7 +38,7 @@ const DashboardContent = () => {
   );
 };
 
-const DashboardSideBar = () => {
+const DashboardSideBar = ({ organizationId }: { organizationId: string }) => {
   const [open, setOpen] = useState(false);
 
   return (
@@ -48,7 +51,7 @@ const DashboardSideBar = () => {
           </CardHeader>
 
           <CardContent className="flex h-full w-full flex-col justify-start gap-8">
-            <DashboardContent />
+            <DashboardContent organizationId={organizationId} />
           </CardContent>
         </Card>
       </aside>
@@ -69,7 +72,7 @@ const DashboardSideBar = () => {
               <SheetTitle>Dashboard</SheetTitle>
             </SheetHeader>
             <div className="py-4">
-              <DashboardContent />
+              <DashboardContent organizationId={organizationId} />
             </div>
           </SheetContent>
         </Sheet>

@@ -43,7 +43,7 @@ const DashboardOrganizationPage = async ({ params }: Props) => {
         />
         <AccommodationModal organization={organizer!} />
       </ClientOnly> */}
-      <EditOrganizationForm organizationId={organizer?.id!} />
+      <EditOrganizationForm organizationData={organizer!} />
     </div>
   );
 };

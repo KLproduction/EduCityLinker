@@ -28,6 +28,7 @@ import { resetSocialMediaData } from "@/redux/slice/create-organizationSocialMed
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
+import { Organization } from "@prisma/client";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();
@@ -50,6 +51,27 @@ export const useUploadLogo = () => {
     isPending,
   };
 };
+export const useEditLogo = (setLogoSrc: (src: string) => void) => {
+  const dispatch = useAppDispatch();
+  const organizationData = useAppSelector((state) => state.organization);
+  const { mutate: uploadImageMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.uuid;
+    },
+    onError: (error) => toast.error(error.message),
+    onSuccess: (data) => {
+      setLogoSrc(data);
+
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadImageMutate,
+    isPending,
+  };
+};
 export const useCoverPhotoLogo = () => {
   const dispatch = useAppDispatch();
   const organizationData = useAppSelector((state) => state.organization);
@@ -61,6 +83,26 @@ export const useCoverPhotoLogo = () => {
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
       dispatch(setOrganizationData({ coverPhoto: data }));
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadCoverPhotoMutate,
+    isPending,
+  };
+};
+export const useEditCoverPhotoLogo = (setLogoSrc: (src: string) => void) => {
+  const dispatch = useAppDispatch();
+  const organizationData = useAppSelector((state) => state.organization);
+  const { mutate: uploadCoverPhotoMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.uuid;
+    },
+    onError: (error) => toast.error(error.message),
+    onSuccess: (data) => {
+      setLogoSrc(data);
       toast.success("Image uploaded successfully!");
     },
   });
@@ -249,6 +291,89 @@ export const useEditOrganization = (organizationId: string) => {
         organizationId,
         organizationData,
       );
+      return result;
+    },
+    onError: (error) => console.error(error.message),
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data?.message);
+      }
+    },
+  });
+
+  const submit = handleSubmit((data) => updateOrganizationMutate(data));
+
+  return {
+    register,
+    submit,
+    setValue,
+    reset,
+    watch,
+    isPending,
+    getValues,
+  };
+};
+export const useEditOrganizationFromDB = (organizationData: Organization) => {
+  const data = organizationData;
+  const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
+    z.infer<typeof createOrganizerSchema>
+  >({
+    resolver: zodResolver(createOrganizerSchema),
+    defaultValues: {
+      name: data.name,
+      description: data.description || "",
+      logo: data.logo || "",
+      coverPhoto: data.coverPhoto || "",
+      gallery: data.gallery || [],
+      feature: data.feature || [],
+      facility: data.facility || [],
+      accommodationTypes: data.accommodationTypes,
+      roomTypes: data.roomTypes || undefined,
+      roomAmenities: data.roomAmenities || [],
+      location: data.location,
+      city: data.city,
+      country: data.country,
+      lat: data.lat,
+      lng: data.lng,
+      distanceOfAmenities: data.distanceOfAmenities || 0,
+      amenityGallery: data.amenityGallery || [],
+      rating: data.rating || 3,
+      ratingDescription: data.ratingDescription || "",
+      lessonDuration: data.lessonDuration || 1,
+      studentMinAge: data.studentMinAge,
+      studentMaxAge: data.studentMaxAge,
+      averageStudentPerClass: data.averageStudentPerClass,
+      accommodationHomeStayPrice: data.accommodationHomeStayPrice!,
+      accommodationStudentResidencePrice:
+        data.accommodationStudentResidencePrice!,
+      accommodationPrivateApartmentPrice:
+        data.accommodationPrivateApartmentPrice!,
+      homeStayPreference: data.homeStayPreference || [],
+      airportTransfers: data.airportTransfers!,
+      airportTransferOnArrivalAndDeparturePrice:
+        data.airportTransferOnArrivalAndDeparturePrice!,
+      airportTransferArrivalOnlyPrice: data.airportTransferArrivalOnlyPrice!,
+      airportTransferDepartureOnlyPrice:
+        data.airportTransferDepartureOnlyPrice!,
+    },
+  });
+
+  // ✅ Use useEffect to update form when data is fetched
+  // useEffect(() => {
+  //   if (data) {
+  //     reset({
+
+  //     });
+  //   }
+  // }, [data, reset]);
+
+  const { mutate: updateOrganizationMutate, isPending } = useMutation({
+    mutationFn: async (
+      organizationData: z.infer<typeof createOrganizerSchema>,
+    ) => {
+      const result = await updateOrganizationAction(data.id, organizationData);
       return result;
     },
     onError: (error) => console.error(error.message),
