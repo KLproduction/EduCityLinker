@@ -126,3 +126,61 @@ export const updateOrganizationAction = async (
     console.error(e);
   }
 };
+
+export const updateNationalityAction = async (
+  organizationId: string,
+  data: { nation: string; count: number }[],
+) => {
+  try {
+    const existingNationalities = await db.nationality.findMany({
+      where: { organizationId },
+    });
+
+    if (existingNationalities) {
+      await db.nationality.deleteMany({
+        where: { organizationId },
+      });
+      await db.nationality.createMany({
+        data: data.map((nation) => ({
+          ...nation,
+          organizationId,
+        })),
+      });
+      return { status: 200, message: "Nationality updated successfully!" };
+    }
+    return { status: 404, message: "Organization not found" };
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const updateSocialMediaAction = async (
+  organizationId: string,
+  data: z.infer<typeof socialMediaSchema>,
+) => {
+  try {
+    const existingSocialMedia = await db.socialMedia.findFirst({
+      where: { organizationId },
+    });
+
+    if (existingSocialMedia) {
+      await db.socialMedia.update({
+        where: { id: existingSocialMedia.id },
+        data,
+      });
+      return { status: 200, message: "Social media updated successfully!" };
+    }
+    if (!existingSocialMedia) {
+      await db.socialMedia.create({
+        data: {
+          ...data,
+          organizationId,
+        },
+      });
+      return { status: 200, message: "Social media created successfully!" };
+    }
+    return { status: 404, message: "Organization not found" };
+  } catch (e) {
+    console.error(e);
+  }
+};

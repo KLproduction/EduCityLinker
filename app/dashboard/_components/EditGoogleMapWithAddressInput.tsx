@@ -15,13 +15,10 @@ import {
 import { Library } from "@googlemaps/js-api-loader";
 import { useJsApiLoader } from "@react-google-maps/api";
 import { v4 } from "uuid";
-import {
-  useAppDispatch,
-  useAppSelector,
-  setOrganizationData,
-} from "@/redux/store";
 import { googleLat } from "@/components/GoogleMapSimple";
-import { useEditOrganization } from "@/hooks/create-organization";
+
+import { Edit } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const LIBRARIES: Library[] = ["marker"];
 type Props = {
@@ -48,6 +45,7 @@ const EditGoogleMapWithAddressInput = ({
 
   const [center, setCenter] = useState<googleLat | null>(null);
 
+  const [isEdit, setIsEdit] = useState(false);
   // Local state for autocomplete input and predictions.
   const [input, setInput] = useState(centerLocation ?? "");
   const [predictions, setPredictions] = useState<PlaceAutocompleteResult[]>([]);
@@ -166,29 +164,40 @@ const EditGoogleMapWithAddressInput = ({
   return (
     <div className="flex flex-col items-center justify-center gap-10">
       {/* Autocomplete Input Section */}
-      <Command>
-        <CommandInput
-          className="w-full"
-          placeholder="What is the location?"
-          value={input}
-          onValueChange={(e) => setInput(e)}
-        />
-        <CommandList>
-          <CommandEmpty>No results found.</CommandEmpty>
-          <CommandGroup heading="Locations">
-            {predictions.map((prediction) => (
-              <CommandItem
-                key={prediction.place_id}
-                onSelect={() =>
-                  handleSelectLocation(prediction, prediction.place_id)
-                }
-              >
-                {prediction.description}
-              </CommandItem>
-            ))}
-          </CommandGroup>
-        </CommandList>
-      </Command>
+      {isEdit ? (
+        // ✅ Show Input Field when Editing
+        <Command>
+          <CommandInput
+            className="w-full"
+            placeholder="What is the location?"
+            value={input}
+            onValueChange={(e) => setInput(e)}
+          />
+          <CommandList>
+            <CommandEmpty>No results found.</CommandEmpty>
+            <CommandGroup heading="Locations">
+              {predictions.map((prediction) => (
+                <CommandItem
+                  key={prediction.place_id}
+                  onSelect={() =>
+                    handleSelectLocation(prediction, prediction.place_id)
+                  }
+                >
+                  {prediction.description}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
+      ) : (
+        // ✅ Show Label when Not Editing
+        <div className="flex w-full gap-3 text-center text-lg font-medium text-gray-700">
+          {input || "No location selected"}
+          <Button onClick={() => setIsEdit(true)} variant={"outline"}>
+            <Edit />
+          </Button>
+        </div>
+      )}
 
       {/* Map Container */}
       {isLoaded ? (

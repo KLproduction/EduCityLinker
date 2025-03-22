@@ -24,16 +24,6 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
       <h1>Dashboard Content</h1>
       <Separator />
       <h1>Dashboard Content</h1>
-      <h1>Dashboard Content</h1>
-      <Separator />
-      <h1>Dashboard Content</h1>
-      <Separator />
-      <h1>Dashboard Content</h1>
-      <h1>Dashboard Content</h1>
-      <Separator />
-      <h1>Dashboard Content</h1>
-      <Separator />
-      <h1>Dashboard Content</h1>
     </div>
   );
 };
@@ -44,7 +34,7 @@ const DashboardSideBar = ({ organizationId }: { organizationId: string }) => {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden min-h-screen p-4 lg:block">
+      <aside className="sticky top-24 hidden h-full p-4 lg:block">
         <Card className="h-full w-full">
           <CardHeader>
             <CardTitle>Dashboard</CardTitle>

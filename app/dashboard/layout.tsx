@@ -1,8 +1,5 @@
-import Categories from "@/components/Nabar/Categories";
 import Navbar from "@/components/Nabar/Navbar";
 import React from "react";
-
-import MyContainer from "@/components/Container";
 import DashboardSideBar from "./_components/DashboardSideBar";
 import { getOrganizationIdByUserIdAction } from "@/actions/organization";
 import { currentUser } from "@/lib/auth";

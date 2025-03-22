@@ -33,17 +33,11 @@ const DashboardOrganizationPage = async ({ params }: Props) => {
 
   return (
     <div className="lg:min-w-7xl mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 lg:px-8 lg:py-16">
-      {/* <ClientOnly>
-        <ListingClient
-          listing={listing!}
-          organizer={organizer!}
-          currentUser={user}
-          studentNation={studentNations}
-          socialMedia={socialMedia}
-        />
-        <AccommodationModal organization={organizer!} />
-      </ClientOnly> */}
-      <EditOrganizationForm organizationData={organizer!} />
+      <EditOrganizationForm
+        organizationData={organizer!}
+        socialMedia={socialMedia!}
+        studentNations={studentNations!}
+      />
     </div>
   );
 };

@@ -1,32 +1,31 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { Trash2, CheckCircle, ImageIcon, Loader2 } from "lucide-react";
-
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TbPhotoPlus } from "react-icons/tb";
 import "@uploadcare/react-uploader/core.css";
 import * as LR from "@uploadcare/blocks";
-
-import { set } from "lodash";
 import {
+  useCoverPhotoLogo,
   useDeleteUploadcare,
-  useEditLogo,
+  useEditCoverPhoto,
   useUploadLogo,
 } from "@/hooks/create-organization";
 
 LR.registerBlocks(LR);
 
 type Props = {
-  logoSrcId: string;
-  setLogo: (id: string) => void;
+  photoId: string;
+  setCoverPhoto: (id: string) => void;
 };
-const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
+const EditCoverPhoto = ({ photoId, setCoverPhoto }: Props) => {
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [uploadFile, setUploadFile] = useState<File | null>(null);
   const imgInputRef = useRef<HTMLInputElement>(null);
 
-  const { uploadImageMutate, isPending } = useEditLogo(setLogo);
+  const { uploadCoverPhotoMutate, isPending } =
+    useEditCoverPhoto(setCoverPhoto);
 
   const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -38,26 +37,26 @@ const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
 
   const { onDeleteUploadcare, isPending: isDeleting } = useDeleteUploadcare();
 
-  const logoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${logoSrcId}/-/preview/300x300/`;
+  const photoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${photoId}/-/preview/600x300/`;
 
   const handleImageDelete = (id: string) => {
-    if (logoSrcId) {
+    if (photoId) {
       onDeleteUploadcare(id);
     }
     setPreviewUrl(null);
     if (imgInputRef.current) {
       imgInputRef.current.value = "";
-      setLogo("");
+      setCoverPhoto("");
     }
   };
   return (
     <div className="flex flex-col items-center justify-center gap-3">
-      {previewUrl || logoSrcId ? (
+      {previewUrl || photoId ? (
         <div className="mt-6 flex h-full w-full items-center justify-center">
           <img
-            src={previewUrl || logoSrc}
+            src={previewUrl || photoSrc}
             alt="image"
-            className="h-48 w-48 rounded-full object-cover object-center"
+            className="h-48 w-96 rounded-lg object-cover object-center"
           />
         </div>
       ) : (
@@ -75,7 +74,7 @@ const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
         onChange={handleImageChange}
         accept=".jpg, .jpeg, .png, .svg"
       />
-      {!previewUrl && !logoSrcId ? (
+      {!previewUrl && !photoId ? (
         <div>
           <Button
             type="button"
@@ -94,7 +93,7 @@ const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
             size={"sm"}
             className="mt-2 w-fit"
             variant={"outline"}
-            onClick={() => handleImageDelete(logoSrcId!)}
+            onClick={() => handleImageDelete(photoId!)}
             disabled={isDeleting}
           >
             {/* TO DO : ADD DELETE HOOK */}
@@ -104,12 +103,12 @@ const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
             variant={"outline"}
             size={"sm"}
             className="mt-2 w-fit"
-            onClick={() => uploadImageMutate(uploadFile!)}
-            disabled={logoSrcId ? true : false}
+            onClick={() => uploadCoverPhotoMutate(uploadFile!)}
+            disabled={photoId ? true : false}
           >
             {isPending ? (
               <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            ) : logoSrcId ? (
+            ) : photoId ? (
               <CheckCircle className="h-4 w-4 text-green-600" />
             ) : (
               <TbPhotoPlus className="h-4 w-4 text-green-600" />
@@ -120,4 +119,4 @@ const EditLogoUpload = ({ logoSrcId, setLogo }: Props) => {
     </div>
   );
 };
-export default EditLogoUpload;
+export default EditCoverPhoto;

@@ -8,19 +8,12 @@ import {
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
-import { CldUploadWidget } from "next-cloudinary";
 import { TbPhotoPlus } from "react-icons/tb";
-import Image from "next/image";
-import { FileUploaderRegular } from "@uploadcare/react-uploader/next";
 import "@uploadcare/react-uploader/core.css";
 import * as LR from "@uploadcare/blocks";
-
-import { set } from "lodash";
 import {
   useCoverPhotoLogo,
   useDeleteUploadcare,
-  useUploadLogo,
 } from "@/hooks/create-organization";
 
 LR.registerBlocks(LR);
@@ -44,7 +37,7 @@ const CoverPhotoUpload = () => {
 
   const { onDeleteUploadcare, isPending: isDeleting } = useDeleteUploadcare();
   const photoId = useAppSelector((state) => state.organization.coverPhoto);
-  const photoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${photoId}/-/preview/300x300/`;
+  const photoSrc = `${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${photoId}/-/preview/600x300/`;
 
   const handleImageDelete = (id: string) => {
     if (photoId) {
@@ -63,7 +56,7 @@ const CoverPhotoUpload = () => {
           <img
             src={previewUrl || photoSrc}
             alt="image"
-            className="h-48 w-48 rounded-lg object-cover object-center"
+            className="h-48 w-96 rounded-lg object-cover object-center"
           />
         </div>
       ) : (

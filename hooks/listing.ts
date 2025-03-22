@@ -67,6 +67,7 @@ export const useAddFavorites = (userId: string, listingId: string) => {
 };
 
 export const useGetOrganizationByListingId = (organizationId: string) => {
+  if (!organizationId) return;
   const { data, isPending, isLoading } = useQuery({
     queryKey: ["organization", organizationId],
     queryFn: async () => {

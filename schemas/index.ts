@@ -141,6 +141,10 @@ export const nationalitySchema = z.object({
     .positive("Number of students must be a positive integer"),
 });
 
+export const updateNationalitySchema = z.object({
+  nationalities: z.array(nationalitySchema).optional(),
+});
+
 export const socialMediaSchema = z.object({
   facebook: z.string().url().optional(),
   instagram: z.string().url().optional(),

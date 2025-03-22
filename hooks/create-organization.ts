@@ -1,7 +1,9 @@
 import {
   getOrganizationByIdAction,
   onCreateOrganizationAction,
+  updateNationalityAction,
   updateOrganizationAction,
+  updateSocialMediaAction,
 } from "@/actions/create-organization";
 import { deleteUploadcare, uploadImage } from "@/actions/uploadImage";
 import {
@@ -15,6 +17,7 @@ import {
   createOrganizerSchema,
   nationalitySchema,
   socialMediaSchema,
+  updateNationalitySchema,
 } from "@/schemas";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
@@ -92,9 +95,7 @@ export const useCoverPhotoLogo = () => {
     isPending,
   };
 };
-export const useEditCoverPhotoLogo = (setLogoSrc: (src: string) => void) => {
-  const dispatch = useAppDispatch();
-  const organizationData = useAppSelector((state) => state.organization);
+export const useEditCoverPhoto = (setCoverPhoto: (id: string) => void) => {
   const { mutate: uploadCoverPhotoMutate, isPending } = useMutation({
     mutationFn: async (fileData: File) => {
       const result = await uploadImage(fileData);
@@ -102,7 +103,7 @@ export const useEditCoverPhotoLogo = (setLogoSrc: (src: string) => void) => {
     },
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
-      setLogoSrc(data);
+      setCoverPhoto(data);
       toast.success("Image uploaded successfully!");
     },
   });
@@ -112,6 +113,7 @@ export const useEditCoverPhotoLogo = (setLogoSrc: (src: string) => void) => {
     isPending,
   };
 };
+
 export const useUploadGallery = () => {
   const dispatch = useAppDispatch();
   const organizationData = useAppSelector((state) => state.organization);
@@ -123,6 +125,27 @@ export const useUploadGallery = () => {
     onError: (error) => toast.error(error.message),
     onSuccess: (data) => {
       dispatch(appendToGallery(data));
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadImageMutate,
+    isPending,
+  };
+};
+export const useEditGallery = (
+  setGallery: (updateFn: (prev: string[]) => string[]) => void,
+) => {
+  const { mutate: uploadImageMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.uuid;
+    },
+    onError: (error) => toast.error(error.message),
+    onSuccess: (data) => {
+      setGallery((prev) => [...prev, data]);
+      console.log("Gallery", data);
       toast.success("Image uploaded successfully!");
     },
   });
@@ -225,96 +248,6 @@ export const useCreateOrganization = ({
   };
 };
 
-export const useEditOrganization = (organizationId: string) => {
-  const { data } = useQuery({
-    queryKey: ["edit-organization", organizationId],
-    queryFn: async () => {
-      const result = await getOrganizationByIdAction(organizationId);
-      console.log(result);
-      return result;
-    },
-  });
-
-  const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
-    z.infer<typeof createOrganizerSchema>
-  >({
-    resolver: zodResolver(createOrganizerSchema),
-    defaultValues: {
-      name: "",
-      description: "",
-      logo: "",
-      coverPhoto: "",
-      gallery: [],
-      feature: [],
-      facility: [],
-      accommodationTypes: "",
-      roomTypes: "",
-      roomAmenities: [],
-      location: "",
-      city: "",
-      country: "",
-      lat: 0,
-      lng: 0,
-      distanceOfAmenities: 0,
-      amenityGallery: [],
-      rating: 0,
-      ratingDescription: "",
-      lessonDuration: 0,
-      studentMinAge: 0,
-      studentMaxAge: 0,
-      averageStudentPerClass: 0,
-      accommodationHomeStayPrice: 0,
-      accommodationStudentResidencePrice: 0,
-      accommodationPrivateApartmentPrice: 0,
-      homeStayPreference: [],
-      airportTransfers: false,
-      airportTransferOnArrivalAndDeparturePrice: 0,
-      airportTransferArrivalOnlyPrice: 0,
-      airportTransferDepartureOnlyPrice: 0,
-    },
-  });
-
-  // ✅ Use useEffect to update form when data is fetched
-  useEffect(() => {
-    if (data) {
-      reset({
-        ...data,
-      });
-    }
-  }, [data, reset]);
-
-  const { mutate: updateOrganizationMutate, isPending } = useMutation({
-    mutationFn: async (
-      organizationData: z.infer<typeof createOrganizerSchema>,
-    ) => {
-      const result = await updateOrganizationAction(
-        organizationId,
-        organizationData,
-      );
-      return result;
-    },
-    onError: (error) => console.error(error.message),
-    onSuccess: (data) => {
-      if (data?.status === 200) {
-        toast.success(data.message);
-      } else {
-        toast.error(data?.message);
-      }
-    },
-  });
-
-  const submit = handleSubmit((data) => updateOrganizationMutate(data));
-
-  return {
-    register,
-    submit,
-    setValue,
-    reset,
-    watch,
-    isPending,
-    getValues,
-  };
-};
 export const useEditOrganizationFromDB = (organizationData: Organization) => {
   const data = organizationData;
   const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
@@ -397,4 +330,50 @@ export const useEditOrganizationFromDB = (organizationData: Organization) => {
     isPending,
     getValues,
   };
+};
+export const useUpdateNationality = (organizationId: string) => {
+  const { mutate, isPending, isSuccess, isError } = useMutation({
+    mutationFn: async (data: { nation: string; count: number }[]) => {
+      if (!organizationId) {
+        throw new Error("Organization ID is required");
+      }
+      return updateNationalityAction(organizationId, data);
+    },
+    onError: (error) => {
+      console.error("Failed to update nationalities:", error);
+      toast.error("Failed to update nationalities. Please try again.");
+    },
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data?.message || "Error updating nationalities.");
+      }
+    },
+  });
+
+  return { updateNationalities: mutate, isPending, isSuccess, isError };
+};
+
+export const useUpdateSocialMedia = (organizationId: string) => {
+  const { mutate, isPending, isSuccess, isError } = useMutation({
+    mutationFn: async (data: z.infer<typeof socialMediaSchema>) => {
+      if (!organizationId) {
+        throw new Error("Organization ID is required");
+      }
+      return updateSocialMediaAction(organizationId, data);
+    },
+    onError: (error) => {
+      console.error("Failed to update social media:", error);
+      toast.error("Failed to update social media. Please try again.");
+    },
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success(data.message);
+      } else {
+        toast.error(data?.message || "Error updating social media.");
+      }
+    },
+  });
+  return { updateSocialMedia: mutate, isPending, isSuccess, isError };
 };

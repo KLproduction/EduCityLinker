@@ -21,3 +21,25 @@ export const getOrganizationIdByUserIdAction = async (userId: string) => {
     return { status: 500, message: "Database error" };
   }
 };
+
+export const getOrganizationSocialMediaAction = async (
+  organizationId: string,
+) => {
+  try {
+    const organization = await db.organization.findUnique({
+      where: {
+        id: organizationId,
+      },
+      select: {
+        socialMedia: true,
+      },
+    });
+    if (organization) {
+      return { organization, status: 200 };
+    }
+    return { status: 404, message: "Organization not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
