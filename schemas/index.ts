@@ -8,7 +8,7 @@ export const SettingSchema = z
   .object({
     name: z.optional(z.string()),
     isTwoFactorEnabled: z.optional(z.boolean()),
-    role: z.enum([UserRole.ADMIN, UserRole.USER]),
+    role: z.enum([UserRole.ADMIN, UserRole.USER, UserRole.ORGANIZER]),
     email: z.optional(z.string().email()),
     password: z.optional(z.string().min(8)),
     newPassword: z.optional(z.string().min(8)),

@@ -233,6 +233,7 @@ const Settingform = ({ user }: SettingFormProps) => {
                       <SelectContent>
                         <SelectItem value={UserRole.ADMIN}>Admin</SelectItem>
                         <SelectItem value={UserRole.USER}>User</SelectItem>
+                        <SelectItem value={UserRole.ORGANIZER}>User</SelectItem>
                       </SelectContent>
                     </Select>
                     <FormMessage />
