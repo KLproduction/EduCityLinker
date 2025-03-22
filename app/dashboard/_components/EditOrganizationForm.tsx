@@ -16,6 +16,11 @@ import EditOrganizationCounter from "./EditOrganizationCounter";
 import EditFeatures from "./EditFeatures";
 import EditSocialMedia from "./EditSocialMedia";
 import EditStudentNation from "./editStudentNation";
+import EditFacilities from "./EditFacilities";
+import EditAirportTransfer from "./EditAirportTransfer";
+import EditAccommodationType from "./editAccommodationType";
+import EditAccommodationGallery from "./editAccommodationGallery";
+import EditRating from "./EditRating";
 
 const EditOrganizationForm = ({
   organizationData,
@@ -26,8 +31,16 @@ const EditOrganizationForm = ({
   studentNations: { nation: string; count: number }[];
   socialMedia: SocialMedia;
 }) => {
-  const { register, submit, setValue, watch, reset, getValues, isPending } =
-    useEditOrganizationFromDB(organizationData);
+  const {
+    register,
+    submit,
+    setValue,
+    watch,
+    reset,
+    getValues,
+    isPending,
+    resetToDefault,
+  } = useEditOrganizationFromDB(organizationData);
 
   const [lat, setLat] = useState<number>(() => getValues("lat") ?? 0);
   const [lng, setLng] = useState<number>(() => getValues("lng") ?? 0);
@@ -188,6 +201,16 @@ const EditOrganizationForm = ({
           <Card className="flex min-h-full w-full flex-col gap-8">
             <CardHeader>
               <CardTitle className="text-2xl font-bold">
+                Edit Facilities
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EditFacilities setValue={setValue} watch={watch} />
+            </CardContent>
+          </Card>
+          <Card className="flex min-h-full w-full flex-col gap-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">
                 Edit Features
               </CardTitle>
             </CardHeader>
@@ -196,10 +219,59 @@ const EditOrganizationForm = ({
             </CardContent>
           </Card>
 
+          <Card className="flex min-h-full w-full flex-col gap-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">
+                Edit AirportTransfer Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EditAirportTransfer setValue={setValue} watch={watch} />
+            </CardContent>
+          </Card>
+
+          <Card className="flex min-h-full w-full flex-col gap-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">
+                Edit Accommodation Details
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EditAccommodationType setValue={setValue} watch={watch} />
+            </CardContent>
+          </Card>
+          <Card className="flex min-h-full w-full flex-col gap-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">
+                Edit Accommodation Gallery
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EditAccommodationGallery setValue={setValue} watch={watch} />
+            </CardContent>
+          </Card>
+
+          <Card className="flex min-h-full w-full flex-col gap-8">
+            <CardHeader>
+              <CardTitle className="text-2xl font-bold">Edit Rating</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <EditRating setValue={setValue} watch={watch} />
+            </CardContent>
+          </Card>
+
           {/* Submit Button */}
-          <div className="flex w-full">
+          <div className="flex w-full flex-col gap-4">
             <Button type="submit" disabled={isPending}>
               {isPending ? "Saving..." : "Save Changes"}
+            </Button>
+            <Button
+              type="button"
+              disabled={isPending}
+              onClick={() => resetToDefault()}
+              variant={"outline"}
+            >
+              Reset Changes
             </Button>
           </div>
         </form>

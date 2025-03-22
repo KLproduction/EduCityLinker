@@ -28,7 +28,7 @@ import { useRouter } from "next/navigation";
 import { appendToAmenityGallery } from "@/redux/slice/create-organizationSlice";
 import { resetStudentNationData } from "@/redux/slice/create-organizationNationSlice";
 import { resetSocialMediaData } from "@/redux/slice/create-organizationSocialMediaSlice";
-import { useForm } from "react-hook-form";
+import { useForm, UseFormSetValue } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
 import { Organization } from "@prisma/client";
@@ -176,6 +176,31 @@ export const useUploadRoomGallery = () => {
   };
 };
 
+export const useEditRoomGallery = (
+  setValue: UseFormSetValue<any>,
+  currentGallery: string[],
+) => {
+  const { mutate: uploadImageMutate, isPending } = useMutation({
+    mutationFn: async (fileData: File) => {
+      const result = await uploadImage(fileData);
+      return result.uuid;
+    },
+    onError: (error) => {
+      toast.error("Failed to upload image: " + error.message);
+    },
+    onSuccess: (uploadedId: string) => {
+      const updatedGallery = [...currentGallery, uploadedId];
+      setValue("amenityGallery", updatedGallery, { shouldValidate: true });
+      toast.success("Image uploaded successfully!");
+    },
+  });
+
+  return {
+    uploadImageMutate,
+    isPending,
+  };
+};
+
 export const useDeleteUploadcare = () => {
   const { mutate: deleteUploadcareMutate, isPending } = useMutation({
     mutationFn: async (id: string) => {
@@ -250,57 +275,49 @@ export const useCreateOrganization = ({
 
 export const useEditOrganizationFromDB = (organizationData: Organization) => {
   const data = organizationData;
+  const router = useRouter();
+  const defaultFormValues: z.infer<typeof createOrganizerSchema> = {
+    name: data.name,
+    description: data.description || "",
+    logo: data.logo || "",
+    coverPhoto: data.coverPhoto || "",
+    gallery: data.gallery || [],
+    feature: data.feature || [],
+    facility: data.facility || [],
+    accommodationTypes: data.accommodationTypes,
+    roomTypes: data.roomTypes || undefined,
+    roomAmenities: data.roomAmenities || [],
+    location: data.location,
+    city: data.city,
+    country: data.country,
+    lat: data.lat,
+    lng: data.lng,
+    distanceOfAmenities: data.distanceOfAmenities || 0,
+    amenityGallery: data.amenityGallery || [],
+    rating: data.rating || 3,
+    ratingDescription: data.ratingDescription || "",
+    lessonDuration: data.lessonDuration || 1,
+    studentMinAge: data.studentMinAge,
+    studentMaxAge: data.studentMaxAge,
+    averageStudentPerClass: data.averageStudentPerClass,
+    accommodationHomeStayPrice: data.accommodationHomeStayPrice!,
+    accommodationStudentResidencePrice:
+      data.accommodationStudentResidencePrice!,
+    accommodationPrivateApartmentPrice:
+      data.accommodationPrivateApartmentPrice!,
+    homeStayPreference: data.homeStayPreference || [],
+    airportTransfers: data.airportTransfers!,
+    airportTransferOnArrivalAndDeparturePrice:
+      data.airportTransferOnArrivalAndDeparturePrice!,
+    airportTransferArrivalOnlyPrice: data.airportTransferArrivalOnlyPrice!,
+    airportTransferDepartureOnlyPrice: data.airportTransferDepartureOnlyPrice!,
+  };
   const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
     z.infer<typeof createOrganizerSchema>
   >({
     resolver: zodResolver(createOrganizerSchema),
-    defaultValues: {
-      name: data.name,
-      description: data.description || "",
-      logo: data.logo || "",
-      coverPhoto: data.coverPhoto || "",
-      gallery: data.gallery || [],
-      feature: data.feature || [],
-      facility: data.facility || [],
-      accommodationTypes: data.accommodationTypes,
-      roomTypes: data.roomTypes || undefined,
-      roomAmenities: data.roomAmenities || [],
-      location: data.location,
-      city: data.city,
-      country: data.country,
-      lat: data.lat,
-      lng: data.lng,
-      distanceOfAmenities: data.distanceOfAmenities || 0,
-      amenityGallery: data.amenityGallery || [],
-      rating: data.rating || 3,
-      ratingDescription: data.ratingDescription || "",
-      lessonDuration: data.lessonDuration || 1,
-      studentMinAge: data.studentMinAge,
-      studentMaxAge: data.studentMaxAge,
-      averageStudentPerClass: data.averageStudentPerClass,
-      accommodationHomeStayPrice: data.accommodationHomeStayPrice!,
-      accommodationStudentResidencePrice:
-        data.accommodationStudentResidencePrice!,
-      accommodationPrivateApartmentPrice:
-        data.accommodationPrivateApartmentPrice!,
-      homeStayPreference: data.homeStayPreference || [],
-      airportTransfers: data.airportTransfers!,
-      airportTransferOnArrivalAndDeparturePrice:
-        data.airportTransferOnArrivalAndDeparturePrice!,
-      airportTransferArrivalOnlyPrice: data.airportTransferArrivalOnlyPrice!,
-      airportTransferDepartureOnlyPrice:
-        data.airportTransferDepartureOnlyPrice!,
-    },
+    defaultValues: defaultFormValues,
   });
-
-  // ✅ Use useEffect to update form when data is fetched
-  // useEffect(() => {
-  //   if (data) {
-  //     reset({
-
-  //     });
-  //   }
-  // }, [data, reset]);
 
   const { mutate: updateOrganizationMutate, isPending } = useMutation({
     mutationFn: async (
@@ -313,6 +330,7 @@ export const useEditOrganizationFromDB = (organizationData: Organization) => {
     onSuccess: (data) => {
       if (data?.status === 200) {
         toast.success(data.message);
+        router.refresh();
       } else {
         toast.error(data?.message);
       }
@@ -320,7 +338,9 @@ export const useEditOrganizationFromDB = (organizationData: Organization) => {
   });
 
   const submit = handleSubmit((data) => updateOrganizationMutate(data));
-
+  const resetToDefault = () => {
+    reset(defaultFormValues);
+  };
   return {
     register,
     submit,
@@ -329,6 +349,7 @@ export const useEditOrganizationFromDB = (organizationData: Organization) => {
     watch,
     isPending,
     getValues,
+    resetToDefault,
   };
 };
 export const useUpdateNationality = (organizationId: string) => {

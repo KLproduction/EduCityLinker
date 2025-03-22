@@ -48,6 +48,14 @@ const EditSocialMedia = ({
     updateSocialMedia(socialMedia);
   };
 
+  const handleReset = () => {
+    setSocialMedia({
+      facebook: initialSocialMedia.facebook || "",
+      instagram: initialSocialMedia.instagram || "",
+      website: initialSocialMedia.website || "",
+    });
+  };
+
   return (
     <div className="space-y-4 p-4">
       {/* Facebook Input */}
@@ -84,14 +92,25 @@ const EditSocialMedia = ({
       </div>
 
       {/* Submit Button */}
-      <Button
-        type="button"
-        onClick={handleSubmit}
-        disabled={isPending}
-        className="w-full"
-      >
-        {isPending ? "Saving..." : "Save Changes"}
-      </Button>
+      <div className="flex flex-col gap-4">
+        <Button
+          type="button"
+          onClick={handleSubmit}
+          disabled={isPending}
+          className="flex-1"
+        >
+          {isPending ? "Saving..." : "Save Changes"}
+        </Button>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={handleReset}
+          disabled={isPending}
+          className="flex-1"
+        >
+          Reset
+        </Button>
+      </div>
     </div>
   );
 };

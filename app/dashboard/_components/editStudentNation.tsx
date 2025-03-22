@@ -62,6 +62,10 @@ const EditStudentNation = ({ organizationId, studentNations }: Props) => {
     );
   };
 
+  const handleReset = () => {
+    setNationalities(studentNations);
+  };
+
   // Filter valid data (no empty nations, no zero counts)
   const chartData = nationalities.filter(
     (item) => item.nation && item.count > 0,
@@ -137,14 +141,23 @@ const EditStudentNation = ({ organizationId, studentNations }: Props) => {
         </div>
       )}
       {/* Submit Button */}
-      <div className="flex w-full flex-col">
+      <div className="flex w-full flex-col gap-4">
         <Button
           type="submit"
           onClick={() => updateNationalities(nationalities)}
           disabled={isPending}
-          className="mt-2"
+          className="w-full sm:w-auto"
         >
           {isPending ? "Saving..." : "Save Changes"}
+        </Button>
+        <Button
+          type="button"
+          onClick={handleReset}
+          variant="outline"
+          disabled={isPending}
+          className="w-full sm:w-auto"
+        >
+          Reset
         </Button>
       </div>
     </div>
