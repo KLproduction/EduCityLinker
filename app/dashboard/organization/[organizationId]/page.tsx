@@ -9,6 +9,7 @@ import ClientOnly from "@/components/global/ClientOnly";
 import AccommodationModal from "@/components/modals/AccommodationModal";
 import { currentUser } from "@/lib/auth";
 import EditOrganizationForm from "../../_components/EditOrganizationForm";
+import { redirect } from "next/navigation";
 
 type Props = {
   params: { organizationId: string };
@@ -16,7 +17,20 @@ type Props = {
 
 const DashboardOrganizationPage = async ({ params }: Props) => {
   const user = await currentUser();
+  if (!user || (user.role !== "ORGANIZER" && user.role !== "ADMIN")) {
+    redirect("/");
+  }
+  if (!params.organizationId) {
+    redirect("/dashboard");
+  }
   const organizer = await getOrganizationByIdAction(params.organizationId);
+  if (user.id !== organizer?.userId) {
+    return (
+      <div className="flex h-full w-full items-center justify-center text-4xl">
+        Unauthorized
+      </div>
+    );
+  }
   const listingData = await getListingByOrganizationIdAction(
     params.organizationId,
   );
@@ -26,7 +40,6 @@ const DashboardOrganizationPage = async ({ params }: Props) => {
   const socialMediaData = await getSocialMediaByOrganizationIdAction(
     params.organizationId,
   );
-
   const listing = listingData?.listing;
   const studentNations = studentNationsData?.studentNations;
   const socialMedia = socialMediaData?.socialMedia;

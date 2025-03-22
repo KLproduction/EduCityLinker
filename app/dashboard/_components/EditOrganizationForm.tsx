@@ -18,9 +18,9 @@ import EditSocialMedia from "./EditSocialMedia";
 import EditStudentNation from "./editStudentNation";
 import EditFacilities from "./EditFacilities";
 import EditAirportTransfer from "./EditAirportTransfer";
-import EditAccommodationType from "./editAccommodationType";
-import EditAccommodationGallery from "./editAccommodationGallery";
 import EditRating from "./EditRating";
+import EditAccommodationType from "./EditAccommodationType";
+import EditAccommodationGallery from "./EditAccommodationGallery";
 
 const EditOrganizationForm = ({
   organizationData,

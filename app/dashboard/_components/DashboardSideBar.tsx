@@ -13,13 +13,25 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+import OrganizationSwitcher from "./OrganizationSwitcher";
 
 const DashboardContent = ({ organizationId }: { organizationId: string }) => {
+  const router = useRouter();
+  const handleEditOrganization = () => {
+    if (organizationId) {
+      router.push(`/dashboard/organization/${organizationId}`);
+    } else {
+      toast.error("You have no organization to edit");
+    }
+  };
   return (
     <div className="flex flex-col justify-start gap-8">
-      <Link href={`dashboard/organization/${organizationId}`}>
+      <OrganizationSwitcher />
+      <Button variant={"ghost"} onClick={handleEditOrganization}>
         Edit Organization
-      </Link>
+      </Button>
       <Separator />
       <h1>Dashboard Content</h1>
       <Separator />

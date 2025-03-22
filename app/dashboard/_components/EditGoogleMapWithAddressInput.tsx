@@ -37,8 +37,6 @@ const EditGoogleMapWithAddressInput = ({
   setLng,
   setLocation,
 }: Props) => {
-  console.log(centerLocation, centerLat, centerLng);
-
   const [location, setLocalLocation] = useState<PlaceAutocompleteResult | null>(
     null,
   );

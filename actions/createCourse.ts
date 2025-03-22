@@ -67,6 +67,7 @@ export const deleteAllListingSuperAdminAction = async () => {
 export const getOrganizationsAction = async () => {
   try {
     const organizations = await db.organization.findMany();
+
     return organizations;
   } catch (e) {
     console.error(e);

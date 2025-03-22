@@ -7,6 +7,8 @@ import {
   nationalitySchema,
   socialMediaSchema,
 } from "@/schemas";
+import { redirect, useRouter } from "next/navigation";
+import { toast } from "sonner";
 import { z } from "zod";
 
 export const onCreateOrganizationAction = async (
@@ -65,13 +67,24 @@ export const onCreateOrganizationAction = async (
 };
 
 export const getOrganizationByIdAction = async (id: string) => {
-  if (!id) return;
+  if (!id) {
+    redirect("/dashboard");
+  }
+
+  const isValidMongoId = (id: string) => {
+    return /^[a-f\d]{24}$/i.test(id);
+  };
+
+  if (!isValidMongoId(id)) {
+    redirect("/dashboard");
+  }
+
   const organization = await db.organization.findUnique({
     where: { id },
   });
   if (!organization) {
     console.log("Organization not found");
-    return;
+    redirect("/dashboard");
   }
   return {
     ...organization,
