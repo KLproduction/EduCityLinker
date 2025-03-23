@@ -24,7 +24,7 @@ const DashboardOrganizationPage = async ({ params }: Props) => {
     redirect("/dashboard");
   }
   const organizer = await getOrganizationByIdAction(params.organizationId);
-  if (user.id !== organizer?.userId) {
+  if (user.role !== "ADMIN" && user.id !== organizer?.userId) {
     return (
       <div className="flex h-full w-full items-center justify-center text-4xl">
         Unauthorized

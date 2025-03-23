@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { useLoginModal } from "./modal";
 import {
   getListingByIdAction,
+  getListingByOrganizationIdAction,
   getOrganizationByListingIdAction,
 } from "@/actions/listing";
 
@@ -96,4 +97,15 @@ export const useGetListingById = (listingId: string) => {
     isPending,
     isLoading,
   };
+};
+
+export const useGetListingByOrganizationId = (organizationId: string) => {
+  const { data, isPending, isLoading } = useQuery({
+    queryKey: ["listing", organizationId],
+    queryFn: async () => {
+      return await getListingByOrganizationIdAction(organizationId);
+    },
+  });
+
+  return { data, isPending };
 };

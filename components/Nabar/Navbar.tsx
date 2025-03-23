@@ -82,7 +82,7 @@ const Navbar = async () => {
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
               <div className={cn("hidden sm:block")}>
-                <div className={cn(!isOrganizer && "hidden")}>
+                <div className={cn(!isOrganizer || (!isAdmin && "hidden"))}>
                   <ModalBtn />
                 </div>
               </div>

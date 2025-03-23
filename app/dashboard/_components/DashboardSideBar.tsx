@@ -16,9 +16,13 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 import OrganizationSwitcher from "./OrganizationSwitcher";
+import { useGetListingByOrganizationId } from "@/hooks/listing";
 
 const DashboardContent = ({ organizationId }: { organizationId: string }) => {
   const router = useRouter();
+  const { data } = useGetListingByOrganizationId(organizationId);
+  const listings = data?.listing;
+
   const handleEditOrganization = () => {
     if (organizationId) {
       router.push(`/dashboard/organization/${organizationId}`);
@@ -28,14 +32,17 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
   };
   return (
     <div className="flex flex-col justify-start gap-8">
-      <OrganizationSwitcher />
       <Button variant={"ghost"} onClick={handleEditOrganization}>
         Edit Organization
       </Button>
       <Separator />
-      <h1>Dashboard Content</h1>
-      <Separator />
-      <h1>Dashboard Content</h1>
+      <div className="flex flex-col gap-4">
+        <div>Dummy</div>
+        <Separator />
+        <div>Dummy</div>
+        <Separator />
+        <div>Dummy</div>
+      </div>
     </div>
   );
 };
@@ -68,7 +75,7 @@ const DashboardSideBar = ({ organizationId }: { organizationId: string }) => {
           </SheetTrigger>
           <SheetContent
             side="bottom"
-            className="z-[9999] h-[100vh] overflow-y-auto"
+            className="z-[9999] h-[70vh] overflow-y-auto"
           >
             <SheetHeader>
               <SheetTitle>Dashboard</SheetTitle>

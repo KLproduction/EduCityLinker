@@ -22,11 +22,7 @@ const DashboardLayout = async ({ children }: Props) => {
       <div className="mb-48">
         <Navbar />
       </div>
-
-      <div className="flex w-full justify-center gap-3">
-        <DashboardSideBar organizationId={organizationId?.organization?.id!} />
-        <div className="w-full flex-1 md:min-w-[3/4]">{children}</div>
-      </div>
+      <div>{children}</div>
     </div>
   );
 };
