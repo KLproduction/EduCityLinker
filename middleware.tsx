@@ -1,16 +1,16 @@
+export const runtime = "nodejs";
+
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "./auth";
 
 export default async function middleware(request: NextRequest) {
-  const isLoggedIn = async () => {
-    const session = await auth();
-    if (!session) {
-      return false;
-    }
-    return true;
-  };
+  const sessionRes = await fetch(new URL("/api/auth/session", request.url), {
+    headers: request.headers,
+    // Forward cookies so NextAuth can read them
+    credentials: "include",
+  });
 
-  if (await isLoggedIn()) {
+  // If status is 200, user is logged in
+  if (sessionRes.ok) {
     return NextResponse.next();
   }
 
