@@ -4,6 +4,7 @@ import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import UserEnrollmentDetails from "../_compoents/UserEnrollmentDetails";
 import { getOrganizationByListingIdAction } from "@/actions/listing";
+import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 
 type Props = {
   params: { userId: string };
@@ -37,7 +38,9 @@ const UserEnrollmentPage = async ({ params }: Props) => {
         Enrollment Requests
       </h1>
       {enrollment.map((item, index) => (
-        <UserEnrollmentDetails key={index} enrollmentData={item} />
+        <div className="flex flex-col gap-3" key={index}>
+          <UserEnrollmentDetails enrollmentData={item} userId={params.userId} />
+        </div>
       ))}
     </div>
   );

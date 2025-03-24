@@ -43,12 +43,9 @@ const Navbar = async () => {
   const userDetails = await getUserById(user?.id!);
 
   const isAdmin = user?.role === "ADMIN" ? true : false;
-  const isOrganizer =
-    userDetails?.organization &&
-    userDetails.organization.length > 0 &&
-    userDetails.organization[0].id
-      ? true
-      : false;
+  const isOrganizer = user?.role === "ORGANIZER";
+
+  const isDashboard = isAdmin || isOrganizer;
 
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
@@ -82,9 +79,8 @@ const Navbar = async () => {
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
               <div className={cn("hidden sm:block")}>
-                <div className={cn(!isOrganizer || (!isAdmin && "hidden"))}>
-                  <ModalBtn />
-                </div>
+                <div className={isDashboard ? "" : "hidden"}></div>
+                <ModalBtn />
               </div>
 
               <UserAvatar

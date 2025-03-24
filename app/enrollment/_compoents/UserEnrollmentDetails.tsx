@@ -2,40 +2,16 @@ import {
   getListingByIdAction,
   getOrganizationByListingIdAction,
 } from "@/actions/listing";
-import ListingSection from "@/components/listing/ListingSection";
-import StarRating from "@/components/StarRating";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import {
-  useGetListingById,
-  useGetOrganizationByListingId,
-} from "@/hooks/listing";
-import { formattedPrice } from "@/lib/formatPrice";
-import { EnrollmentRequest, Listing, Organization } from "@prisma/client";
-import { format } from "date-fns";
-import { Check, InfoIcon, MapPin } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { EnrollmentRequest } from "@prisma/client";
 import React from "react";
 import UserEnrollmentDetailsSection from "./UserEnrollmentDetailsSection";
 
-// type Props = {
-//   enrollmentData: EnrollmentRequest;
-// };
 type Props = {
   enrollmentData: EnrollmentRequest;
+  userId: string;
 };
 
-const UserEnrollmentDetails = async ({ enrollmentData }: Props) => {
+const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
   const organizationData = await getOrganizationByListingIdAction(
     enrollmentData.organizationId,
   );
@@ -50,6 +26,7 @@ const UserEnrollmentDetails = async ({ enrollmentData }: Props) => {
         enrollmentData={enrollmentData}
         organization={organization!}
         listing={listing!}
+        userId={userId}
       />
     </div>
   );

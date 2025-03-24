@@ -94,7 +94,7 @@ const AccommodationModal = ({ organization }: Props) => {
               <h2 className="font-semibold">Pricing</h2>
             </div>
             <div className="space-y-2">
-              {organization.accommodationHomeStayPrice && (
+              {organization.accommodationHomeStayPrice !== 0 && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
                     Home Stay
@@ -105,7 +105,7 @@ const AccommodationModal = ({ organization }: Props) => {
                   </Badge>
                 </div>
               )}
-              {organization.accommodationStudentResidencePrice && (
+              {organization.accommodationStudentResidencePrice !== 0 && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
                     Student Residence
@@ -118,7 +118,7 @@ const AccommodationModal = ({ organization }: Props) => {
                   </Badge>
                 </div>
               )}
-              {organization.accommodationPrivateApartmentPrice && (
+              {organization.accommodationPrivateApartmentPrice !== 0 && (
                 <div className="flex items-center justify-between">
                   <span className="text-sm text-muted-foreground">
                     Private Apartment
@@ -126,7 +126,7 @@ const AccommodationModal = ({ organization }: Props) => {
 
                   <Badge variant="outline">
                     {formattedPrice(
-                      organization.accommodationPrivateApartmentPrice,
+                      organization.accommodationPrivateApartmentPrice!,
                     )}
                     /week
                   </Badge>

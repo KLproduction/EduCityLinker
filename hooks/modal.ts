@@ -1,7 +1,15 @@
 "use client";
 
+import {
+  getEnrollmentRequestsByIdAction,
+  getEnrollmentRequestsByUserIdAction,
+  onDeleteEnrollmentRequestAction,
+} from "@/actions/create-enrollment";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { useRouter } from "next/navigation";
 import { parseAsBoolean, parseAsString, useQueryState } from "nuqs";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { toast } from "sonner";
 
 export const useCreateCourseModal = () => {
   const [isOpen, setIsOpen] = useQueryState(
@@ -124,5 +132,25 @@ export const useCreateEnrollmentModal = () => {
     setSelectedListingId,
     selectedOrganizationId,
     setSelectedOrganizationId,
+  };
+};
+
+export const useCancelEnrollmentModal = (enrollmentId: string) => {
+  const [isOpen, setIsOpen] = useQueryState(
+    "cancel-enrollment-modal",
+    parseAsBoolean.withDefault(false).withOptions({ clearOnDefault: true }),
+  );
+  const open = () => {
+    setIsOpen(true);
+  };
+  const close = () => {
+    setIsOpen(false);
+  };
+
+  return {
+    isOpen,
+    open,
+    close,
+    setIsOpen,
   };
 };

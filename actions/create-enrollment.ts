@@ -120,3 +120,62 @@ export const getEnrollmentRequestsByUserIdAction = async (userId: string) => {
     return { status: 500, message: "Database error" };
   }
 };
+export const getEnrollmentRequestsByIdAction = async (id: string) => {
+  try {
+    const enrollmentRequests = await db.enrollmentRequest.findUnique({
+      where: { id },
+    });
+    if (enrollmentRequests) {
+      return { enrollmentRequests, status: 200 };
+    }
+    return { status: 404, message: "Enrollment requests not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const onDeleteEnrollmentRequestAction = async (id: string) => {
+  try {
+    await db.enrollmentRequest.update({
+      where: { id },
+      data: { status: "CANCELLED" },
+    });
+    return { status: 200, message: "Enrollment request deleted successfully" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+// export const onUpdateEnrollmentRequestAction = async (
+//   id: string,
+//   data: z.infer<typeof updateEnrollmentRequestSchema>,
+// ) => {
+//   try {
+//     const enrollmentRequest = await db.enrollmentRequest.findUnique({
+//       where: { id },
+//     });
+//     if (!enrollmentRequest) {
+//       return { status: 404, message: "Enrollment request not found" };
+//     }
+//     const validationResult = updateEnrollmentRequestSchema.safeParse(data);
+//     if (!validationResult.success) {
+//       console.error(validationResult.error.flatten());
+//       return {
+//         status: 400,
+//         message: "Invalid enrollment data",
+//         errors: validationResult.error.flatten(),
+//       };
+//     } else {
+//       await db.enrollmentRequest.update({
+//         where: { id },
+//         data: validationResult.data,
+//       });
+//       return { status: 200, message: "Enrollment request updated successfully" };
+//     }
+//   } catch (e) {
+//     console.error(e);
+//     return { status: 500, message: "Database error" };
+//   }
+// };

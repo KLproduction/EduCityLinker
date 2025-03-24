@@ -1,10 +1,7 @@
 "use client";
 
-import {
-  getListingByIdAction,
-  getOrganizationByListingIdAction,
-} from "@/actions/listing";
 import ListingSection from "@/components/listing/ListingSection";
+import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import {
@@ -16,23 +13,21 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  useGetListingById,
-  useGetOrganizationByListingId,
-} from "@/hooks/listing";
+import { useCancelEnrollmentModal } from "@/hooks/modal";
 import { formattedPrice } from "@/lib/formatPrice";
 import { EnrollmentRequest, Listing, Organization } from "@prisma/client";
 import { format } from "date-fns";
 import { Check, InfoIcon, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
   enrollmentData: EnrollmentRequest;
   organization: Organization;
   listing: Listing;
+  userId: string;
 };
 
 const UserEnrollmentDetailsSection = ({
@@ -43,6 +38,8 @@ const UserEnrollmentDetailsSection = ({
   const router = useRouter();
 
   if (enrollmentData.status === "CANCELLED") return null;
+
+  const { open } = useCancelEnrollmentModal(enrollmentData.id);
 
   return (
     <>
@@ -248,7 +245,7 @@ const UserEnrollmentDetailsSection = ({
                   ? " Accept Enrollment"
                   : "Waiting For Confirmation"}
               </Button>
-              <Button variant="outline">Cancel Enrollment</Button>
+              <CancelEnrollmentModal enrollment={enrollmentData} />
             </div>
           </CardFooter>
         </Card>

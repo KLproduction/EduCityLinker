@@ -7,7 +7,10 @@ import { useRouter } from "next/navigation";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { resetEnrollmentRequestData } from "@/redux/slice/create-enrollmentRequestSlice";
-import { createEnrollmentRequestAction } from "@/actions/create-enrollment";
+import {
+  createEnrollmentRequestAction,
+  onDeleteEnrollmentRequestAction,
+} from "@/actions/create-enrollment";
 import {
   getListingByIdAction,
   getOrganizationByIdAction,
@@ -75,5 +78,31 @@ export const useGetListingByEnrollmentModal = (listingId: string) => {
   return {
     data,
     isPending,
+  };
+};
+
+export const useCancelEnrollment = () => {
+  const router = useRouter();
+  const { mutate: deleteEnrollmentMutate, isPending: isDeletingEnrollment } =
+    useMutation({
+      mutationFn: async (enrollmentId: string) => {
+        const result = await onDeleteEnrollmentRequestAction(enrollmentId);
+        return result.status;
+      },
+      onError: (error) => console.error(error.message),
+      onSuccess: (data) => {
+        if (data === 200) {
+          toast.success("Enrollment deleted successfully!");
+          close();
+          router.refresh();
+        } else {
+          toast.error("Error deleting enrollment!");
+        }
+      },
+    });
+
+  return {
+    deleteEnrollmentMutate,
+    isDeletingEnrollment,
   };
 };

@@ -218,34 +218,34 @@ export const EnrollmentDetailsInput = ({ listing, organization }: Props) => {
             <div className="mt-4 space-y-2 rounded-md bg-muted p-3">
               <p className="text-sm font-medium">Available options:</p>
               <div className="ml-4 list-disc text-sm">
-                {organization.accommodationPrivateApartmentPrice && (
+                {organization.accommodationPrivateApartmentPrice !== 0 && (
                   <div className="flex gap-8">
                     <p>Private Apartment</p>
 
                     <p>
                       {formattedPrice(
-                        organization.accommodationPrivateApartmentPrice,
+                        organization.accommodationPrivateApartmentPrice!,
                       )}
                     </p>
                   </div>
                 )}
-                {organization.accommodationStudentResidencePrice && (
+                {organization.accommodationStudentResidencePrice !== 0 && (
                   <div className="flex gap-8">
                     <p>Student Residence</p>
 
                     <p>
                       {formattedPrice(
-                        organization.accommodationStudentResidencePrice,
+                        organization.accommodationStudentResidencePrice!,
                       )}
                     </p>
                   </div>
                 )}
-                {organization.accommodationHomeStayPrice && (
+                {organization.accommodationHomeStayPrice !== 0 && (
                   <div className="flex gap-8">
                     <p>Home Stay</p>
 
                     <p>
-                      {formattedPrice(organization.accommodationHomeStayPrice)}
+                      {formattedPrice(organization.accommodationHomeStayPrice!)}
                     </p>
                   </div>
                 )}

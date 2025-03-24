@@ -1,3 +1,4 @@
+import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 import Navbar from "@/components/Nabar/Navbar";
 
 type Props = {
