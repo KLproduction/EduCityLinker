@@ -39,8 +39,6 @@ const UserEnrollmentDetailsSection = ({
 
   if (enrollmentData.status === "CANCELLED") return null;
 
-  const { open } = useCancelEnrollmentModal(enrollmentData.id);
-
   return (
     <>
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
