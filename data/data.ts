@@ -253,69 +253,6 @@ export const ageGroups = [
   { label: "Seniors (50+)", description: "For senior learners", icon: null },
 ];
 
-export const categories = [
-  {
-    label: null,
-    icon: AiOutlineGlobal,
-    description: "All",
-  },
-  {
-    label: "Beach",
-    icon: TbBeach,
-    description: "This is a beach city.",
-  },
-  {
-    label: "Windmills",
-    icon: GiWindmill,
-    description: "This is a beach city.",
-  },
-  {
-    label: "Modern",
-    icon: MdOutlineVilla,
-    description: "This is a modern city.",
-  },
-  {
-    label: "Countryside",
-    icon: TbMountain,
-    description: "This is in the countryside.",
-  },
-  {
-    label: "Pools",
-    icon: TbPool,
-    description: "This is near the pool.",
-  },
-  {
-    label: "Islands",
-    icon: GiIsland,
-    description: "This is on an Island.",
-  },
-  {
-    label: "Lake",
-    icon: GiBoatFishing,
-    description: "This is close to a lake.",
-  },
-  {
-    label: "Skiing",
-    icon: FaSkiing,
-    description: "This is near to skiing activities.",
-  },
-  {
-    label: "Castles",
-    icon: GiCastle,
-    description: "This is near to castle.",
-  },
-  {
-    label: "Camping",
-    icon: GiForestCamp,
-    description: "This has camping activities.",
-  },
-  {
-    label: "Lux",
-    icon: IoDiamond,
-    description: "This is luxurious.",
-  },
-];
-
 export const accommodationTypes = [
   {
     label: "Home Stay",

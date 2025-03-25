@@ -37,7 +37,12 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
       </Button>
       <Separator />
       <div className="flex flex-col gap-4">
-        <div>Dummy</div>
+        <Button
+          variant={"ghost"}
+          onClick={() => router.push(`/dashboard/enrollment`)}
+        >
+          Enrollments
+        </Button>
         <Separator />
         <div>Dummy</div>
         <Separator />

@@ -44,6 +44,10 @@ export const createEnrollmentRequestAction = async (
       };
     }
 
+    if (enrollmentData.startDate <= new Date()) {
+      return { status: 400, message: "Start date must be in the future" };
+    }
+
     let accommodationPrice;
     if (validationResult.data.accommodation) {
       if (organization?.accommodationHomeStayPrice! > 0) {
@@ -93,6 +97,8 @@ export const createEnrollmentRequestAction = async (
         airportTransferPrice: airportTransferPrice,
         addOnPrice: accommodationPrice + airportTransferPrice,
         totalPrice: listing!.price * 0.9 * validationResult.data.weeks,
+        centerConfirmed: false,
+        centerConfirmationDate: null,
       },
     });
 
@@ -134,6 +140,36 @@ export const getEnrollmentRequestsByIdAction = async (id: string) => {
     return { status: 500, message: "Database error" };
   }
 };
+export const getEnrollmentRequestsWithOrganizationByIdAction = async (
+  id: string,
+) => {
+  try {
+    const enrollmentRequests = await db.enrollmentRequest.findUnique({
+      where: { id },
+      include: { organization: true },
+    });
+    if (enrollmentRequests) {
+      return { enrollmentRequests, status: 200 };
+    }
+    return { status: 404, message: "Enrollment requests not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const getAllEnrollmentRequestsAction = async () => {
+  try {
+    const enrollmentRequests = await db.enrollmentRequest.findMany();
+    if (enrollmentRequests.length > 0) {
+      return { enrollmentRequests, status: 200 };
+    }
+    return { status: 404, message: "Enrollment requests not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
 
 export const onDeleteEnrollmentRequestAction = async (id: string) => {
   try {
@@ -148,34 +184,37 @@ export const onDeleteEnrollmentRequestAction = async (id: string) => {
   }
 };
 
-// export const onUpdateEnrollmentRequestAction = async (
-//   id: string,
-//   data: z.infer<typeof updateEnrollmentRequestSchema>,
-// ) => {
-//   try {
-//     const enrollmentRequest = await db.enrollmentRequest.findUnique({
-//       where: { id },
-//     });
-//     if (!enrollmentRequest) {
-//       return { status: 404, message: "Enrollment request not found" };
-//     }
-//     const validationResult = updateEnrollmentRequestSchema.safeParse(data);
-//     if (!validationResult.success) {
-//       console.error(validationResult.error.flatten());
-//       return {
-//         status: 400,
-//         message: "Invalid enrollment data",
-//         errors: validationResult.error.flatten(),
-//       };
-//     } else {
-//       await db.enrollmentRequest.update({
-//         where: { id },
-//         data: validationResult.data,
-//       });
-//       return { status: 200, message: "Enrollment request updated successfully" };
-//     }
-//   } catch (e) {
-//     console.error(e);
-//     return { status: 500, message: "Database error" };
-//   }
-// };
+export const onUpdateEnrollmentRequestAction = async (
+  enrollmentId: string,
+  data: z.infer<typeof enrollmentRequestSchema>,
+) => {
+  try {
+    const enrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id: enrollmentId },
+    });
+    if (!enrollmentRequest) {
+      return { status: 404, message: "Enrollment request not found" };
+    }
+    const validationResult = enrollmentRequestSchema.safeParse(data);
+    if (!validationResult.success) {
+      console.error(validationResult.error.flatten());
+      return {
+        status: 400,
+        message: "Invalid enrollment data",
+        errors: validationResult.error.flatten(),
+      };
+    } else {
+      await db.enrollmentRequest.update({
+        where: { id: enrollmentId },
+        data: validationResult.data,
+      });
+      return {
+        status: 200,
+        message: "Enrollment request updated successfully",
+      };
+    }
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};

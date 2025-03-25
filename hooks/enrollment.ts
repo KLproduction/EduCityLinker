@@ -10,11 +10,15 @@ import { resetEnrollmentRequestData } from "@/redux/slice/create-enrollmentReque
 import {
   createEnrollmentRequestAction,
   onDeleteEnrollmentRequestAction,
+  onUpdateEnrollmentRequestAction,
 } from "@/actions/create-enrollment";
 import {
   getListingByIdAction,
   getOrganizationByIdAction,
 } from "@/actions/listing";
+import { EnrollmentRequest, EnrollmentRequestState } from "@prisma/client";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export const useCreateEnrollmentRequest = (
   data: z.infer<typeof enrollmentRequestSchema>,
@@ -104,5 +108,73 @@ export const useCancelEnrollment = () => {
   return {
     deleteEnrollmentMutate,
     isDeletingEnrollment,
+  };
+};
+
+type EditEnrollmentProps = {
+  enrollment: EnrollmentRequest;
+};
+export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
+  const router = useRouter();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+    getValues,
+    watch,
+    reset,
+    setValue,
+  } = useForm<z.infer<typeof enrollmentRequestSchema>>({
+    resolver: zodResolver(enrollmentRequestSchema),
+    defaultValues: {
+      ...enrollment,
+    },
+  });
+
+  const { mutate: updateEnrollmentMutate, isPending: isUpdatingEnrollment } =
+    useMutation({
+      mutationFn: async ({
+        enrollmentId,
+        data,
+      }: {
+        enrollmentId: string;
+        data: z.infer<typeof enrollmentRequestSchema>;
+      }) => {
+        return await onUpdateEnrollmentRequestAction(enrollmentId, data);
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(error.message || "Failed to update enrollment");
+      },
+      onSuccess: (data) => {
+        if (data.status === 200) {
+          toast.success("Enrollment updated successfully!");
+          router.refresh();
+        } else {
+          toast.error(data.message);
+        }
+      },
+    });
+
+  const onSubmit = handleSubmit(async (data) => {
+    updateEnrollmentMutate({ enrollmentId: enrollment.id, data });
+  });
+
+  const resetForm = () => {
+    reset();
+  };
+
+  return {
+    register,
+    handleSubmit: onSubmit,
+    errors,
+    isSubmitting,
+    watch,
+    getValues,
+    setValue,
+    reset,
+    onSubmit,
+    isUpdatingEnrollment,
+    resetForm,
   };
 };

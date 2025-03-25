@@ -38,7 +38,7 @@ const UserEnrollmentPage = async ({ params }: Props) => {
         Enrollment Requests
       </h1>
       {enrollment.map((item, index) => (
-        <div className="flex flex-col gap-3" key={index}>
+        <div className="my-6 flex flex-col gap-3" key={index}>
           <UserEnrollmentDetails enrollmentData={item} userId={params.userId} />
         </div>
       ))}

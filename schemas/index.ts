@@ -168,8 +168,6 @@ export const enrollmentRequestSchema = z.object({
     .number()
     .nonnegative("Airport transfer price must be non-negative"),
   totalPrice: z.number().nonnegative("Total price must be non-negative"),
-  createdAt: z.date().default(new Date()), // Defaults to now()
-  status: z.enum(["PENDING", "CONFIRMED", "CANCELLED"]), // Matches `EnrollmentRequestState`
-  centerConfirmed: z.boolean().nullable().default(false),
-  centerConfirmationDate: z.date().nullable().optional(),
+  createdAt: z.date().default(new Date()),
+  status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
 });

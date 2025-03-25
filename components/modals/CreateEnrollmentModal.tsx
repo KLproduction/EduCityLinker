@@ -30,7 +30,6 @@ export enum ENROLLMENT_STEPS {
 
 export const CreateEnrollmentModal = () => {
   const params = useSearchParams();
-
   const listingId = params.get("enrollment-listing-id");
   const organizationId = params.get("enrollment-organization-id");
 
@@ -47,9 +46,25 @@ export const CreateEnrollmentModal = () => {
 
   const isPending = isGettingOrganization || isGettingListing;
 
-  const [step, setStep] = useState(ENROLLMENT_STEPS.USER_DETAILS);
-
   const dispatch = useAppDispatch();
+  const [step, setStep] = useState(ENROLLMENT_STEPS.USER_DETAILS);
+  const [emailError, setEmailError] = useState(false);
+  const emailSchema = z.string().email("Invalid email format");
+  const validateEmail = (email: string) => {
+    const result = emailSchema.safeParse(email);
+
+    if (!result.success) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  };
+
+  useEffect(() => {
+    if (enrollmentData.emailAddress) {
+      validateEmail(enrollmentData.emailAddress);
+    }
+  }, [enrollmentData]);
 
   useEffect(() => {
     if (listing?.price) {
@@ -145,20 +160,22 @@ export const CreateEnrollmentModal = () => {
   }
 
   if (step === ENROLLMENT_STEPS.USER_DETAILS) {
-    const emailSchema = z.string().email("Invalid email format");
-
-    const emailResult = emailSchema.safeParse(enrollmentData.emailAddress);
-
+    const isAccommodationSelected =
+      enrollmentData.airportTransfer && !enrollmentData.airportTransfersType;
+    const isValidPhoneNumber = (phone: string): boolean => {
+      return /^\d+$/.test(phone.trim());
+    };
     isDisabled =
       !enrollmentData.firstName ||
       !enrollmentData.sureName ||
       !enrollmentData.contactNumber ||
       !enrollmentData.emailAddress ||
-      !emailResult.success ||
+      emailError ||
       !enrollmentData.startDate ||
-      (enrollmentData.airportTransfer &&
-        !enrollmentData.airportTransfersType) ||
-      enrollmentData.weeks < 1;
+      enrollmentData.startDate <= new Date() ||
+      enrollmentData.weeks < 1 ||
+      isAccommodationSelected ||
+      !isValidPhoneNumber(enrollmentData.contactNumber);
   }
 
   return (

@@ -1,6 +1,6 @@
 "use client";
 
-import { categories, courseTypes, features } from "@/data/data";
+import { courseTypes, features } from "@/data/data";
 import MyContainer from "../Container";
 
 import CategoryBox from "./CategoryBox";
@@ -46,7 +46,7 @@ const Categories = () => {
     <div
       className={cn(
         "h-full w-full bg-transparent backdrop-blur-md transition-all duration-500",
-        isScrolled ? "opacity-0" : "",
+        isScrolled ? "hidden" : "",
         isModalOpen ? "hidden" : "",
       )}
     >

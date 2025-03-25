@@ -46,6 +46,11 @@ export const EnrollmentDetailsInput = ({ listing, organization }: Props) => {
     }
   };
 
+  const isInvalidDate = enrollmentData.startDate <= new Date();
+  const isValidPhoneNumber = (phone: string): boolean => {
+    return /^\d+$/.test(phone.trim());
+  };
+
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const email = e.target.value;
 
@@ -100,6 +105,13 @@ export const EnrollmentDetailsInput = ({ listing, organization }: Props) => {
             className="bg-white"
           />
         </div>
+
+        {enrollmentData.contactNumber &&
+          !isValidPhoneNumber(enrollmentData.contactNumber) && (
+            <p className="text-sm text-red-600">
+              Please enter a valid phone number.
+            </p>
+          )}
 
         <div className="space-y-2">
           <Label htmlFor="emailAddress">Email Address</Label>
@@ -170,6 +182,11 @@ export const EnrollmentDetailsInput = ({ listing, organization }: Props) => {
               />
             </DialogContent>
           </Dialog>
+          {isInvalidDate && (
+            <p className="text-sm text-red-600">
+              Start date must be after today.
+            </p>
+          )}
         </div>
 
         <div className="space-y-2">
@@ -178,82 +195,92 @@ export const EnrollmentDetailsInput = ({ listing, organization }: Props) => {
       </div>
 
       <Separator />
+      {organization?.accommodationTypes === "No Accommodation" ? (
+        <Card>
+          <CardTitle className="flex w-full items-center justify-center p-6 text-zinc-500">
+            No Accommodation Provided
+          </CardTitle>
+        </Card>
+      ) : (
+        <Card>
+          <CardHeader>
+            <CardTitle>Accommodation</CardTitle>
+            <CardDescription>
+              Do you need accommodation during your stay?
+            </CardDescription>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            <div className="flex items-center justify-between">
+              <Label htmlFor="accommodation" className="flex-1">
+                Request accommodation
+              </Label>
+              <Switch
+                id="accommodation"
+                checked={enrollmentData.accommodation}
+                onCheckedChange={(checked) => {
+                  dispatch(setEnrollmentData({ accommodation: checked }));
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Accommodation</CardTitle>
-          <CardDescription>
-            Do you need accommodation during your stay?
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <div className="flex items-center justify-between">
-            <Label htmlFor="accommodation" className="flex-1">
-              Request accommodation
-            </Label>
-            <Switch
-              id="accommodation"
-              checked={enrollmentData.accommodation}
-              onCheckedChange={(checked) => {
-                dispatch(setEnrollmentData({ accommodation: checked }));
+                  const accommodationPrice =
+                    organization?.accommodationHomeStayPrice ??
+                    organization?.accommodationStudentResidencePrice ??
+                    organization?.accommodationPrivateApartmentPrice ??
+                    0;
 
-                const accommodationPrice =
-                  organization?.accommodationHomeStayPrice ??
-                  organization?.accommodationStudentResidencePrice ??
-                  organization?.accommodationPrivateApartmentPrice ??
-                  0;
-
-                dispatch(
-                  setEnrollmentData({
-                    accommodationPrice: checked
-                      ? enrollmentData.accommodationPrice + accommodationPrice
-                      : enrollmentData.accommodationPrice - accommodationPrice,
-                  }),
-                );
-              }}
-            />
-          </div>
-
-          {enrollmentData.accommodation && organization && (
-            <div className="mt-4 space-y-2 rounded-md bg-muted p-3">
-              <p className="text-sm font-medium">Available options:</p>
-              <div className="ml-4 list-disc text-sm">
-                {organization.accommodationPrivateApartmentPrice !== 0 && (
-                  <div className="flex gap-8">
-                    <p>Private Apartment</p>
-
-                    <p>
-                      {formattedPrice(
-                        organization.accommodationPrivateApartmentPrice!,
-                      )}
-                    </p>
-                  </div>
-                )}
-                {organization.accommodationStudentResidencePrice !== 0 && (
-                  <div className="flex gap-8">
-                    <p>Student Residence</p>
-
-                    <p>
-                      {formattedPrice(
-                        organization.accommodationStudentResidencePrice!,
-                      )}
-                    </p>
-                  </div>
-                )}
-                {organization.accommodationHomeStayPrice !== 0 && (
-                  <div className="flex gap-8">
-                    <p>Home Stay</p>
-
-                    <p>
-                      {formattedPrice(organization.accommodationHomeStayPrice!)}
-                    </p>
-                  </div>
-                )}
-              </div>
+                  dispatch(
+                    setEnrollmentData({
+                      accommodationPrice: checked
+                        ? enrollmentData.accommodationPrice + accommodationPrice
+                        : enrollmentData.accommodationPrice -
+                          accommodationPrice,
+                    }),
+                  );
+                }}
+              />
             </div>
-          )}
-        </CardContent>
-      </Card>
+
+            {enrollmentData.accommodation && organization && (
+              <div className="mt-4 space-y-2 rounded-md bg-muted p-3">
+                <p className="text-sm font-medium">Available options:</p>
+                <div className="ml-4 list-disc text-sm">
+                  {organization.accommodationPrivateApartmentPrice! > 0 && (
+                    <div className="flex gap-8">
+                      <p>Private Apartment</p>
+
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationPrivateApartmentPrice!,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  {organization.accommodationStudentResidencePrice! > 0 && (
+                    <div className="flex gap-8">
+                      <p>Student Residence</p>
+
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationStudentResidencePrice!,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                  {organization.accommodationHomeStayPrice! > 0 && (
+                    <div className="flex gap-8">
+                      <p>Home Stay</p>
+
+                      <p>
+                        {formattedPrice(
+                          organization.accommodationHomeStayPrice!,
+                        )}
+                      </p>
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      )}
 
       <Card>
         <CardHeader>
