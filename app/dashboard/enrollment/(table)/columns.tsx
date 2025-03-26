@@ -80,6 +80,7 @@ export const columns: ColumnDef<EnrollmentRequest>[] = [
       );
     },
     cell: ({ row }) => {
+      //error
       const data = useGetOrganizationByEnrollmentModal(
         row.getValue("organizationId"),
       );

@@ -170,4 +170,6 @@ export const enrollmentRequestSchema = z.object({
   totalPrice: z.number().nonnegative("Total price must be non-negative"),
   createdAt: z.date().default(new Date()),
   status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
+  centerConfirmed: z.boolean().default(false),
+  centerConfirmationDate: z.date().nullable().default(null),
 });
