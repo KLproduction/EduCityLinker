@@ -20,6 +20,18 @@ import { formattedPrice } from "@/lib/formatPrice";
 import { cn } from "@/lib/utils";
 import { useGetOrganizationByEnrollmentModal } from "@/hooks/enrollment";
 
+type OrganizationCellProps = {
+  organizationId: string;
+};
+const OrganizationCell = ({ organizationId }: OrganizationCellProps) => {
+  const { data } = useGetOrganizationByEnrollmentModal(organizationId);
+  return (
+    <div className="flex justify-center">
+      <span className="font-medium">{data?.organization?.name || "—"}</span>
+    </div>
+  );
+};
+
 export const columns: ColumnDef<EnrollmentRequest>[] = [
   {
     id: "actions",
@@ -80,18 +92,9 @@ export const columns: ColumnDef<EnrollmentRequest>[] = [
       );
     },
     cell: ({ row }) => {
-      //error
-      const data = useGetOrganizationByEnrollmentModal(
-        row.getValue("organizationId"),
-      );
+      const orgId = row.getValue("organizationId") as string;
 
-      return (
-        <div className="flex justify-center">
-          <span className="font-medium">
-            {data.data?.organization?.name || "—"}
-          </span>
-        </div>
-      );
+      return <OrganizationCell organizationId={orgId} />;
     },
   },
   {
