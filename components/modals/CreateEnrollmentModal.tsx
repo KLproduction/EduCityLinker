@@ -70,7 +70,7 @@ export const CreateEnrollmentModal = () => {
     if (listing?.price) {
       dispatch(
         setEnrollmentData({
-          totalPrice: listing?.price * enrollmentData.weeks,
+          coursePrice: listing?.price * enrollmentData.weeks,
         }),
       );
     }

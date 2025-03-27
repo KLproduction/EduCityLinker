@@ -1,5 +1,6 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { AIMO_DISCOUNT } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import { useAppSelector } from "@/redux/store";
 import { format } from "date-fns";
@@ -97,7 +98,9 @@ const EnrollmentDetailsConfirmationStep = () => {
                   Course Fee:
                 </dt>
                 <dd className="font-semibold">
-                  {formattedPrice(enrollmentData.totalPrice)}
+                  {formattedPrice(
+                    enrollmentData.coursePrice * enrollmentData.weeks,
+                  )}
                 </dd>
               </div>
               {enrollmentData.airportTransferPrice > 0 && (
@@ -126,7 +129,9 @@ const EnrollmentDetailsConfirmationStep = () => {
                 <dt className="font-medium">Total Price:</dt>
                 <dd className="text-lg font-bold text-primary">
                   {formattedPrice(
-                    enrollmentData.totalPrice * 0.9 +
+                    enrollmentData.coursePrice *
+                      enrollmentData.weeks *
+                      AIMO_DISCOUNT +
                       enrollmentData.accommodationPrice +
                       enrollmentData.airportTransferPrice,
                   )}

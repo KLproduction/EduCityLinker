@@ -18,7 +18,7 @@ import { useCreateCourse } from "@/hooks/create-course";
 import CourseTypeInput from "../inputs/CourseTypeInput";
 import OrganizerSelector from "../inputs/OrganizerSelector";
 import { ExtenderUser } from "@/next-auth";
-import { User } from "@prisma/client";
+import { User, UserRole } from "@prisma/client";
 
 export enum STEPS {
   ORGANIZER = 0,
@@ -36,7 +36,7 @@ type Props = {
 export const CreateCourseModal = ({ user, organizationId }: Props) => {
   const courseData = useAppSelector((state) => state.createCourse);
   const { isOpen, setIsOpen } = useCreateCourseModal();
-  const [step, setStep] = useState(STEPS.ORGANIZER);
+  const [step, setStep] = useState(0);
 
   const dispatch = useAppDispatch();
 
@@ -89,7 +89,7 @@ export const CreateCourseModal = ({ user, organizationId }: Props) => {
   }
 
   useEffect(() => {
-    if (user?.role !== "ADMIN") {
+    if (user?.role !== UserRole.ADMIN) {
       setStep(STEPS.CATEGORY);
       dispatch(setCourseData({ organizationId }));
     }

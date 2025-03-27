@@ -27,7 +27,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-
   const user = await getUserById(session?.user.id as string);
 
   return (
@@ -49,6 +48,7 @@ export default async function RootLayout({
                       />
                     );
                   })()}
+
                 <CreateOrganizerModal />
                 <CreateEnrollmentModal />
                 <LoginModal />

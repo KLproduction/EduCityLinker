@@ -32,6 +32,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formattedPrice } from "@/lib/formatPrice";
 import { useState } from "react";
+import { AIMO_DISCOUNT } from "@/data/data";
 
 type Props = {
   enrollment: EnrollmentRequest;
@@ -39,6 +40,7 @@ type Props = {
 };
 
 const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
+  const [isEditable, setIsEditable] = useState(false);
   const {
     register,
     errors,
@@ -48,12 +50,13 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
     watch,
     setValue,
     resetForm,
+    getValues,
   } = useEditEnrollment({
-    enrollment,
+    enrollment: enrollment,
+    setIsEditable: setIsEditable,
   });
-
+  console.log(getValues());
   const isInvalidDate = watch("startDate") <= new Date();
-  const [isEditable, setIsEditable] = useState(false);
 
   // Calculate add-on price as the sum of accommodation and airport transfer
   const addOnPrice =
@@ -182,11 +185,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                 />
               </DialogContent>
             </Dialog>
-            {errors.startDate && (
-              <p className="text-sm text-destructive">
-                {errors.startDate.message}
-              </p>
-            )}
+
             {isInvalidDate && (
               <p className="text-sm text-destructive">
                 Start date must be after today.
@@ -418,7 +417,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
             <div className="flex justify-between border-b py-1">
               <span>Course Price:</span>
               <span className="font-medium">
-                {formattedPrice(watch("totalPrice") - addOnPrice)}
+                {formattedPrice(watch("coursePrice") * watch("weeks") || 0)}
               </span>
             </div>
             <div className="flex justify-between border-b py-1">
@@ -434,47 +433,103 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
               </span>
             </div>
             <div className="flex justify-between py-2 font-bold">
+              <span>Add-On Price:</span>
+              <span>{formattedPrice(watch("accommodationPrice") || 0)}</span>
+            </div>
+            <div className="flex justify-between py-2 font-bold">
               <span>Total Price:</span>
-              <span>{formattedPrice(watch("totalPrice") || 0)}</span>
+              <span>
+                {formattedPrice(
+                  watch("coursePrice") * watch("weeks") +
+                    watch("accommodationPrice") +
+                    watch("airportTransferPrice"),
+                )}
+              </span>
+            </div>
+            <div className="flex justify-between py-2 font-bold">
+              <span>Total Price after discount:</span>
+              <span>
+                {formattedPrice(
+                  watch("coursePrice") * watch("weeks") * AIMO_DISCOUNT +
+                    watch("accommodationPrice") +
+                    watch("airportTransferPrice") || 0,
+                )}
+              </span>
             </div>
           </CardContent>
         </Card>
 
         {/* Status */}
-        <div>
-          <Label htmlFor="status">Enrollment Status</Label>
-          <Select
-            value={watch("status")}
-            onValueChange={(value: EnrollmentRequestState) =>
-              setValue("status", value)
-            }
-          >
-            <SelectTrigger className="w-full">
-              <SelectValue placeholder="Select status" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value={EnrollmentRequestState.PENDING}>
+        <Card>
+          <CardHeader>
+            <div className="flex items-center gap-5">
+              <Label htmlFor="status">Current Status:</Label>
+
+              <h1
+                className={cn(
+                  "text-md inline-flex items-center rounded-full p-3 font-bold",
+                  watch("status") === EnrollmentRequestState.PENDING &&
+                    "bg-yellow-100 text-yellow-800",
+                  watch("status") ===
+                    EnrollmentRequestState.CONFIRM_BY_CENTER &&
+                    "bg-green-100 text-green-800",
+                  watch("status") === EnrollmentRequestState.CANCELLED &&
+                    "bg-red-100 text-red-800",
+                )}
+              >
+                {watch("status")}
+              </h1>
+            </div>
+          </CardHeader>
+          <CardContent className="flex w-full flex-col justify-center gap-5">
+            {watch("status") !== EnrollmentRequestState.CONFIRM_BY_CENTER && (
+              <Button
+                onClick={() =>
+                  setValue("status", EnrollmentRequestState.CONFIRM_BY_CENTER)
+                }
+                className="bg-green-500 text-zinc-50"
+                disabled={!isEditable}
+              >
+                Confirm By Center
+              </Button>
+            )}
+            {watch("status") !== EnrollmentRequestState.PENDING && (
+              <Button
+                onClick={() =>
+                  setValue("status", EnrollmentRequestState.PENDING)
+                }
+                className="bg-zinc-700 text-zinc-50"
+                disabled={!isEditable}
+              >
                 Pending
-              </SelectItem>
-              <SelectItem value={EnrollmentRequestState.CONFIRM_BY_CENTER}>
-                Confirm by center
-              </SelectItem>
-              <SelectItem value={EnrollmentRequestState.CANCELLED}>
-                Cancelled
-              </SelectItem>
-            </SelectContent>
-          </Select>
-          {errors.status && (
-            <p className="text-sm text-destructive">{errors.status.message}</p>
-          )}
-        </div>
+              </Button>
+            )}
+
+            {watch("status") !== EnrollmentRequestState.CANCELLED && (
+              <Button
+                variant="outline"
+                onClick={() =>
+                  setValue("status", EnrollmentRequestState.CANCELLED)
+                }
+                disabled={!isEditable}
+              >
+                Cancel Enrollment
+              </Button>
+            )}
+          </CardContent>
+        </Card>
 
         {/* Submit Button */}
         <div className="flex w-full flex-col gap-3">
           <Button
             type="submit"
             className="w-full"
-            disabled={!isEditable || isSubmitting || isUpdatingEnrollment}
+            disabled={
+              !isEditable ||
+              isSubmitting ||
+              isUpdatingEnrollment ||
+              isInvalidDate
+            }
           >
             {isUpdatingEnrollment ? "Updating..." : "Update Enrollment"}
           </Button>

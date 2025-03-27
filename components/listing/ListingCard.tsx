@@ -41,12 +41,12 @@ const ListingCard = ({
     [onAction, actionId, disabled],
   );
 
-  const price = useMemo(() => {
-    if (enrollment) {
-      return formattedPrice(enrollment.totalPrice);
-    }
-    return formattedPrice(data.price);
-  }, [enrollment, data.price]);
+  // const price = useMemo(() => {
+  //   if (enrollment) {
+  //     return formattedPrice(enrollment.totalPrice);
+  //   }
+  //   return formattedPrice(data.price);
+  // }, [enrollment, data.price]);
 
   return (
     <div className="group col-span-1 cursor-pointer justify-center">

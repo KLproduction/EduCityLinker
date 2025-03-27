@@ -48,7 +48,7 @@ export const useCreateCourse = (
         if (data.status === 200) {
           toast.success("Course created successfully!");
           dispatch(resetCourseData());
-          setStep(STEPS.CATEGORY);
+          setStep(0);
           close();
           router.refresh();
         }

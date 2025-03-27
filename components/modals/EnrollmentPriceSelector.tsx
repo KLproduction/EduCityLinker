@@ -9,6 +9,7 @@ import { formattedPrice } from "@/lib/formatPrice";
 import { Check } from "lucide-react";
 import { setEnrollmentData } from "@/redux/slice/create-enrollmentRequestSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
+import { AIMO_DISCOUNT } from "@/data/data";
 
 interface PriceCalculatorProps {
   basePrice: number;
@@ -32,12 +33,11 @@ export default function EnrollmentPriceSelector({
       setWeek(value);
 
       const updatedOriginalPrice = basePrice * value;
-      const updatedDiscountPrice = updatedOriginalPrice * 0.9;
+      const updatedDiscountPrice = updatedOriginalPrice * AIMO_DISCOUNT;
 
       dispatch(
         setEnrollmentData({
           weeks: value,
-          totalPrice: updatedDiscountPrice,
         }),
       );
     } else if (e.target.value === "") {
@@ -45,7 +45,6 @@ export default function EnrollmentPriceSelector({
       dispatch(
         setEnrollmentData({
           weeks: 1,
-          totalPrice: basePrice,
         }),
       );
     }
@@ -83,11 +82,12 @@ export default function EnrollmentPriceSelector({
           </div>
 
           <div className="flex items-center justify-between">
-            <div>
-              <span className="text-sm font-medium">Discounted Price:</span>
-              <span className="ml-2 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1">
+              <h4 className="text-rose-500">AIMO</h4>
+              <span className="text-sm font-medium">Price:</span>
+              {/* <span className="ml-2 text-xs text-muted-foreground">
                 (10% off)
-              </span>
+              </span> */}
             </div>
             <span className="text-lg font-bold text-rose-600">
               {formattedPrice(discountPrice)}

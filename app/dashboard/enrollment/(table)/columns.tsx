@@ -314,16 +314,12 @@ export const columns: ColumnDef<EnrollmentRequest>[] = [
   },
 
   {
-    accessorKey: "totalPrice",
+    accessorKey: "courseTotalPriceBeforeDiscount",
     header: () => <div className="text-center">Course Price</div>,
     cell: ({ row }) => {
-      const data = row.getValue("totalPrice") as number;
+      const data = row.getValue("courseTotalPriceBeforeDiscount") as number;
       const formatPrice = formattedPrice(data);
-      return (
-        <div className="text-center font-medium text-primary">
-          {formatPrice}
-        </div>
-      );
+      return <div className="text-center font-medium">{formatPrice}</div>;
     },
   },
   {
@@ -332,11 +328,19 @@ export const columns: ColumnDef<EnrollmentRequest>[] = [
     cell: ({ row }) => {
       const data = row.getValue("addOnPrice") as number;
       const formatPrice = formattedPrice(data);
-      return (
-        <div className="text-center font-medium text-primary">
-          {formatPrice}
-        </div>
-      );
+      return <div className="text-center font-medium">{formatPrice}</div>;
+    },
+  },
+  {
+    accessorKey: "orderTotalPrice",
+    header: () => <div className="text-center">Order Total Price</div>,
+    cell: ({ row }) => {
+      const coursePrice = row.getValue(
+        "courseTotalPriceBeforeDiscount",
+      ) as number;
+      const addOnPrice = row.getValue("addOnPrice") as number;
+      const formatPrice = formattedPrice(coursePrice + addOnPrice);
+      return <div className="text-center font-medium">{formatPrice}</div>;
     },
   },
 ];

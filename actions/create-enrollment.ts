@@ -1,11 +1,15 @@
 "use server";
 
 import { z } from "zod";
-import { enrollmentRequestSchema } from "@/schemas";
+import {
+  editEnrollmentRequestSchema,
+  enrollmentRequestSchema,
+} from "@/schemas";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { EnrollmentRequestState } from "@prisma/client";
 import { getOrganizationByIdAction } from "./create-organization";
+import { AIMO_DISCOUNT } from "@/data/data";
 
 export const createEnrollmentRequestAction = async (
   enrollmentData: z.infer<typeof enrollmentRequestSchema>,
@@ -86,6 +90,11 @@ export const createEnrollmentRequestAction = async (
       airportTransferPrice = 0;
     }
 
+    const addOnPrice = accommodationPrice + airportTransferPrice;
+    const courseTotalPriceBeforeDiscount =
+      listing!.price * validationResult.data.weeks;
+    const courseTotalPrice = courseTotalPriceBeforeDiscount * AIMO_DISCOUNT;
+
     const enrollmentRequest = await db.enrollmentRequest.create({
       data: {
         ...validationResult.data,
@@ -93,12 +102,15 @@ export const createEnrollmentRequestAction = async (
         userId: user.id,
         listingId,
         organizationId: organization.id,
-        accommodationPrice: accommodationPrice,
-        airportTransferPrice: airportTransferPrice,
-        addOnPrice: accommodationPrice + airportTransferPrice,
-        totalPrice: listing!.price * 0.9 * validationResult.data.weeks,
         centerConfirmed: false,
         centerConfirmationDate: null,
+        accommodationPrice: accommodationPrice,
+        airportTransferPrice: airportTransferPrice,
+        addOnPrice: addOnPrice,
+        coursePrice: listing!.price,
+        courseTotalPriceBeforeDiscount: courseTotalPriceBeforeDiscount,
+        courseTotalPrice: courseTotalPrice,
+        orderTotalPrice: courseTotalPrice + addOnPrice,
       },
     });
 
@@ -186,7 +198,7 @@ export const onDeleteEnrollmentRequestAction = async (id: string) => {
 
 export const onUpdateEnrollmentRequestAction = async (
   enrollmentId: string,
-  data: z.infer<typeof enrollmentRequestSchema>,
+  data: z.infer<typeof editEnrollmentRequestSchema>,
 ) => {
   try {
     const enrollmentRequest = await db.enrollmentRequest.findUnique({
@@ -195,7 +207,7 @@ export const onUpdateEnrollmentRequestAction = async (
     if (!enrollmentRequest) {
       return { status: 404, message: "Enrollment request not found" };
     }
-    const validationResult = enrollmentRequestSchema.safeParse(data);
+    const validationResult = editEnrollmentRequestSchema.safeParse(data);
     if (!validationResult.success) {
       console.error(validationResult.error.flatten());
       return {
@@ -204,14 +216,64 @@ export const onUpdateEnrollmentRequestAction = async (
         errors: validationResult.error.flatten(),
       };
     } else {
-      await db.enrollmentRequest.update({
-        where: { id: enrollmentId },
-        data: validationResult.data,
-      });
-      return {
-        status: 200,
-        message: "Enrollment request updated successfully",
-      };
+      const courseTotalPriceBeforeDiscount =
+        validationResult.data.coursePrice * validationResult.data.weeks;
+
+      const addOnPrice =
+        validationResult.data.accommodationPrice +
+        validationResult.data.airportTransferPrice;
+      const courseTotalPrice = courseTotalPriceBeforeDiscount * AIMO_DISCOUNT;
+
+      if (
+        validationResult.data.status ===
+        EnrollmentRequestState.CONFIRM_BY_CENTER
+      ) {
+        const enrollmentRequest = await db.enrollmentRequest.update({
+          where: { id: enrollmentId },
+          data: {
+            ...validationResult.data,
+            courseTotalPriceBeforeDiscount: courseTotalPriceBeforeDiscount,
+            addOnPrice: addOnPrice,
+            courseTotalPrice: courseTotalPrice,
+            orderTotalPrice: courseTotalPrice + addOnPrice,
+            centerConfirmed: true,
+            centerConfirmationDate: new Date(),
+          },
+        });
+        if (enrollmentRequest) {
+          return {
+            status: 200,
+            message: "Enrollment request updated successfully",
+          };
+        }
+        return {
+          status: 404,
+          message: "Enrollment request not found",
+        };
+      } else {
+        const enrollmentRequest = await db.enrollmentRequest.update({
+          where: { id: enrollmentId },
+          data: {
+            ...validationResult.data,
+            courseTotalPriceBeforeDiscount: courseTotalPriceBeforeDiscount,
+            addOnPrice: addOnPrice,
+            courseTotalPrice: courseTotalPrice,
+            orderTotalPrice: courseTotalPrice + addOnPrice,
+            centerConfirmed: false,
+            centerConfirmationDate: null,
+          },
+        });
+        if (enrollmentRequest) {
+          return {
+            status: 200,
+            message: "Enrollment request updated successfully",
+          };
+        }
+        return {
+          status: 404,
+          message: "Enrollment request not found",
+        };
+      }
     }
   } catch (e) {
     console.error(e);

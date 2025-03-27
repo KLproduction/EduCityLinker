@@ -167,9 +167,34 @@ export const enrollmentRequestSchema = z.object({
   airportTransferPrice: z
     .number()
     .nonnegative("Airport transfer price must be non-negative"),
-  totalPrice: z.number().nonnegative("Total price must be non-negative"),
+  coursePrice: z.number(),
   createdAt: z.date().default(new Date()),
   status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
   centerConfirmed: z.boolean().default(false),
   centerConfirmationDate: z.date().nullable().default(null),
+});
+export const editEnrollmentRequestSchema = z.object({
+  firstName: z.string().min(1, "First name is required"),
+  sureName: z.string().min(1, "Sure name is required"),
+  contactNumber: z.string().min(1, "Invalid contact number"),
+  emailAddress: z.string().email("Invalid email address"),
+  startDate: z.date().min(new Date(), "Start date must be in the future"),
+  weeks: z.number().int().positive("Weeks must be a positive integer"),
+  airportTransfer: z.boolean(),
+  airportTransfersType: z.string(),
+  accommodation: z.boolean(),
+  accommodationPrice: z
+    .number()
+    .nonnegative("Accommodation price must be non-negative"),
+  airportTransferPrice: z
+    .number()
+    .nonnegative("Airport transfer price must be non-negative"),
+  createdAt: z.date().default(new Date()),
+  status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
+  centerConfirmed: z.boolean(),
+  centerConfirmationDate: z.date().nullable().default(null),
+  coursePrice: z.number().min(1, "Course price must be a positive number"),
+  courseTotalPriceBeforeDiscount: z.number(),
+  courseTotalPrice: z.number(),
+  orderTotalPrice: z.number(),
 });

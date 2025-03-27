@@ -1,6 +1,7 @@
 "use client";
 
 import ListingSection from "@/components/listing/ListingSection";
+import AcceptEnrollmentModal from "@/components/modals/AcceptEnrollmentModal";
 import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
@@ -13,9 +14,17 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useCancelEnrollmentModal } from "@/hooks/modal";
+import {
+  useAcceptEnrollmentModal,
+  useCancelEnrollmentModal,
+} from "@/hooks/modal";
 import { formattedPrice } from "@/lib/formatPrice";
-import { EnrollmentRequest, Listing, Organization } from "@prisma/client";
+import {
+  EnrollmentRequest,
+  EnrollmentRequestState,
+  Listing,
+  Organization,
+} from "@prisma/client";
 import { format } from "date-fns";
 import { Check, InfoIcon, MapPin } from "lucide-react";
 import Image from "next/image";
@@ -34,8 +43,11 @@ const UserEnrollmentDetailsSection = ({
   enrollmentData,
   organization,
   listing,
+  userId,
 }: Props) => {
   const router = useRouter();
+
+  const { open, close } = useAcceptEnrollmentModal(enrollmentData.id);
 
   if (enrollmentData.status === "CANCELLED") return null;
 
@@ -195,7 +207,9 @@ const UserEnrollmentDetailsSection = ({
                     Course Fee:
                   </dt>
                   <dd className="font-semibold">
-                    {formattedPrice(enrollmentData.totalPrice)}
+                    {formattedPrice(
+                      enrollmentData.courseTotalPriceBeforeDiscount,
+                    )}
                   </dd>
                 </div>
                 {enrollmentData.airportTransferPrice > 0 && (
@@ -221,28 +235,36 @@ const UserEnrollmentDetailsSection = ({
 
                 <Separator className="my-2" />
                 <div className="flex justify-between">
-                  <dt className="font-medium">Total Price:</dt>
-                  <dd className="text-lg font-bold text-primary">
-                    {formattedPrice(
-                      enrollmentData.totalPrice * 0.9 +
-                        enrollmentData.accommodationPrice +
-                        enrollmentData.airportTransferPrice,
-                    )}
-                  </dd>
+                  <div className="font-medium">Total Price:</div>
+                  <div className="flex flex-col justify-end gap-2 text-lg font-bold text-primary">
+                    <div className="flex w-full items-center justify-end text-zinc-800">
+                      {formattedPrice(
+                        enrollmentData.courseTotalPriceBeforeDiscount +
+                          enrollmentData.addOnPrice,
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <div className="flex items-center gap-2">
+                        <h4>AIMO</h4>
+                        <span>Price:</span>
+                      </div>
+                      <span>
+                        {formattedPrice(enrollmentData.orderTotalPrice)}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </div>
             </dl>
           </CardContent>
           <CardFooter>
             <div className="flex w-full flex-col justify-end gap-3 md:flex-row">
-              <Button
-                disabled={enrollmentData.status !== "CONFIRM_BY_CENTER"}
-                className="bg-green-500"
-              >
-                {enrollmentData.status === "CONFIRM_BY_CENTER"
-                  ? " Accept Enrollment"
-                  : "Waiting For Confirmation"}
-              </Button>
+              <AcceptEnrollmentModal
+                enrollment={enrollmentData}
+                organization={organization}
+                listing={listing}
+                userId={userId}
+              />
               <CancelEnrollmentModal enrollment={enrollmentData} />
             </div>
           </CardFooter>

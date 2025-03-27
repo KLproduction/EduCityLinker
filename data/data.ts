@@ -37,6 +37,9 @@ import {
   MdOutlineBusinessCenter,
   MdSecurity,
 } from "react-icons/md";
+
+export const AIMO_DISCOUNT = 0.9;
+
 export const features = [
   {
     label: "WiFi",

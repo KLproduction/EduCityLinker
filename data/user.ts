@@ -23,6 +23,7 @@ export const getUserById = async (id: string) => {
         organization: true,
       },
     });
+    console.log("getUserById success");
     return user;
   } catch {
     return null;

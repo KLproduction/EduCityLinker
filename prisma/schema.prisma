@@ -164,31 +164,34 @@ model Listing {
 }
 
 model EnrollmentRequest {
-  id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
-  userId                 String                   @db.ObjectId
-  listingId              String                   @db.ObjectId
-  organizationId         String                   @db.ObjectId
-  firstName              String
-  sureName               String
-  contactNumber          String
-  emailAddress           String
-  startDate              DateTime
-  weeks                  Int
-  airportTransfer        Boolean
-  airportTransfersType   String
-  accommodation          Boolean
-  totalPrice             Float
-  accommodationPrice     Float
-  airportTransferPrice   Float
-  addOnPrice             Float
-  createdAt              DateTime                 @default(now())
-  status                 EnrollmentRequestState   @default(PENDING)
-  centerConfirmed        Boolean?                 @default(false)
-  centerConfirmationDate DateTime?
-  organization           Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  listing                Listing                  @relation(fields: [listingId], references: [id], onDelete: Cascade)
-  user                   User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  enrollmentConfirmation EnrollmentConfirmation[]
+  id                             String                   @id @default(auto()) @map("_id") @db.ObjectId
+  userId                         String                   @db.ObjectId
+  listingId                      String                   @db.ObjectId
+  organizationId                 String                   @db.ObjectId
+  firstName                      String
+  sureName                       String
+  contactNumber                  String
+  emailAddress                   String
+  startDate                      DateTime
+  weeks                          Int
+  coursePrice                    Float
+  courseTotalPriceBeforeDiscount Float
+  courseTotalPrice               Float
+  airportTransfer                Boolean
+  airportTransfersType           String
+  accommodation                  Boolean
+  accommodationPrice             Float
+  airportTransferPrice           Float
+  addOnPrice                     Float
+  orderTotalPrice                Float
+  createdAt                      DateTime                 @default(now())
+  status                         EnrollmentRequestState   @default(PENDING)
+  centerConfirmed                Boolean?                 @default(false)
+  centerConfirmationDate         DateTime?
+  organization                   Organization             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  listing                        Listing                  @relation(fields: [listingId], references: [id], onDelete: Cascade)
+  user                           User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  enrollmentConfirmation         EnrollmentConfirmation[]
 
   @@map("enrollment_requests")
 }

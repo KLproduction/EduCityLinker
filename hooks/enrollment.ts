@@ -1,6 +1,9 @@
 import { ENROLLMENT_STEPS } from "@/components/modals/CreateEnrollmentModal";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { enrollmentRequestSchema } from "@/schemas";
+import {
+  editEnrollmentRequestSchema,
+  enrollmentRequestSchema,
+} from "@/schemas";
 import { z } from "zod";
 import { useCreateEnrollmentModal } from "./modal";
 import { useRouter } from "next/navigation";
@@ -113,8 +116,12 @@ export const useCancelEnrollment = () => {
 
 type EditEnrollmentProps = {
   enrollment: EnrollmentRequest;
+  setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
 };
-export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
+export const useEditEnrollment = ({
+  enrollment,
+  setIsEditable,
+}: EditEnrollmentProps) => {
   const router = useRouter();
   const {
     register,
@@ -124,10 +131,12 @@ export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
     watch,
     reset,
     setValue,
-  } = useForm<z.infer<typeof enrollmentRequestSchema>>({
-    resolver: zodResolver(enrollmentRequestSchema),
+  } = useForm<z.infer<typeof editEnrollmentRequestSchema>>({
+    resolver: zodResolver(editEnrollmentRequestSchema),
     defaultValues: {
       ...enrollment,
+      centerConfirmed: enrollment.centerConfirmed ?? false,
+      centerConfirmationDate: enrollment.centerConfirmationDate ?? null,
     },
   });
 
@@ -138,9 +147,14 @@ export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
         data,
       }: {
         enrollmentId: string;
-        data: z.infer<typeof enrollmentRequestSchema>;
+        data: z.infer<typeof editEnrollmentRequestSchema>;
       }) => {
-        return await onUpdateEnrollmentRequestAction(enrollmentId, data);
+        const result = await onUpdateEnrollmentRequestAction(enrollmentId, {
+          ...data,
+          centerConfirmationDate: data.centerConfirmationDate ?? null,
+        });
+
+        return result;
       },
       onError: (error) => {
         console.error(error);
@@ -149,6 +163,7 @@ export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
       onSuccess: (data) => {
         if (data.status === 200) {
           toast.success("Enrollment updated successfully!");
+          setIsEditable(false);
           router.refresh();
         } else {
           toast.error(data.message);
@@ -176,5 +191,14 @@ export const useEditEnrollment = ({ enrollment }: EditEnrollmentProps) => {
     onSubmit,
     isUpdatingEnrollment,
     resetForm,
+  };
+};
+
+export const useAcceptEnrollment = () => {
+  const { mutate: acceptEnrollmentMutate, isPending: isAcceptingEnrollment } =
+    useMutation({});
+  return {
+    acceptEnrollmentMutate,
+    isAcceptingEnrollment,
   };
 };

@@ -93,6 +93,7 @@ export const getOrganizationByListingIdAction = async (
 
 export const getOrganizationByIdAction = async (organizationId: string) => {
   if (!organizationId) return;
+  console.log("organizationName");
   try {
     const organization = await db.organization.findUnique({
       where: { id: organizationId },
