@@ -75,7 +75,8 @@ export async function POST(req: NextRequest) {
 
         let enrollmentPayment = await db.enrollmentPayment.findFirst({
           where: {
-            transactionId: charge.id,
+            confirmationId: enrollmentConfirm.id,
+            userId: existingEnrollment.userId,
           },
         });
 
