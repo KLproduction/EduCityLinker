@@ -1,6 +1,6 @@
 import {
   getListingByIdAction,
-  getOrganizationByListingIdAction,
+  getOrganizationByOrganizationIdAction,
 } from "@/actions/listing";
 import { EnrollmentRequest } from "@prisma/client";
 import React from "react";
@@ -12,7 +12,7 @@ type Props = {
 };
 
 const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
-  const organizationData = await getOrganizationByListingIdAction(
+  const organizationData = await getOrganizationByOrganizationIdAction(
     enrollmentData.organizationId,
   );
   const listingData = await getListingByIdAction(enrollmentData.listingId);

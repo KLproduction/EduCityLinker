@@ -37,6 +37,7 @@ type Props = {
   organization: Organization;
   listing: Listing;
   userId: string;
+  isCheckOut?: boolean;
 };
 
 const UserEnrollmentDetailsSection = ({
@@ -44,6 +45,7 @@ const UserEnrollmentDetailsSection = ({
   organization,
   listing,
   userId,
+  isCheckOut = false,
 }: Props) => {
   const router = useRouter();
 
@@ -257,17 +259,19 @@ const UserEnrollmentDetailsSection = ({
               </div>
             </dl>
           </CardContent>
-          <CardFooter>
-            <div className="flex w-full flex-col justify-end gap-3 md:flex-row">
-              <AcceptEnrollmentModal
-                enrollment={enrollmentData}
-                organization={organization}
-                listing={listing}
-                userId={userId}
-              />
-              <CancelEnrollmentModal enrollment={enrollmentData} />
-            </div>
-          </CardFooter>
+          {!isCheckOut && (
+            <CardFooter>
+              <div className="flex w-full flex-col justify-end gap-3 md:flex-row">
+                <AcceptEnrollmentModal
+                  enrollment={enrollmentData}
+                  organization={organization}
+                  listing={listing}
+                  userId={userId}
+                />
+                <CancelEnrollmentModal enrollment={enrollmentData} />
+              </div>
+            </CardFooter>
+          )}
         </Card>
       </div>
     </>

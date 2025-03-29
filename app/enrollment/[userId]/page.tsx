@@ -3,8 +3,6 @@ import BackToExploreBtn from "@/components/global/BackToExploreBtn";
 import { currentUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 import UserEnrollmentDetails from "../_compoents/UserEnrollmentDetails";
-import { getOrganizationByListingIdAction } from "@/actions/listing";
-import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 
 type Props = {
   params: { userId: string };

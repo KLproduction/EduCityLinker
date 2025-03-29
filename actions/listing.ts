@@ -66,7 +66,7 @@ export const getOrganizationWithListingAction = async () => {
   }
 };
 
-export const getOrganizationByListingIdAction = async (
+export const getOrganizationByOrganizationIdAction = async (
   organizationId: string,
 ) => {
   try {
@@ -75,6 +75,30 @@ export const getOrganizationByListingIdAction = async (
     });
     if (organization) {
       console.log("Organization found");
+
+      return {
+        organization,
+        status: 200,
+      };
+    }
+    console.log("Organization not found");
+    return {
+      status: 404,
+      message: "Organization not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};
+export const getOrganizationByListingIdAction = async (listingId: string) => {
+  try {
+    const listing = await db.listing.findUnique({
+      where: { id: listingId },
+    });
+    if (listingId) {
+      const organization = await db.organization.findUnique({
+        where: { id: listing?.organizationId },
+      });
 
       return {
         organization,

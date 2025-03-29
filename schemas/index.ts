@@ -169,7 +169,12 @@ export const enrollmentRequestSchema = z.object({
     .nonnegative("Airport transfer price must be non-negative"),
   coursePrice: z.number(),
   createdAt: z.date().default(new Date()),
-  status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
+  status: z.enum([
+    "PENDING",
+    "CONFIRM_BY_CENTER",
+    "CONFIRM_BY_USER",
+    "CANCELLED",
+  ]),
   centerConfirmed: z.boolean().default(false),
   centerConfirmationDate: z.date().nullable().default(null),
 });
@@ -190,7 +195,12 @@ export const editEnrollmentRequestSchema = z.object({
     .number()
     .nonnegative("Airport transfer price must be non-negative"),
   createdAt: z.date().default(new Date()),
-  status: z.enum(["PENDING", "CONFIRM_BY_CENTER", "CANCELLED"]),
+  status: z.enum([
+    "PENDING",
+    "CONFIRM_BY_CENTER",
+    "CONFIRM_BY_USER",
+    "CANCELLED",
+  ]),
   centerConfirmed: z.boolean(),
   centerConfirmationDate: z.date().nullable().default(null),
   coursePrice: z.number().min(1, "Course price must be a positive number"),

@@ -11,6 +11,8 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Card } from "../ui/card";
+import { useRouter } from "next/navigation";
 
 type Props = {
   enrollment: EnrollmentRequest;
@@ -25,12 +27,9 @@ const AcceptEnrollmentModal = ({
   organization,
   userId,
 }: Props) => {
+  const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-
-  const { acceptEnrollmentMutate, isAcceptingEnrollment } =
-    useAcceptEnrollment();
-
   const depositAmount = Math.floor(enrollment.orderTotalPrice * 0.2);
   const remainingBalance = enrollment.orderTotalPrice - depositAmount;
   const paymentDueDate = new Date(enrollment.startDate);
@@ -49,13 +48,13 @@ const AcceptEnrollmentModal = ({
             actionLabel={`Pay Deposit (£${depositAmount})`}
             secondaryActionLabel="Cancel"
             onSubmit={() => {
-              // acceptEnrollmentMutate(enrollment.id);
+              router.push(`/checkout/${enrollment.id}`);
               setIsOpen(false);
             }}
             secondaryAction={() => setIsOpen(false)}
-            disabled={!confirmed || isAcceptingEnrollment}
+            disabled={!confirmed}
             body={
-              <div className="flex flex-col gap-6">
+              <Card className="flex flex-col gap-6 p-3">
                 {/* Course Details */}
                 <div className="space-y-4 rounded-lg border border-border bg-card p-4">
                   <div className="flex items-center justify-between">
@@ -171,7 +170,7 @@ const AcceptEnrollmentModal = ({
                     </p>
                   </div>
                 </div>
-              </div>
+              </Card>
             }
           />
         </ResponsiveModel>

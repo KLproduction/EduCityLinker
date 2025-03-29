@@ -10,7 +10,7 @@ import { useLoginModal } from "./modal";
 import {
   getListingByIdAction,
   getListingByOrganizationIdAction,
-  getOrganizationByListingIdAction,
+  getOrganizationByOrganizationIdAction,
 } from "@/actions/listing";
 
 export const useAddFavorites = (userId: string, listingId: string) => {
@@ -72,7 +72,7 @@ export const useGetOrganizationByListingId = (organizationId: string) => {
   const { data, isPending, isLoading } = useQuery({
     queryKey: ["organization", organizationId],
     queryFn: async () => {
-      return await getOrganizationByListingIdAction(organizationId);
+      return await getOrganizationByOrganizationIdAction(organizationId);
     },
   });
   if (data?.status !== 200) {
