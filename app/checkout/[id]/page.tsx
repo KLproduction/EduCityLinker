@@ -28,7 +28,7 @@ const CheckOutPage = async ({ params }: { params: { id: string } }) => {
     revalidatePath("/cart");
   } else {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(enrollment?.orderTotalPrice! * 100),
+      amount: Math.round(Math.round(enrollment?.orderTotalPrice! * 0.2) * 100),
       currency: "GBP",
       metadata: {
         orderId: enrollment?.id!,

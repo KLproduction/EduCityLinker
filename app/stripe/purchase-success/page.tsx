@@ -41,20 +41,45 @@ const successPage = async ({
     include: {
       organization: true,
       listing: true,
-      enrollmentConfirmation: {
-        include: {
-          payment: true,
-        },
-      },
     },
   });
   if (!product?.id) {
     return (
       <div className="flex min-h-full flex-col items-center justify-center gap-3">
-        <h1 className="text-xl">No Enrollment Found!</h1>
+        <h1 className="text-xl">No Enrollment Found</h1>
         <Button asChild variant={"link"} size={"sm"}>
-          <Link href={"/"}>Back</Link>
+          <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>Back</Link>
         </Button>
+      </div>
+    );
+  }
+
+  const enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
+    where: {
+      requestId: product.id,
+    },
+  });
+
+  const enrollmentPayment = await db.enrollmentPayment.findFirst({
+    where: {
+      confirmationId: enrollmentConfirm?.id,
+    },
+  });
+
+  if (!enrollmentPayment || !enrollmentConfirm) {
+    return (
+      <div className="mt-24 flex flex-col items-center justify-center gap-3">
+        <div className="flex flex-col items-center justify-center gap-3">
+          <h1 className="flex items-center justify-center text-xl">
+            Something went wrong! Payment Not Success
+          </h1>
+
+          <Button asChild size={"sm"}>
+            <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>
+              Back
+            </Link>
+          </Button>
+        </div>
       </div>
     );
   }
@@ -69,35 +94,61 @@ const successPage = async ({
   const isSuccess = paymentIntent.status === "succeeded";
 
   return (
-    <div className="container pb-12 sm:p-5 sm:pt-20">
-      <Card className="m-5 mx-auto max-w-[280px] p-5 sm:max-w-full">
-        <CardHeader className="text-xl">
-          <div className="flex justify-center font-bold text-orange-500">
-            {isSuccess
-              ? "Payment success!".toUpperCase()
-              : "Something went wrong, order not placed!"}
-          </div>
-        </CardHeader>
+    <div className="container flex flex-col items-center gap-5 pb-12 sm:p-5 sm:pt-20">
+      <div className="flex justify-center text-4xl font-bold text-rose-500">
+        {isSuccess
+          ? "Payment success!".toUpperCase()
+          : "Something went wrong, order not placed!"}
+      </div>
+      <div className="m-5 mx-auto max-w-[280px] p-5 sm:max-w-full">
         <div className="text-sm">
-          <CardDescription className="flex min-h-full flex-col justify-center">
-            <span className="font-bold">Enrollment Reference No.: </span>
-            <span>{product?.id}</span>
-            <span className="mt-3 font-bold">Center Name:</span>
-            <span>{product.organization.name}</span>
-            <span className="mt-3 font-bold">Center Address:</span>
-            <span>{product.organization.location}</span>
-            <span className="mt-3 font-bold">Course title:</span>
-            <span>{product.listing.title}</span>
-            <span className="mt-3 font-bold">Course Start Date:</span>
-            <span>{`${product.startDate.getDate()}/ ${
-              product.startDate.getMonth() + 1
-            }/ ${product.startDate.getFullYear()}`}</span>
-          </CardDescription>
-          <div className="flex flex-col items-center">
-            <h1 className="text-4xl font-bold text-rose-500">Confirm & Pay</h1>
+          <Card className="text-md w-full space-y-1 p-3">
+            <CardHeader className="flex w-full">
+              <h3 className="mx-auto text-xl font-bold">Deposit Details</h3>
+            </CardHeader>
+            <CardContent>
+              <div className="flex justify-between">
+                <span>Total Course Price</span>
+                <span>£{product.orderTotalPrice}</span>
+              </div>
+              <div className="flex justify-between font-medium text-primary">
+                <span>Deposit (20%)</span>
+                <span>{formattedPrice(enrollmentPayment?.depositAmount!)}</span>
+              </div>
+              <Separator className="my-2" />
+              <div className="flex justify-between text-muted-foreground">
+                <span>Remaining Balance</span>
+                <span>
+                  {formattedPrice(enrollmentPayment?.remainingBalance!)}
+                </span>
+              </div>
+              <p className="text-md text-muted-foreground">
+                Balance due by{" "}
+                <strong>
+                  {paymentDueDate.toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "long",
+                  })}
+                </strong>
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Deposit Paid Date</span>
+                  <span>
+                    {`${enrollmentConfirm?.userConfirmationDate?.toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "long",
+                      },
+                    )}`}
+                  </span>
+                </div>
+              </p>
+            </CardContent>
+          </Card>
 
+          <div className="flex flex-col items-center">
             <div className="m-5 flex flex-col items-center gap-5">
-              <Card className="flex flex-col gap-4 border-border bg-card p-4">
+              <div className="flex flex-col gap-4 border-border bg-card p-4">
                 <div>
                   <UserEnrollmentDetailsSection
                     enrollmentData={product}
@@ -108,59 +159,16 @@ const successPage = async ({
                   />
                 </div>
                 {/* Summary */}
-                <Card className="text-md w-full space-y-1 p-3">
-                  <CardHeader className="flex w-full">
-                    <h3 className="mx-auto text-xl font-bold">
-                      Deposit Details
-                    </h3>
-                  </CardHeader>
-                  <div className="flex justify-between">
-                    <span>Total Course Price</span>
-                    <span>£{product.orderTotalPrice}</span>
-                  </div>
-                  <div className="flex justify-between font-medium text-primary">
-                    <span>Deposit (20%)</span>
-                    {/* <span>
-                      {formattedPrice(
-                        product.enrollmentConfirmation[0].payment[0]
-                          .depositAmount,
-                      )}
-                    </span> */}
-                  </div>
-                  <Separator className="my-2" />
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Remaining Balance</span>
-                    {/* <span>
-                      {formattedPrice(
-                        product.enrollmentConfirmation[0].payment[0]
-                          .remainingBalance,
-                      )}
-                    </span> */}
-                  </div>
-                  <p className="text-md text-muted-foreground">
-                    Balance due by{" "}
-                    <strong>
-                      {paymentDueDate.toLocaleDateString("en-GB", {
-                        day: "numeric",
-                        month: "long",
-                      })}
-                    </strong>
-                    {/* <div className="flex justify-between text-muted-foreground">
-                      <span>Deposit Paid Date</span>
-                      <span>
-                        {product.enrollmentConfirmation[0].userConfirmationDate?.getDate()}
-                      </span>
-                    </div> */}
-                  </p>
-                </Card>
-              </Card>
+              </div>
             </div>
           </div>
         </div>
-      </Card>
+      </div>
       <div className="flex justify-end p-5 pb-12">
         <Button asChild variant={"link"} size={"lg"}>
-          <Link href={"/"}>Back</Link>
+          <Link href={`/enrollment/${paymentIntent.metadata.userId}`}>
+            Back
+          </Link>
         </Button>
       </div>
     </div>

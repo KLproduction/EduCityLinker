@@ -202,7 +202,7 @@ model EnrollmentConfirmation {
   id                   String                      @id @default(auto()) @map("_id") @db.ObjectId
   requestId            String                      @db.ObjectId // Links back to EnrollmentRequest
   userId               String                      @db.ObjectId
-  confirmedByUser      Boolean?                    @default(false)
+  confirmedByUser      Boolean                     @default(false)
   userConfirmationDate DateTime?
   status               EnrollmentConfirmationState @default(AWAITING_USER)
   request              EnrollmentRequest           @relation(fields: [requestId], references: [id], onDelete: Cascade)
@@ -217,13 +217,13 @@ model EnrollmentPayment {
   confirmationId     String                   @db.ObjectId
   userId             String                   @db.ObjectId
   depositAmount      Int
-  depositPaid        Boolean?                 @default(false)
+  depositPaid        Boolean                  @default(false)
   depositPaymentDate DateTime?
   remainingBalance   Int
   fullPaymentDueDate DateTime?
-  fullPaymentPaid    Boolean?                 @default(false)
+  fullPaymentPaid    Boolean                  @default(false)
   fullPaymentDate    DateTime?
-  paymentMethod      String? // ["credit_card", "bank_transfer", "PayPal"]
+  paymentMethod      String?
   transactionId      String?
   invoiceUrl         String?
   status             PaymentState             @default(DEPOSIT_PENDING)
