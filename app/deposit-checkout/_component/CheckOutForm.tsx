@@ -15,7 +15,12 @@ import MySpinner from "@/components/ui/MySpinner";
 import { Separator } from "@/components/ui/separator";
 import { formattedPrice } from "@/lib/formatPrice";
 import MyLoader from "@/loader/MyLoader";
-import { EnrollmentRequest, Listing, Organization } from "@prisma/client";
+import {
+  EnrollmentConfirmation,
+  EnrollmentRequest,
+  Listing,
+  Organization,
+} from "@prisma/client";
 
 import {
   AddressElement,
@@ -26,6 +31,8 @@ import {
   useStripe,
 } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
+import { ArrowBigLeft } from "lucide-react";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import { useDispatch } from "react-redux";
@@ -35,6 +42,7 @@ type CheckOutFormProps = {
   organization: Organization;
   listing: Listing;
   clientSecret: string;
+  enrollmentConfirmation: EnrollmentConfirmation;
 };
 
 type FormProps = {
@@ -47,6 +55,7 @@ const CheckOutForm = ({
   organization,
   listing,
   clientSecret,
+  enrollmentConfirmation,
 }: CheckOutFormProps) => {
   const depositAmount = Math.floor(enrollment.orderTotalPrice * 0.2);
   const remainingBalance = enrollment.orderTotalPrice - depositAmount;
@@ -63,7 +72,13 @@ const CheckOutForm = ({
 
   return (
     <div className="container mx-auto w-full space-y-8">
-      <div className="flex flex-col items-center">
+      <div className="flex w-full flex-col items-center justify-start">
+        <div className="flex w-full justify-start">
+          <Button size={"lg"} className="flex items-center gap-3">
+            <ArrowBigLeft className="h-6 w-6" />
+            <Link href={`/enrollment/${enrollment.userId}`}>Back</Link>
+          </Button>
+        </div>
         <h1 className="text-4xl font-bold text-rose-500">Confirm & Pay</h1>
 
         <div className="m-5 flex flex-col items-center gap-5">
@@ -75,6 +90,7 @@ const CheckOutForm = ({
                 listing={listing!}
                 userId={enrollment.userId}
                 isCheckOut
+                enrollmentConfirmation={enrollmentConfirmation}
               />
             </div>
             {/* Summary */}
@@ -101,6 +117,7 @@ const CheckOutForm = ({
                   {paymentDueDate.toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "long",
+                    year: "numeric",
                   })}
                 </strong>
               </p>

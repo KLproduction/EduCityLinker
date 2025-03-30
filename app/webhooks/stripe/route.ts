@@ -45,6 +45,7 @@ export async function POST(req: NextRequest) {
             status: EnrollmentRequestState.CONFIRM_BY_USER,
           },
         });
+
         let enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
           where: {
             requestId: existingEnrollment.id,

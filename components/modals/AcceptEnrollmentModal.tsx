@@ -48,7 +48,7 @@ const AcceptEnrollmentModal = ({
             actionLabel={`Pay Deposit (£${depositAmount})`}
             secondaryActionLabel="Cancel"
             onSubmit={() => {
-              router.push(`/checkout/${enrollment.id}`);
+              router.push(`/deposit-checkout/${enrollment.id}`);
               setIsOpen(false);
             }}
             secondaryAction={() => setIsOpen(false)}

@@ -9,6 +9,7 @@ import {
   getListingByIdAction,
   getOrganizationByListingIdAction,
 } from "@/actions/listing";
+import { db } from "@/lib/db";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -22,6 +23,11 @@ const CheckOutPage = async ({ params }: { params: { id: string } }) => {
     enrollment?.listingId!,
   );
   const listing = await getListingByIdAction(enrollment?.listingId!);
+  const enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
+    where: {
+      requestId: enrollment?.id!,
+    },
+  });
 
   if (!enrollment) {
     <MySpinner />;
@@ -47,6 +53,7 @@ const CheckOutPage = async ({ params }: { params: { id: string } }) => {
           organization={organization?.organization!}
           listing={listing?.listing!}
           clientSecret={paymentIntent.client_secret}
+          enrollmentConfirmation={enrollmentConfirm!}
         />
       </div>
     );

@@ -1,5 +1,6 @@
 "use client";
 
+import EnrollmentSteps from "@/components/global/EnrollmentStep";
 import ListingSection from "@/components/listing/ListingSection";
 import AcceptEnrollmentModal from "@/components/modals/AcceptEnrollmentModal";
 import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
@@ -20,6 +21,7 @@ import {
 } from "@/hooks/modal";
 import { formattedPrice } from "@/lib/formatPrice";
 import {
+  EnrollmentConfirmation,
   EnrollmentRequest,
   EnrollmentRequestState,
   Listing,
@@ -38,6 +40,7 @@ type Props = {
   listing: Listing;
   userId: string;
   isCheckOut?: boolean;
+  enrollmentConfirmation: EnrollmentConfirmation;
 };
 
 const UserEnrollmentDetailsSection = ({
@@ -46,6 +49,7 @@ const UserEnrollmentDetailsSection = ({
   listing,
   userId,
   isCheckOut = false,
+  enrollmentConfirmation,
 }: Props) => {
   const router = useRouter();
 
@@ -259,19 +263,11 @@ const UserEnrollmentDetailsSection = ({
               </div>
             </dl>
           </CardContent>
-          {!isCheckOut && (
-            <CardFooter>
-              <div className="flex w-full flex-col justify-end gap-3 md:flex-row">
-                <AcceptEnrollmentModal
-                  enrollment={enrollmentData}
-                  organization={organization}
-                  listing={listing}
-                  userId={userId}
-                />
-                <CancelEnrollmentModal enrollment={enrollmentData} />
-              </div>
-            </CardFooter>
-          )}
+          <Separator className="my-4" />
+
+          <CardFooter>
+            <EnrollmentSteps enrollmentConfirmation={enrollmentConfirmation} />
+          </CardFooter>
         </Card>
       </div>
     </>

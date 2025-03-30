@@ -8,10 +8,10 @@ type Props = {
   children: React.ReactNode;
 };
 
-const DashboardLayout = async ({ children }: Props) => {
+const PaymentLayout = async ({ children }: Props) => {
   const user = await currentUser();
 
-  if (!user || (user.role !== "ORGANIZER" && user.role !== "ADMIN")) {
+  if (!user?.id) {
     redirect("/");
   }
 
@@ -25,4 +25,4 @@ const DashboardLayout = async ({ children }: Props) => {
   );
 };
 
-export default DashboardLayout;
+export default PaymentLayout;

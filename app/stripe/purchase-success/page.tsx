@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import { formattedPrice } from "@/lib/formatPrice";
 import { EnrollmentRequest } from "@prisma/client";
+import { ArrowBigLeft, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Stripe from "stripe";
 
@@ -95,6 +96,14 @@ const successPage = async ({
 
   return (
     <div className="container flex flex-col items-center gap-5 pb-12 sm:p-5 sm:pt-20">
+      <div className="flex w-full justify-start">
+        <Button size={"lg"} className="flex items-center gap-3">
+          <ArrowBigLeft className="h-6 w-6" />
+          <Link href={`/enrollment/${paymentIntent.metadata.userId}`}>
+            Back
+          </Link>
+        </Button>
+      </div>
       <div className="flex justify-center text-4xl font-bold text-rose-500">
         {isSuccess
           ? "Payment success!".toUpperCase()
@@ -122,14 +131,17 @@ const successPage = async ({
                   {formattedPrice(enrollmentPayment?.remainingBalance!)}
                 </span>
               </div>
-              <p className="text-md text-muted-foreground">
-                Balance due by{" "}
-                <strong>
+              <div className="flex justify-between text-muted-foreground">
+                <span> Balance due by</span>
+                <span>
                   {paymentDueDate.toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "long",
+                    year: "numeric",
                   })}
-                </strong>
+                </span>
+              </div>
+              <p className="text-md text-muted-foreground">
                 <div className="flex justify-between text-muted-foreground">
                   <span>Deposit Paid Date</span>
                   <span>
@@ -138,6 +150,7 @@ const successPage = async ({
                       {
                         day: "numeric",
                         month: "long",
+                        year: "numeric",
                       },
                     )}`}
                   </span>
@@ -156,20 +169,13 @@ const successPage = async ({
                     listing={product.listing!}
                     userId={product.userId}
                     isCheckOut
+                    enrollmentConfirmation={enrollmentConfirm}
                   />
                 </div>
-                {/* Summary */}
               </div>
             </div>
           </div>
         </div>
-      </div>
-      <div className="flex justify-end p-5 pb-12">
-        <Button asChild variant={"link"} size={"lg"}>
-          <Link href={`/enrollment/${paymentIntent.metadata.userId}`}>
-            Back
-          </Link>
-        </Button>
       </div>
     </div>
   );

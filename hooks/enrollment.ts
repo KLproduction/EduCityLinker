@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { resetEnrollmentRequestData } from "@/redux/slice/create-enrollmentRequestSlice";
 import {
   createEnrollmentRequestAction,
+  onConfirmEnrollmentRequestAction,
   onDeleteEnrollmentRequestAction,
   onUpdateEnrollmentRequestAction,
 } from "@/actions/create-enrollment";
@@ -200,5 +201,23 @@ export const useAcceptEnrollment = () => {
   return {
     acceptEnrollmentMutate,
     isAcceptingEnrollment,
+  };
+};
+
+export const useEnrollmentConfirmation = () => {
+  const { mutate: confirmEnrollmentMutate, isPending: isConfirmingEnrollment } =
+    useMutation({
+      mutationFn: async (enrollmentId: string) => {
+        const result = await onConfirmEnrollmentRequestAction(enrollmentId);
+        return result;
+      },
+      onError: (error) => {
+        console.error(error);
+        toast.error(error.message || "Failed to confirm enrollment");
+      },
+    });
+  return {
+    confirmEnrollmentMutate,
+    isConfirmingEnrollment,
   };
 };

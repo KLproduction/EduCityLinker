@@ -7,7 +7,10 @@ import {
 } from "@/schemas";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
-import { EnrollmentRequestState } from "@prisma/client";
+import {
+  EnrollmentConfirmationState,
+  EnrollmentRequestState,
+} from "@prisma/client";
 import { getOrganizationByIdAction } from "./create-organization";
 import { AIMO_DISCOUNT } from "@/data/data";
 
@@ -240,6 +243,17 @@ export const onUpdateEnrollmentRequestAction = async (
             centerConfirmationDate: new Date(),
           },
         });
+
+        await db.enrollmentConfirmation.create({
+          data: {
+            requestId: enrollmentRequest.id,
+            userId: enrollmentRequest.userId,
+            confirmedByUser: false,
+            userConfirmationDate: new Date(),
+            status: EnrollmentConfirmationState.AWAITING_USER,
+          },
+        });
+
         if (enrollmentRequest) {
           return {
             status: 200,
@@ -275,6 +289,35 @@ export const onUpdateEnrollmentRequestAction = async (
         };
       }
     }
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const onConfirmEnrollmentRequestAction = async (
+  enrollmentId: string,
+) => {
+  try {
+    const existingEnrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id: enrollmentId },
+    });
+
+    if (!existingEnrollmentRequest) {
+      return { status: 404, message: "Enrollment request not found" };
+    }
+
+    const enrollmentConfirmation = await db.enrollmentConfirmation.findFirst({
+      where: { requestId: existingEnrollmentRequest.id },
+    });
+
+    if (!enrollmentConfirmation) {
+      return { status: 404, message: "Enrollment confirmation not found" };
+    }
+    return {
+      enrollmentConfirmation,
+      status: 200,
+    };
   } catch (e) {
     console.error(e);
     return { status: 500, message: "Database error" };
