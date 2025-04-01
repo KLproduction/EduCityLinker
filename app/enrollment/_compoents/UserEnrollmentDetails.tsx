@@ -14,7 +14,6 @@ import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 import { db } from "@/lib/db";
 import { Button } from "@/components/ui/button";
 import FullPaymentModal from "@/components/modals/FullPaymentModal";
-import EnrollmentSteps from "@/components/global/EnrollmentStep";
 
 type Props = {
   enrollmentData: EnrollmentRequest;

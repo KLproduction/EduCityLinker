@@ -13,6 +13,8 @@ import { cn } from "@/lib/utils";
 import {
   EnrollmentConfirmation,
   EnrollmentConfirmationState,
+  EnrollmentRequest,
+  EnrollmentRequestState,
 } from "@prisma/client";
 
 interface EnrollmentStep {
@@ -25,9 +27,13 @@ interface EnrollmentStep {
 
 type Props = {
   enrollmentConfirmation: EnrollmentConfirmation;
+  enrollmentRequest: EnrollmentRequest;
 };
 
-export const EnrollmentSteps = ({ enrollmentConfirmation }: Props) => {
+export const EnrollmentSteps = ({
+  enrollmentConfirmation,
+  enrollmentRequest,
+}: Props) => {
   const [steps, setSteps] = useState<EnrollmentStep[]>([
     {
       id: 0,
@@ -69,6 +75,17 @@ export const EnrollmentSteps = ({ enrollmentConfirmation }: Props) => {
 
   useEffect(() => {
     if (!enrollmentConfirmation) {
+      if (
+        enrollmentRequest.status === EnrollmentRequestState.CONFIRM_BY_CENTER
+      ) {
+        setSteps((prev) =>
+          prev.map((step) => ({
+            ...step,
+            isActive: step.id === 1,
+          })),
+        );
+        return;
+      }
       setSteps((prev) =>
         prev.map((step) => ({
           ...step,

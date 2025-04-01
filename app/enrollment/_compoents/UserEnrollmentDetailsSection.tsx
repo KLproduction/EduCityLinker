@@ -266,7 +266,10 @@ const UserEnrollmentDetailsSection = ({
           <Separator className="my-4" />
 
           <CardFooter>
-            <EnrollmentSteps enrollmentConfirmation={enrollmentConfirmation} />
+            <EnrollmentSteps
+              enrollmentConfirmation={enrollmentConfirmation}
+              enrollmentRequest={enrollmentData}
+            />
           </CardFooter>
         </Card>
       </div>

@@ -10,6 +10,7 @@ import {
 import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import { formattedPrice } from "@/lib/formatPrice";
+import MyLoader from "@/loader/MyLoader";
 import { EnrollmentRequest } from "@prisma/client";
 import { ArrowBigLeft, ArrowLeft } from "lucide-react";
 import Link from "next/link";
@@ -63,23 +64,27 @@ const SuccessPage = async ({
     },
   });
 
-  if (!enrollmentPayment || !enrollmentConfirm) {
-    return (
-      <div className="mt-24 flex flex-col items-center justify-center gap-3">
-        <div className="flex flex-col items-center justify-center gap-3">
-          <h1 className="flex items-center justify-center text-xl">
-            Something went wrong! Payment Not Success
-          </h1>
-
-          <Button asChild size={"sm"}>
-            <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>
-              Back
-            </Link>
-          </Button>
-        </div>
-      </div>
-    );
+  if (!enrollmentConfirm || !enrollmentPayment) {
+    return <MyLoader />;
   }
+
+  // if (!enrollmentPayment || !enrollmentConfirm) {
+  //   return (
+  //     <div className="mt-24 flex flex-col items-center justify-center gap-3">
+  //       <div className="flex flex-col items-center justify-center gap-3">
+  //         <h1 className="flex items-center justify-center text-xl">
+  //           Something went wrong! Payment Not Success
+  //         </h1>
+
+  //         <Button asChild size={"sm"}>
+  //           <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>
+  //             Back
+  //           </Link>
+  //         </Button>
+  //       </div>
+  //     </div>
+  //   );
+  // }
 
   const courseStart = new Date(product.startDate);
   const today = new Date();
@@ -175,8 +180,8 @@ const SuccessPage = async ({
                 <span>Total Paid</span>
                 <span className="text-green-600">
                   {formattedPrice(
-                    enrollmentPayment.depositAmount +
-                      enrollmentPayment.remainingBalance,
+                    enrollmentPayment?.depositAmount! +
+                      enrollmentPayment?.remainingBalance!,
                   )}
                 </span>
               </div>
@@ -207,7 +212,7 @@ const SuccessPage = async ({
                     listing={product.listing!}
                     userId={product.userId}
                     isCheckOut
-                    enrollmentConfirmation={enrollmentConfirm}
+                    enrollmentConfirmation={enrollmentConfirm!}
                   />
                 </div>
               </div>

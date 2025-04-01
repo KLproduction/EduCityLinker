@@ -138,8 +138,10 @@ const AcceptEnrollmentModal = ({
                 </div>
 
                 {/* Reminder */}
-                <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm">
-                  <p className="font-medium text-primary">
+                <div className="flex items-center gap-2 pl-6 text-green-600">
+                  <CheckCircle className="h-5 w-5" />
+
+                  <p className="font-medium text-green-600">
                     Please pay your deposit to secure your place.
                   </p>
                 </div>
@@ -159,14 +161,6 @@ const AcceptEnrollmentModal = ({
                         the deposit.
                       </Label>
                     </div>
-                  </div>
-
-                  <div className="flex items-center gap-2 pl-6 text-xs text-green-600">
-                    <CheckCircle className="h-3.5 w-3.5" />
-                    <p>
-                      No worry — you can cancel anytime up to 30 days before the
-                      course starts and get a full refund!
-                    </p>
                   </div>
                 </div>
               </Card>

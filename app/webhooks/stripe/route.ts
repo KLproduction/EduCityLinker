@@ -17,7 +17,7 @@ export async function POST(req: NextRequest) {
       req.headers.get("Stripe-Signature") as string,
       process.env.STRIPE_WEBHOOK_SECRET as string,
     );
-
+    console.log("EVENT", event.type);
     if (event.type === "charge.succeeded") {
       const charge = event.data.object;
       const enrollmentId = charge.metadata.orderId;
@@ -34,7 +34,6 @@ export async function POST(req: NextRequest) {
       const orderType = charge.metadata?.orderType;
 
       if (orderType === "deposit") {
-        console.log("DEPOSIT", orderType);
         const existingEnrollment = await db.enrollmentRequest.findUnique({
           where: { id: enrollmentId },
         });
@@ -86,7 +85,7 @@ export async function POST(req: NextRequest) {
 
         if (!enrollmentPayment) {
           const depositAmount = Math.floor(
-            existingEnrollment.orderTotalPrice * 0.2,
+            existingEnrollment.coursePrice * existingEnrollment.weeks * 0.2,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
@@ -109,7 +108,7 @@ export async function POST(req: NextRequest) {
           });
         } else {
           const depositAmount = Math.floor(
-            existingEnrollment.orderTotalPrice * 0.2,
+            existingEnrollment.coursePrice * existingEnrollment.weeks * 0.2,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
@@ -198,6 +197,22 @@ export async function POST(req: NextRequest) {
 
       console.log("Unhandled event type:", event.type);
       return new NextResponse("Event type not handled", { status: 400 });
+    }
+
+    if (event.type === "charge.updated") {
+      console.log("🔄 Charge was updated:", event.data.object.id);
+      return new NextResponse("ok", { status: 200 });
+    }
+
+    if (event.type === "charge.refunded") {
+      const charge = event.data.object;
+      const enrollmentId = charge.metadata?.orderId;
+      const refundAmount = charge.amount_refunded / 100;
+      console.log(
+        `Refund received for enrollment ${enrollmentId}: £${refundAmount}`,
+      );
+
+      return new NextResponse("ok", { status: 200 });
     }
 
     // Missing return for non "charge.succeeded" events:
