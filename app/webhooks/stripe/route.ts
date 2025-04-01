@@ -88,6 +88,8 @@ export async function POST(req: NextRequest) {
           const depositAmount = Math.floor(
             existingEnrollment.orderTotalPrice * 0.2,
           );
+          const fullPaymentDueDate = new Date(existingEnrollment.startDate);
+          fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
           enrollmentPayment = await db.enrollmentPayment.create({
             data: {
               confirmationId: enrollmentConfirm.id,
@@ -102,12 +104,15 @@ export async function POST(req: NextRequest) {
               transactionId: charge.id,
               status: PaymentState.DEPOSIT_PAID,
               depositInvoiceUrl: charge.receipt_url,
+              fullPaymentDueDate: fullPaymentDueDate,
             },
           });
         } else {
           const depositAmount = Math.floor(
             existingEnrollment.orderTotalPrice * 0.2,
           );
+          const fullPaymentDueDate = new Date(existingEnrollment.startDate);
+          fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
           enrollmentPayment = await db.enrollmentPayment.update({
             where: { id: enrollmentPayment.id },
             data: {
@@ -120,6 +125,8 @@ export async function POST(req: NextRequest) {
               paymentMethod: charge.payment_method_details?.type,
               transactionId: charge.id,
               status: PaymentState.DEPOSIT_PAID,
+              fullPaymentDueDate: fullPaymentDueDate,
+              depositInvoiceUrl: charge.receipt_url,
             },
           });
         }
