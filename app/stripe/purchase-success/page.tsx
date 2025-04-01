@@ -28,6 +28,9 @@ const SuccessPage = async ({
   if (paymentIntent.metadata.orderId == null) {
     console.log("Enrollment ID is NULL");
   }
+
+  const orderType = paymentIntent.metadata.orderType;
+
   const product = await db.enrollmentRequest.findUnique({
     where: {
       id: paymentIntent.metadata.orderId,
@@ -104,53 +107,95 @@ const SuccessPage = async ({
       </div>
       <div className="m-5 mx-auto max-w-[280px] p-5 sm:max-w-full">
         <div className="text-sm">
-          <Card className="text-md w-full space-y-1 p-3">
-            <CardHeader className="flex w-full">
-              <h3 className="mx-auto text-xl font-bold">Deposit Details</h3>
-            </CardHeader>
-            <CardContent>
-              <div className="flex justify-between">
-                <span>Total Course Price</span>
-                <span>£{product.orderTotalPrice}</span>
-              </div>
-              <div className="flex justify-between font-medium text-primary">
-                <span>Deposit (20%)</span>
-                <span>{formattedPrice(enrollmentPayment?.depositAmount!)}</span>
-              </div>
-              <Separator className="my-2" />
-              <div className="flex justify-between text-muted-foreground">
-                <span>Remaining Balance</span>
-                <span>
-                  {formattedPrice(enrollmentPayment?.remainingBalance!)}
-                </span>
-              </div>
-              <div className="flex justify-between text-muted-foreground">
-                <span> Balance due by</span>
-                <span>
-                  {paymentDueDate.toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
-                </span>
-              </div>
-              <p className="text-md text-muted-foreground">
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Deposit Paid Date</span>
+          {orderType === "deposit" && (
+            <Card className="text-md w-full space-y-1 p-3">
+              <CardHeader className="flex w-full">
+                <h3 className="mx-auto text-xl font-bold">Deposit Details</h3>
+              </CardHeader>
+              <CardContent>
+                <div className="flex justify-between">
+                  <span>Total Course Price</span>
+                  <span>£{product.orderTotalPrice}</span>
+                </div>
+                <div className="flex justify-between font-medium text-primary">
+                  <span>Deposit (20%)</span>
                   <span>
-                    {`${enrollmentConfirm?.userConfirmationDate?.toLocaleDateString(
-                      "en-GB",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      },
-                    )}`}
+                    {formattedPrice(enrollmentPayment?.depositAmount!)}
                   </span>
                 </div>
+                <Separator className="my-2" />
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Remaining Balance</span>
+                  <span>
+                    {formattedPrice(enrollmentPayment?.remainingBalance!)}
+                  </span>
+                </div>
+                <div className="flex justify-between text-muted-foreground">
+                  <span> Balance due by</span>
+                  <span>
+                    {paymentDueDate.toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
+                <p className="text-md text-muted-foreground">
+                  <div className="flex justify-between text-muted-foreground">
+                    <span>Deposit Paid Date</span>
+                    <span>
+                      {`${enrollmentConfirm?.userConfirmationDate?.toLocaleDateString(
+                        "en-GB",
+                        {
+                          day: "numeric",
+                          month: "long",
+                          year: "numeric",
+                        },
+                      )}`}
+                    </span>
+                  </div>
+                </p>
+              </CardContent>
+            </Card>
+          )}
+          {orderType === "full" && (
+            <Card className="text-md w-full space-y-1 p-3">
+              <CardHeader className="flex w-full">
+                <h3 className="mx-auto text-xl font-bold">
+                  Remaining Balance Details
+                </h3>
+              </CardHeader>
+              <div className="flex justify-between">
+                <span>Total Course Price</span>
+                <span className="text-green-600">
+                  {formattedPrice(product.orderTotalPrice)}
+                </span>
+              </div>
+              <div className="flex justify-between font-medium text-primary">
+                <span>Total Paid</span>
+                <span className="text-green-600">
+                  {formattedPrice(
+                    enrollmentPayment.depositAmount +
+                      enrollmentPayment.remainingBalance,
+                  )}
+                </span>
+              </div>
+
+              <p className="text-md text-muted-foreground">
+                Full Payment at:{" "}
+                <strong>
+                  {enrollmentPayment?.fullPaymentDate?.toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    },
+                  )}
+                </strong>
               </p>
-            </CardContent>
-          </Card>
+            </Card>
+          )}
 
           <div className="flex flex-col items-center">
             <div className="m-5 flex flex-col items-center gap-5">

@@ -2,7 +2,11 @@ import {
   getListingByIdAction,
   getOrganizationByOrganizationIdAction,
 } from "@/actions/listing";
-import { EnrollmentRequest, EnrollmentRequestState } from "@prisma/client";
+import {
+  EnrollmentConfirmationState,
+  EnrollmentRequest,
+  EnrollmentRequestState,
+} from "@prisma/client";
 import React from "react";
 import UserEnrollmentDetailsSection from "./UserEnrollmentDetailsSection";
 import AcceptEnrollmentModal from "@/components/modals/AcceptEnrollmentModal";
@@ -39,7 +43,8 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
     if (!enrollmentPayment) {
       return;
     }
-
+    if (enrollmentPayment.status === EnrollmentConfirmationState.FULLY_PAID)
+      return;
     return (
       <FullPaymentModal
         enrollment={enrollmentData}

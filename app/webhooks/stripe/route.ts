@@ -66,7 +66,6 @@ export async function POST(req: NextRequest) {
               status: EnrollmentConfirmationState.DEPOSIT_PAID,
             },
           });
-          console.log("enrollmentConfirm changed to deposit paid");
         } else {
           await db.enrollmentConfirmation.update({
             where: { id: enrollmentConfirm.id },
@@ -76,7 +75,6 @@ export async function POST(req: NextRequest) {
               status: EnrollmentConfirmationState.DEPOSIT_PAID,
             },
           });
-          console.log("enrollmentConfirm changed to deposit paid");
         }
 
         let enrollmentPayment = await db.enrollmentPayment.findFirst({
@@ -87,16 +85,17 @@ export async function POST(req: NextRequest) {
         });
 
         if (!enrollmentPayment) {
+          const depositAmount = Math.floor(
+            existingEnrollment.orderTotalPrice * 0.2,
+          );
           enrollmentPayment = await db.enrollmentPayment.create({
             data: {
               confirmationId: enrollmentConfirm.id,
               userId: existingEnrollment.userId,
-              depositAmount: Math.floor(
-                existingEnrollment.orderTotalPrice * 0.2,
-              ),
+              depositAmount: depositAmount,
               remainingBalance:
-                existingEnrollment.orderTotalPrice -
-                Math.floor(existingEnrollment.orderTotalPrice * 0.2),
+                existingEnrollment.orderTotalPrice - depositAmount,
+              totalPaidAmount: depositAmount,
               depositPaymentDate: new Date(),
               depositPaid: true,
               paymentMethod: charge.payment_method_details?.type,
@@ -106,15 +105,16 @@ export async function POST(req: NextRequest) {
             },
           });
         } else {
+          const depositAmount = Math.floor(
+            existingEnrollment.orderTotalPrice * 0.2,
+          );
           enrollmentPayment = await db.enrollmentPayment.update({
             where: { id: enrollmentPayment.id },
             data: {
-              depositAmount: Math.floor(
-                existingEnrollment.orderTotalPrice * 0.2,
-              ),
+              depositAmount: depositAmount,
               remainingBalance:
-                existingEnrollment.orderTotalPrice -
-                Math.floor(existingEnrollment.orderTotalPrice * 0.2),
+                existingEnrollment.orderTotalPrice - depositAmount,
+              totalPaidAmount: depositAmount,
               depositPaymentDate: new Date(),
               depositPaid: true,
               paymentMethod: charge.payment_method_details?.type,
@@ -180,6 +180,10 @@ export async function POST(req: NextRequest) {
             fullPaymentPaid: true,
             fullPaymentDate: new Date(),
             fullPaymentInvoiceUrl: charge.receipt_url,
+            remainingBalance:
+              existingEnrollmentPayment.remainingBalance - charge.amount,
+            totalPaidAmount:
+              existingEnrollmentPayment.depositAmount + charge.amount,
           },
         });
         return new NextResponse("ok", { status: 200 });

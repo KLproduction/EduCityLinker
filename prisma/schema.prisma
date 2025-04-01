@@ -217,13 +217,14 @@ model EnrollmentPayment {
   id                    String                   @id @default(auto()) @map("_id") @db.ObjectId
   confirmationId        String                   @db.ObjectId
   userId                String                   @db.ObjectId
-  depositAmount         Int
+  depositAmount         Float
   depositPaid           Boolean                  @default(false)
   depositPaymentDate    DateTime?
-  remainingBalance      Int
+  remainingBalance      Float
   fullPaymentDueDate    DateTime?
   fullPaymentPaid       Boolean                  @default(false)
   fullPaymentDate       DateTime?
+  totalPaidAmount       Float
   paymentMethod         String?
   transactionId         String?
   depositInvoiceUrl     String?
