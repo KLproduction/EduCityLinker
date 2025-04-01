@@ -211,6 +211,14 @@ const SuccessPage = async ({
                   />
                 </div>
               </div>
+              <Button
+                asChild
+                className="w-full md:mx-auto md:flex md:w-auto md:justify-center"
+              >
+                <Link href={`/enrollment/${product.userId}`}>
+                  Back to My Enrollment
+                </Link>
+              </Button>
             </div>
           </div>
         </div>

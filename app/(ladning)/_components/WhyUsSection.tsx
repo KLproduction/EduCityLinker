@@ -45,9 +45,8 @@ export default function WhyUsSection() {
     },
     {
       icon: <ShieldCheck className="h-10 w-10 text-primary" />,
-      title: "Free Cancellation Policy",
-      description:
-        "Flexible plans with our hassle-free cancellation policy for your peace of mind.",
+      title: "Flexible Cancellation Policy",
+      description: `Enjoy flexible cancellation options with just a small 5% administration fee to cover processing costs. We’re here to make changes stress-free while keeping things transparent.`,
     },
     {
       icon: <ListChecks className="h-10 w-10 text-primary" />,

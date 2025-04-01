@@ -7,12 +7,8 @@ import { Toaster } from "@/components/ui/sonner";
 import { ReactQueryProvider } from "@/react-query/provider";
 import { ReduxProvider } from "@/redux/provider";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { CreateCourseModal } from "@/components/modals/CreateCourseModal";
 import { LoginModal } from "@/components/auth/LoginModal";
-import { CreateOrganizerModal } from "@/components/modals/CreateOrganizerModal";
-import { getUserById } from "@/data/user";
 import { Analytics } from "@vercel/analytics/next";
-import { CreateEnrollmentModal } from "@/components/modals/CreateEnrollmentModal";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -27,7 +23,6 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const session = await auth();
-  const user = await getUserById(session?.user.id as string);
 
   return (
     <SessionProvider session={session}>
@@ -37,20 +32,7 @@ export default async function RootLayout({
             <ReduxProvider>
               <NuqsAdapter>
                 <Toaster />
-                {user &&
-                  user?.organization.length > 0 &&
-                  (() => {
-                    const organizationId = user?.organization[0].id;
-                    return (
-                      <CreateCourseModal
-                        user={user}
-                        organizationId={organizationId}
-                      />
-                    );
-                  })()}
 
-                <CreateOrganizerModal />
-                <CreateEnrollmentModal />
                 <LoginModal />
                 {children}
                 <Analytics />

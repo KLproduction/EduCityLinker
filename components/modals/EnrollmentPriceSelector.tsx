@@ -82,12 +82,9 @@ export default function EnrollmentPriceSelector({
           </div>
 
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-1">
-              <h4 className="text-rose-500">AIMO</h4>
-              <span className="text-sm font-medium">Price:</span>
-              {/* <span className="ml-2 text-xs text-muted-foreground">
-                (10% off)
-              </span> */}
+            <div className="flex items-end gap-2 text-rose-500">
+              <h4>AIMO</h4>
+              <p className="font-bold">Price:</p>
             </div>
             <span className="text-lg font-bold text-rose-600">
               {formattedPrice(discountPrice)}
@@ -106,7 +103,7 @@ export default function EnrollmentPriceSelector({
               <Check className="h-4 w-4 flex-shrink-0 text-green-600 dark:text-green-500" />
               <span className="text-sm leading-none">
                 {" "}
-                {`No Cancellation Fee – Cancel or reschedule lessons anytime, no extra charge.`}
+                {`Flexible Cancellation – Change or cancel lessons anytime. A small 5% admin fee applies for refunded payments to cover processing costs.`}
               </span>
             </div>
           </div>

@@ -14,6 +14,7 @@ import NavLogo from "./NavLogo";
 import ModalBtn from "./ModalBtn";
 import LoginModalBtn from "./LoginModalBtn";
 import { getUserById } from "@/data/user";
+import { UserRole } from "@prisma/client";
 
 const navList = [
   {
@@ -41,8 +42,8 @@ const navList = [
 const Navbar = async () => {
   const user = await currentUser();
 
-  const isAdmin = user?.role === "ADMIN" ? true : false;
-  const isOrganizer = user?.role === "ORGANIZER";
+  const isAdmin = user?.role === UserRole.ADMIN ? true : false;
+  const isOrganizer = user?.role === UserRole.ORGANIZER ? true : false;
 
   const isDashboard = isAdmin || isOrganizer;
 

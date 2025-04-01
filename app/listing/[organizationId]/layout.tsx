@@ -1,3 +1,4 @@
+import { CreateEnrollmentModal } from "@/components/modals/CreateEnrollmentModal";
 import Navbar from "@/components/Nabar/Navbar";
 
 type Props = {
@@ -9,6 +10,7 @@ const ListingPageLayout = ({ children }: Props) => {
     <div className="flex flex-col items-center justify-center">
       <div className="mb-20">
         <Navbar />
+        <CreateEnrollmentModal />
       </div>
       {children}
     </div>

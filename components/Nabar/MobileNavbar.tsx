@@ -1,19 +1,14 @@
 import Link from "next/link";
 import { Button } from "../ui/button";
-import { db } from "@/lib/db";
-import { auth } from "@/auth";
 import { LoginButtonProps } from "../auth/loginBtn";
-import SignOutBtn from "../auth/SignOutBtn";
 import { currentUser } from "@/lib/auth";
 import UserAvatar from "../global/UserAvatar";
 import MySearch from "./MySearch";
 import { cn } from "@/lib/utils";
 import MyContainer from "../Container";
 import Categories from "./Categories";
-import NavLogo from "./NavLogo";
 import ModalBtn from "./ModalBtn";
-import LoginModalBtn from "./LoginModalBtn";
-import { getUserById } from "@/data/user";
+import { UserRole } from "@prisma/client";
 
 const navList = [
   {
@@ -40,15 +35,8 @@ const navList = [
 
 const MobileNavbar = async () => {
   const user = await currentUser();
-  const userDetails = await getUserById(user?.id!);
-
-  const isAdmin = user?.role === "ADMIN" ? true : false;
-  const isOrganizer =
-    userDetails?.organization &&
-    userDetails.organization.length > 0 &&
-    userDetails.organization[0].id
-      ? true
-      : false;
+  const isAdmin = user?.role === UserRole.ADMIN ? true : false;
+  const isOrganizer = user?.role === UserRole.ORGANIZER ? true : false;
 
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
@@ -93,7 +81,7 @@ const MobileNavbar = async () => {
 
               <UserAvatar
                 name={user?.name!}
-                userId={userDetails?.id}
+                userId={user?.id}
                 image={user?.image || ""}
                 isAdmin
                 isOrganizer

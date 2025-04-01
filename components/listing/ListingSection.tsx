@@ -1,3 +1,4 @@
+import { AIMO_DISCOUNT } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import { Listing, Organization } from "@prisma/client";
 import { Badge, Book, Calendar, Check, MapPin, Users } from "lucide-react";
@@ -39,14 +40,14 @@ const ListingSection = ({ listing }: Props) => {
         {/* Price (Always right-aligned) */}
         <div className="flex flex-col items-end gap-3">
           <div className="text-right text-sm text-zinc-500">
-            {`Original Price: ${" "}${formattedPrice(listing.price)}`}
+            {`Original Price: ${" "}${formattedPrice(listing.price)}/week`}
           </div>
           <div className="flex items-end gap-5 text-right text-base font-bold text-rose-500">
             <div className="flex items-end gap-2">
               <h4 className="text-xl">AMIO</h4>
               Price:
             </div>
-            {formattedPrice(listing.price * 0.9)}
+            {formattedPrice(listing.price * AIMO_DISCOUNT)}/week
           </div>
         </div>
       </div>
