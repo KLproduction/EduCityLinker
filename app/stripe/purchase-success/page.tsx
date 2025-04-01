@@ -64,6 +64,8 @@ const SuccessPage = async ({
     },
   });
 
+  console.log(enrollmentConfirm?.id, enrollmentPayment?.id);
+
   if (!enrollmentConfirm || !enrollmentPayment) {
     return <MyLoader />;
   }
