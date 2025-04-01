@@ -15,12 +15,7 @@ import { ArrowBigLeft, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Stripe from "stripe";
 
-type CheckOutFormProps = {
-  enrollment: EnrollmentRequest;
-  clientSecret: string;
-};
-
-const successPage = async ({
+const SuccessPage = async ({
   searchParams,
 }: {
   searchParams: { payment_intent: string };
@@ -29,8 +24,6 @@ const successPage = async ({
   const paymentIntent = await stripe.paymentIntents.retrieve(
     searchParams.payment_intent,
   );
-
-  console.log(paymentIntent.metadata);
 
   if (paymentIntent.metadata.orderId == null) {
     console.log("Enrollment ID is NULL");
@@ -181,4 +174,4 @@ const successPage = async ({
   );
 };
 
-export default successPage;
+export default SuccessPage;

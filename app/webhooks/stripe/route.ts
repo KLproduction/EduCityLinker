@@ -31,19 +31,22 @@ export async function POST(req: NextRequest) {
         charge.shipping?.address?.postal_code
       }`;
 
-      const existingEnrollment = await db.enrollmentRequest.findUnique({
-        where: { id: enrollmentId },
-      });
-      if (!existingEnrollment || !email) {
-        return new NextResponse("Bad Request", { status: 400 });
-      }
+      const orderType = charge.metadata?.orderType;
 
-      if (existingEnrollment) {
+      if (orderType === "deposit") {
+        console.log("DEPOSIT", orderType);
+        const existingEnrollment = await db.enrollmentRequest.findUnique({
+          where: { id: enrollmentId },
+        });
+        if (!existingEnrollment || !email) {
+          return new NextResponse("No existingEnrollmentRequest", {
+            status: 400,
+          });
+        }
+
         const enrollmentRequest = await db.enrollmentRequest.update({
           where: { id: existingEnrollment.id },
-          data: {
-            status: EnrollmentRequestState.CONFIRM_BY_USER,
-          },
+          data: { status: EnrollmentRequestState.CONFIRM_BY_USER },
         });
 
         let enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
@@ -63,6 +66,7 @@ export async function POST(req: NextRequest) {
               status: EnrollmentConfirmationState.DEPOSIT_PAID,
             },
           });
+          console.log("enrollmentConfirm changed to deposit paid");
         } else {
           await db.enrollmentConfirmation.update({
             where: { id: enrollmentConfirm.id },
@@ -72,6 +76,7 @@ export async function POST(req: NextRequest) {
               status: EnrollmentConfirmationState.DEPOSIT_PAID,
             },
           });
+          console.log("enrollmentConfirm changed to deposit paid");
         }
 
         let enrollmentPayment = await db.enrollmentPayment.findFirst({
@@ -97,6 +102,7 @@ export async function POST(req: NextRequest) {
               paymentMethod: charge.payment_method_details?.type,
               transactionId: charge.id,
               status: PaymentState.DEPOSIT_PAID,
+              depositInvoiceUrl: charge.receipt_url,
             },
           });
         } else {
@@ -117,10 +123,74 @@ export async function POST(req: NextRequest) {
             },
           });
         }
+        return new NextResponse("ok", { status: 200 });
       }
+
+      if (orderType === "full") {
+        const existingEnrollment = await db.enrollmentRequest.findUnique({
+          where: { id: enrollmentId },
+        });
+        if (!existingEnrollment || !email) {
+          return new NextResponse("No existingEnrollmentRequest", {
+            status: 400,
+          });
+        }
+
+        const enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
+          where: {
+            requestId: existingEnrollment.id,
+            userId: existingEnrollment.userId,
+          },
+        });
+
+        if (!enrollmentConfirm) {
+          return new NextResponse("No existingEnrollmentConfirmation", {
+            status: 400,
+          });
+        }
+
+        const confirmation = await db.enrollmentConfirmation.update({
+          where: { id: enrollmentConfirm.id },
+          data: { status: EnrollmentConfirmationState.FULLY_PAID },
+        });
+
+        if (confirmation) {
+          console.log("confirmation", confirmation.status);
+        }
+
+        const existingEnrollmentPayment = await db.enrollmentPayment.findFirst({
+          where: {
+            confirmationId: enrollmentConfirm.id,
+            userId: existingEnrollment.userId,
+          },
+        });
+
+        if (!existingEnrollmentPayment) {
+          return new NextResponse("No existingEnrollmentPayment", {
+            status: 400,
+          });
+        }
+
+        await db.enrollmentPayment.update({
+          where: { id: existingEnrollmentPayment.id },
+          data: {
+            paymentMethod: charge.payment_method_details?.type,
+            transactionId: charge.id,
+            status: PaymentState.FULLY_PAID,
+            fullPaymentPaid: true,
+            fullPaymentDate: new Date(),
+            fullPaymentInvoiceUrl: charge.receipt_url,
+          },
+        });
+        return new NextResponse("ok", { status: 200 });
+      }
+
+      console.log("Unhandled event type:", event.type);
+      return new NextResponse("Event type not handled", { status: 400 });
     }
 
-    return new NextResponse("ok", { status: 200 });
+    // Missing return for non "charge.succeeded" events:
+    return new NextResponse("Event type not handled", { status: 400 });
   } catch (err) {
     console.error("Webhook Error:", err);
     return new NextResponse("Webhook error", { status: 500 });

@@ -106,6 +106,14 @@ const FullPaymentModal = ({
                   <h3 className="mb-3 font-semibold">Payment Summary</h3>
 
                   <div className="flex justify-between">
+                    <span>{`Total Amount`}</span>
+                    <span className="font-medium text-green-600">
+                      {formattedPrice(enrollment.orderTotalPrice)}
+                    </span>
+                  </div>
+
+                  <Separator className="my-2" />
+                  <div className="flex justify-between">
                     <span>{`Total Paid (Deposit)`}</span>
                     <span className="font-medium text-green-600">
                       {formattedPrice(payment.depositAmount)}

@@ -40,7 +40,6 @@ const navList = [
 
 const Navbar = async () => {
   const user = await currentUser();
-  const userDetails = await getUserById(user?.id!);
 
   const isAdmin = user?.role === "ADMIN" ? true : false;
   const isOrganizer = user?.role === "ORGANIZER";
@@ -85,7 +84,7 @@ const Navbar = async () => {
 
               <UserAvatar
                 name={user?.name!}
-                userId={userDetails?.id}
+                userId={user?.id}
                 image={user?.image || ""}
                 isAdmin
                 isOrganizer

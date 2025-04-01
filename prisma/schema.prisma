@@ -214,23 +214,24 @@ model EnrollmentConfirmation {
 }
 
 model EnrollmentPayment {
-  id                 String                   @id @default(auto()) @map("_id") @db.ObjectId
-  confirmationId     String                   @db.ObjectId
-  userId             String                   @db.ObjectId
-  depositAmount      Int
-  depositPaid        Boolean                  @default(false)
-  depositPaymentDate DateTime?
-  remainingBalance   Int
-  fullPaymentDueDate DateTime?
-  fullPaymentPaid    Boolean                  @default(false)
-  fullPaymentDate    DateTime?
-  paymentMethod      String?
-  transactionId      String?
-  invoiceUrl         String?
-  status             PaymentState             @default(DEPOSIT_PENDING)
-  confirmation       EnrollmentConfirmation   @relation(fields: [confirmationId], references: [id], onDelete: Cascade)
-  user               User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  cancellation       EnrollmentCancellation[]
+  id                    String                   @id @default(auto()) @map("_id") @db.ObjectId
+  confirmationId        String                   @db.ObjectId
+  userId                String                   @db.ObjectId
+  depositAmount         Int
+  depositPaid           Boolean                  @default(false)
+  depositPaymentDate    DateTime?
+  remainingBalance      Int
+  fullPaymentDueDate    DateTime?
+  fullPaymentPaid       Boolean                  @default(false)
+  fullPaymentDate       DateTime?
+  paymentMethod         String?
+  transactionId         String?
+  depositInvoiceUrl     String?
+  fullPaymentInvoiceUrl String?
+  status                PaymentState             @default(DEPOSIT_PENDING)
+  confirmation          EnrollmentConfirmation   @relation(fields: [confirmationId], references: [id], onDelete: Cascade)
+  user                  User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  cancellation          EnrollmentCancellation[]
 
   @@map("enrollment_payments")
 }

@@ -139,7 +139,6 @@ const AcceptEnrollmentModal = ({
 
                 {/* Reminder */}
                 <div className="flex items-center gap-2 rounded-lg border border-primary/20 bg-primary/5 p-3 text-sm">
-                  <AlertCircle className="h-5 w-5 text-primary" />
                   <p className="font-medium text-primary">
                     Please pay your deposit to secure your place.
                   </p>
