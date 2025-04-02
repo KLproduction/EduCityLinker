@@ -85,7 +85,7 @@ export async function POST(req: NextRequest) {
 
         if (!enrollmentPayment) {
           const depositAmount = Math.floor(
-            existingEnrollment.coursePrice * existingEnrollment.weeks * 0.2,
+            existingEnrollment.orderTotalPrice * 0.2,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
@@ -108,7 +108,7 @@ export async function POST(req: NextRequest) {
           });
         } else {
           const depositAmount = Math.floor(
-            existingEnrollment.coursePrice * existingEnrollment.weeks * 0.2,
+            existingEnrollment.orderTotalPrice * 0.2,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
