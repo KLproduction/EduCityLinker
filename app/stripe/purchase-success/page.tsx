@@ -53,6 +53,7 @@ const SuccessPage = async ({
   }
 
   let enrollmentConfirm = null;
+
   let retries = 3;
   while (!enrollmentConfirm && retries > 0) {
     enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
@@ -66,35 +67,45 @@ const SuccessPage = async ({
     }
   }
 
-  const enrollmentPayment = await db.enrollmentPayment.findFirst({
-    where: {
-      confirmationId: enrollmentConfirm?.id,
-    },
-  });
+  let enrollmentPayment = null;
+  retries = 3;
+
+  while (!enrollmentPayment && retries > 0) {
+    enrollmentPayment = await db.enrollmentPayment.findFirst({
+      where: {
+        confirmationId: enrollmentConfirm?.id,
+      },
+    });
+
+    if (!enrollmentPayment) {
+      retries--;
+      await new Promise((res) => setTimeout(res, 500));
+    }
+  }
 
   console.log(enrollmentConfirm?.id, enrollmentPayment?.id);
 
-  if (!enrollmentConfirm || !enrollmentPayment) {
-    return <MyLoader />;
-  }
-
-  // if (!enrollmentPayment || !enrollmentConfirm) {
-  //   return (
-  //     <div className="mt-24 flex flex-col items-center justify-center gap-3">
-  //       <div className="flex flex-col items-center justify-center gap-3">
-  //         <h1 className="flex items-center justify-center text-xl">
-  //           Something went wrong! Payment Not Success
-  //         </h1>
-
-  //         <Button asChild size={"sm"}>
-  //           <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>
-  //             Back
-  //           </Link>
-  //         </Button>
-  //       </div>
-  //     </div>
-  //   );
+  // if (!enrollmentConfirm || !enrollmentPayment) {
+  //   return <MyLoader />;
   // }
+
+  if (!enrollmentPayment || !enrollmentConfirm) {
+    return (
+      <div className="mt-24 flex flex-col items-center justify-center gap-3">
+        <div className="flex flex-col items-center justify-center gap-3">
+          <h1 className="flex items-center justify-center text-xl">
+            Something went wrong! Payment Not Success
+          </h1>
+
+          <Button asChild size={"sm"}>
+            <Link href={`/enrollment/${paymentIntent.metadata.useId}`}>
+              Back
+            </Link>
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   const courseStart = new Date(product.startDate);
   const today = new Date();
@@ -125,28 +136,37 @@ const SuccessPage = async ({
           {orderType === "deposit" && (
             <Card className="text-md w-full space-y-1 p-3">
               <CardHeader className="flex w-full">
-                <h3 className="mx-auto text-xl font-bold">Deposit Details</h3>
+                <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
               </CardHeader>
-              <CardContent>
+
+              <CardContent className="space-y-3">
+                <div className="rounded-md bg-blue-100 px-4 py-2 text-center text-sm text-blue-800">
+                  {`Your deposit has been received. You're almost there!`}
+                </div>
+
                 <div className="flex justify-between">
                   <span>Total Course Price</span>
-                  <span>£{product.orderTotalPrice}</span>
-                </div>
-                <div className="flex justify-between font-medium text-primary">
-                  <span>Deposit (20%)</span>
-                  <span>
-                    {formattedPrice(enrollmentPayment?.depositAmount!)}
+                  <span className="text-green-600">
+                    {formattedPrice(product.orderTotalPrice)}
                   </span>
                 </div>
+
+                <div className="flex justify-between font-medium text-primary">
+                  <span>Deposit Paid (20%)</span>
+                  <span>{formattedPrice(enrollmentPayment.depositAmount)}</span>
+                </div>
+
                 <Separator className="my-2" />
+
                 <div className="flex justify-between text-muted-foreground">
                   <span>Remaining Balance</span>
                   <span>
-                    {formattedPrice(enrollmentPayment?.remainingBalance!)}
+                    {formattedPrice(enrollmentPayment.remainingBalance)}
                   </span>
                 </div>
+
                 <div className="flex justify-between text-muted-foreground">
-                  <span> Balance due by</span>
+                  <span>Balance Due By</span>
                   <span>
                     {paymentDueDate.toLocaleDateString("en-GB", {
                       day: "numeric",
@@ -155,60 +175,154 @@ const SuccessPage = async ({
                     })}
                   </span>
                 </div>
-                <p className="text-md text-muted-foreground">
-                  <div className="flex justify-between text-muted-foreground">
-                    <span>Deposit Paid Date</span>
-                    <span>
-                      {`${enrollmentConfirm?.userConfirmationDate?.toLocaleDateString(
-                        "en-GB",
-                        {
-                          day: "numeric",
-                          month: "long",
-                          year: "numeric",
-                        },
-                      )}`}
-                    </span>
-                  </div>
-                </p>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Deposit Payment Date</span>
+                  <span>
+                    {enrollmentConfirm?.userConfirmationDate?.toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      },
+                    )}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Payment Method</span>
+                  <span className="capitalize">
+                    {enrollmentPayment?.paymentMethod}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Receipt</span>
+                  <a
+                    href={enrollmentPayment?.depositInvoiceUrl!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    View Receipt
+                  </a>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Course Start Date</span>
+                  <span>
+                    {new Date(product.startDate).toLocaleDateString("en-GB", {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    })}
+                  </span>
+                </div>
               </CardContent>
             </Card>
           )}
           {orderType === "full" && (
             <Card className="text-md w-full space-y-1 p-3">
+              <div className="rounded-md bg-green-100 px-4 py-2 text-center text-sm text-green-800">
+                ✅ Your full payment has been received. You're all set!
+              </div>
               <CardHeader className="flex w-full">
                 <h3 className="mx-auto text-xl font-bold">
-                  Remaining Balance Details
+                  Full Payment Summary
                 </h3>
               </CardHeader>
-              <div className="flex justify-between">
-                <span>Total Course Price</span>
-                <span className="text-green-600">
-                  {formattedPrice(product.orderTotalPrice)}
-                </span>
-              </div>
-              <div className="flex justify-between font-medium text-primary">
-                <span>Total Paid</span>
-                <span className="text-green-600">
-                  {formattedPrice(
-                    enrollmentPayment?.depositAmount! +
-                      enrollmentPayment?.remainingBalance!,
-                  )}
-                </span>
-              </div>
 
-              <p className="text-md text-muted-foreground">
-                Full Payment at:{" "}
-                <strong>
-                  {enrollmentPayment?.fullPaymentDate?.toLocaleDateString(
-                    "en-GB",
-                    {
+              <CardContent className="space-y-3">
+                <div className="flex justify-between">
+                  <span>Total Course Price</span>
+                  <span className="text-green-600">
+                    {formattedPrice(product.orderTotalPrice)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between">
+                  <span>Paid Remaining Amount</span>
+                  <span className="text-green-600">
+                    {formattedPrice(
+                      product.orderTotalPrice - enrollmentPayment.depositAmount,
+                    )}
+                  </span>
+                </div>
+                <div className="flex justify-between">
+                  <span>Paid Deposit (20%)</span>
+                  <span className="text-green-600">
+                    {formattedPrice(enrollmentPayment.depositAmount)}
+                  </span>
+                </div>
+
+                <Separator className="my-2" />
+
+                <div className="flex justify-between">
+                  <span>Total Paid</span>
+                  <span className="font-medium text-primary">
+                    {formattedPrice(enrollmentPayment.totalPaidAmount)}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Full Payment Date</span>
+                  <span>
+                    {enrollmentPayment.fullPaymentDate?.toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      },
+                    )}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Enrollment Confirmed By You</span>
+                  <span>
+                    {enrollmentConfirm.userConfirmationDate?.toLocaleDateString(
+                      "en-GB",
+                      {
+                        day: "numeric",
+                        month: "long",
+                        year: "numeric",
+                      },
+                    )}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Course Start Date</span>
+                  <span>
+                    {new Date(product.startDate).toLocaleDateString("en-GB", {
                       day: "numeric",
                       month: "long",
                       year: "numeric",
-                    },
-                  )}
-                </strong>
-              </p>
+                    })}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Payment Method</span>
+                  <span className="capitalize">
+                    {enrollmentPayment.paymentMethod}
+                  </span>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>Receipt</span>
+                  <a
+                    href={enrollmentPayment.fullPaymentInvoiceUrl!}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 underline"
+                  >
+                    View Receipt
+                  </a>
+                </div>
+              </CardContent>
             </Card>
           )}
 

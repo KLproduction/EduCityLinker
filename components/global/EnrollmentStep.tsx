@@ -81,7 +81,7 @@ export const EnrollmentSteps = ({
         setSteps((prev) =>
           prev.map((step) => ({
             ...step,
-            isActive: step.id === 1,
+            isActive: step.id <= 1,
           })),
         );
         return;
