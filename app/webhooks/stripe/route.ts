@@ -187,9 +187,9 @@ export async function POST(req: NextRequest) {
             fullPaymentDate: new Date(),
             fullPaymentInvoiceUrl: charge.receipt_url,
             remainingBalance:
-              existingEnrollment.orderTotalPrice - charge.amount / 100,
+              existingEnrollmentPayment.remainingBalance - charge.amount / 100,
             totalPaidAmount:
-              existingEnrollmentPayment.depositAmount + charge.amount / 100,
+              existingEnrollmentPayment.totalPaidAmount + charge.amount / 100,
           },
         });
         return new NextResponse("ok", { status: 200 });

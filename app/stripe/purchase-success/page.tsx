@@ -52,11 +52,19 @@ const SuccessPage = async ({
     );
   }
 
-  const enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
-    where: {
-      requestId: product.id,
-    },
-  });
+  let enrollmentConfirm = null;
+  let retries = 3;
+  while (!enrollmentConfirm && retries > 0) {
+    enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
+      where: {
+        requestId: product.id,
+      },
+    });
+    if (!enrollmentConfirm) {
+      retries--;
+      await new Promise((res) => setTimeout(res, 500));
+    }
+  }
 
   const enrollmentPayment = await db.enrollmentPayment.findFirst({
     where: {
