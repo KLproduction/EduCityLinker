@@ -1,3 +1,4 @@
+import { DEPOSIT_RATE } from "@/data/data";
 import { db } from "@/lib/db";
 import {
   EnrollmentConfirmationState,
@@ -85,7 +86,7 @@ export async function POST(req: NextRequest) {
 
         if (!enrollmentPayment) {
           const depositAmount = Math.floor(
-            existingEnrollment.orderTotalPrice * 0.2,
+            existingEnrollment.orderTotalPrice * DEPOSIT_RATE,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);
@@ -108,7 +109,7 @@ export async function POST(req: NextRequest) {
           });
         } else {
           const depositAmount = Math.floor(
-            existingEnrollment.orderTotalPrice * 0.2,
+            existingEnrollment.orderTotalPrice * DEPOSIT_RATE,
           );
           const fullPaymentDueDate = new Date(existingEnrollment.startDate);
           fullPaymentDueDate.setDate(fullPaymentDueDate.getDate() - 30);

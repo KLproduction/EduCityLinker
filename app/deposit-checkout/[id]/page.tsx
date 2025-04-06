@@ -10,6 +10,7 @@ import {
   getOrganizationByListingIdAction,
 } from "@/actions/listing";
 import { db } from "@/lib/db";
+import { DEPOSIT_RATE } from "@/data/data";
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY as string);
 
@@ -34,7 +35,9 @@ const DepositCheckOutPage = async ({ params }: { params: { id: string } }) => {
     revalidatePath(`/enrollment/${user?.id}`);
   } else {
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: Math.round(Math.round(enrollment?.orderTotalPrice! * 0.2) * 100),
+      amount: Math.round(
+        Math.round(enrollment?.orderTotalPrice! * DEPOSIT_RATE) * 100,
+      ),
       currency: "GBP",
       metadata: {
         orderId: enrollment?.id!,

@@ -1,9 +1,8 @@
 "use client";
 
+import CancelEnrollmentSteps from "@/components/global/CacnelEnrollmentStep";
 import EnrollmentSteps from "@/components/global/EnrollmentStep";
 import ListingSection from "@/components/listing/ListingSection";
-import AcceptEnrollmentModal from "@/components/modals/AcceptEnrollmentModal";
-import CancelEnrollmentModal from "@/components/modals/CancelEnrollmentModal";
 import StarRating from "@/components/StarRating";
 import { Button } from "@/components/ui/button";
 import {
@@ -15,13 +14,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import {
-  useAcceptEnrollmentModal,
-  useCancelEnrollmentModal,
-} from "@/hooks/modal";
 import { formattedPrice } from "@/lib/formatPrice";
+import { cn } from "@/lib/utils";
 import {
   EnrollmentConfirmation,
+  EnrollmentConfirmationState,
   EnrollmentRequest,
   EnrollmentRequestState,
   Listing,
@@ -31,7 +28,7 @@ import { format } from "date-fns";
 import { Check, InfoIcon, MapPin } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import React from "react";
 
 type Props = {
@@ -52,8 +49,9 @@ const UserEnrollmentDetailsSection = ({
   enrollmentConfirmation,
 }: Props) => {
   const router = useRouter();
+  const pathname = usePathname();
 
-  const { open, close } = useAcceptEnrollmentModal(enrollmentData.id);
+  const isEnrollmentPage = pathname.includes("/enrollment");
 
   if (enrollmentData.status === "CANCELLED") return null;
 
@@ -64,7 +62,10 @@ const UserEnrollmentDetailsSection = ({
 
         <Card
           key={organization?.id}
-          className="overflow-hidden p-4 lg:min-w-[1000px]"
+          className={cn(
+            "overflow-hidden p-4 lg:min-w-[1000px]",
+            isEnrollmentPage && "border-none shadow-none",
+          )}
         >
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             {/* Cover Photo (Responsive) */}
@@ -123,7 +124,7 @@ const UserEnrollmentDetailsSection = ({
 
       {/* Enrollment Details */}
       <div className="space-y-6">
-        <Card>
+        <Card className={cn(isEnrollmentPage && "border-none shadow-none")}>
           <CardHeader>
             <CardDescription>Enrollment Details</CardDescription>
             <div>{listing && <ListingSection listing={listing} />}</div>
@@ -266,10 +267,21 @@ const UserEnrollmentDetailsSection = ({
           <Separator className="my-4" />
 
           <CardFooter>
-            <EnrollmentSteps
-              enrollmentConfirmation={enrollmentConfirmation}
-              enrollmentRequest={enrollmentData}
-            />
+            {enrollmentConfirmation?.status ===
+              EnrollmentConfirmationState.CANCELLATION_REQUESTED ||
+            enrollmentConfirmation?.status ===
+              EnrollmentConfirmationState.CANCELLATION_PROCESSING ||
+            enrollmentConfirmation?.status ===
+              EnrollmentConfirmationState.CANCELLED_REFUNDED ? (
+              <CancelEnrollmentSteps
+                enrollmentConfirmation={enrollmentConfirmation}
+              />
+            ) : (
+              <EnrollmentSteps
+                enrollmentConfirmation={enrollmentConfirmation}
+                enrollmentRequest={enrollmentData}
+              />
+            )}
           </CardFooter>
         </Card>
       </div>

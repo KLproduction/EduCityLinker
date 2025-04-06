@@ -97,9 +97,24 @@ const EnrollmentDetailsConfirmationStep = () => {
                 <dt className="font-medium text-muted-foreground">
                   Course Fee:
                 </dt>
-                <dd className="font-semibold">
+                <dd className="font-semibold line-through">
                   {formattedPrice(
                     enrollmentData.coursePrice * enrollmentData.weeks,
+                  )}
+                </dd>
+              </div>
+              <div className="flex justify-between">
+                <dt className="font-medium text-muted-foreground">
+                  <div className="flex items-center gap-1 text-rose-500">
+                    <h4>AIMO</h4>
+                    <span>Price:</span>
+                  </div>
+                </dt>
+                <dd className="font-semibold text-rose-500">
+                  {formattedPrice(
+                    enrollmentData.coursePrice *
+                      enrollmentData.weeks *
+                      AIMO_DISCOUNT,
                   )}
                 </dd>
               </div>

@@ -17,6 +17,8 @@ enum EnrollmentRequestState {
   PENDING
   CONFIRM_BY_CENTER
   CONFIRM_BY_USER
+  CANCELLATION_REQUESTED
+  CANCELLED_REFUNDED
   CANCELLED
 }
 
@@ -25,6 +27,9 @@ enum EnrollmentConfirmationState {
   DEPOSIT_PENDING
   DEPOSIT_PAID
   FULLY_PAID
+  CANCELLATION_REQUESTED
+  CANCELLATION_PROCESSING
+  CANCELLED_REFUNDED
   CANCELLED
 }
 
@@ -32,6 +37,9 @@ enum PaymentState {
   DEPOSIT_PENDING
   DEPOSIT_PAID
   FULLY_PAID
+  CANCELLATION_REQUESTED
+  CANCELLATION_PROCESSING
+  CANCELLED_REFUNDED
   CANCELLED
 }
 
@@ -239,15 +247,16 @@ model EnrollmentPayment {
 }
 
 model EnrollmentCancellation {
-  id              String            @id @default(auto()) @map("_id") @db.ObjectId
-  paymentId       String            @db.ObjectId
-  userId          String            @db.ObjectId
-  reason          String
-  cancelledAt     DateTime          @default(now())
-  refundAmount    Int?
-  refundProcessed Boolean?          @default(false)
-  payment         EnrollmentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
-  user            User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id                String            @id @default(auto()) @map("_id") @db.ObjectId
+  paymentId         String            @db.ObjectId
+  userId            String            @db.ObjectId
+  reason            String
+  cancelRequestedAt DateTime          @default(now())
+  cancelledAt       DateTime?
+  refundAmount      Int?
+  refundProcessed   Boolean?          @default(false)
+  payment           EnrollmentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("enrollment_cancellations")
 }

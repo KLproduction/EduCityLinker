@@ -13,6 +13,7 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Card } from "../ui/card";
 import { useRouter } from "next/navigation";
+import { DEPOSIT_RATE } from "@/data/data";
 
 type Props = {
   enrollment: EnrollmentRequest;
@@ -30,7 +31,7 @@ const AcceptEnrollmentModal = ({
   const router = useRouter();
   const [isOpen, setIsOpen] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
-  const depositAmount = Math.floor(enrollment.orderTotalPrice * 0.2);
+  const depositAmount = Math.floor(enrollment.orderTotalPrice * DEPOSIT_RATE);
   const remainingBalance = enrollment.orderTotalPrice - depositAmount;
   const paymentDueDate = new Date(enrollment.startDate);
   paymentDueDate.setDate(paymentDueDate.getDate() - 30);
@@ -111,9 +112,7 @@ const AcceptEnrollmentModal = ({
                     </div>
 
                     <div className="flex justify-between font-medium">
-                      <span className="text-muted-foreground">
-                        Deposit (20%)
-                      </span>
+                      <span className="text-muted-foreground">Deposit</span>
                       <span className="text-primary">£{depositAmount}</span>
                     </div>
 
@@ -157,8 +156,9 @@ const AcceptEnrollmentModal = ({
                     />
                     <div>
                       <Label htmlFor="confirm" className="font-medium">
-                        I confirm my enrollment and would like to proceed with
-                        the deposit.
+                        I confirm my enrollment and acknowledge that the deposit
+                        is non-refundable, and I would like to proceed with the
+                        deposit.
                       </Label>
                     </div>
                   </div>

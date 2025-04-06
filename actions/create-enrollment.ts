@@ -10,6 +10,7 @@ import { db } from "@/lib/db";
 import {
   EnrollmentConfirmationState,
   EnrollmentRequestState,
+  PaymentState,
 } from "@prisma/client";
 import { getOrganizationByIdAction } from "./create-organization";
 import { AIMO_DISCOUNT } from "@/data/data";
@@ -186,19 +187,6 @@ export const getAllEnrollmentRequestsAction = async () => {
   }
 };
 
-export const onDeleteEnrollmentRequestAction = async (id: string) => {
-  try {
-    await db.enrollmentRequest.update({
-      where: { id },
-      data: { status: "CANCELLED" },
-    });
-    return { status: 200, message: "Enrollment request deleted successfully" };
-  } catch (e) {
-    console.error(e);
-    return { status: 500, message: "Database error" };
-  }
-};
-
 export const onUpdateEnrollmentRequestAction = async (
   enrollmentId: string,
   data: z.infer<typeof editEnrollmentRequestSchema>,
@@ -317,6 +305,160 @@ export const onConfirmEnrollmentRequestAction = async (
     return {
       enrollmentConfirmation,
       status: 200,
+    };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const onDeleteEnrollmentRequestAction = async (id: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      return { status: 401, message: "Unauthorized" };
+    }
+
+    const existingEnrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id },
+    });
+
+    if (
+      !existingEnrollmentRequest ||
+      user.id !== existingEnrollmentRequest.userId
+    ) {
+      return { status: 403, message: "Forbidden" };
+    }
+    await db.enrollmentRequest.delete({
+      where: { id: existingEnrollmentRequest?.id },
+    });
+    return { status: 200, message: "Enrollment request deleted successfully" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+export const onRequestCancelEnrollmentRequestAction = async (
+  id: string,
+  reason?: string,
+) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      return { status: 401, message: "Unauthorized" };
+    }
+
+    const existingEnrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id },
+    });
+
+    if (
+      !existingEnrollmentRequest ||
+      user.id !== existingEnrollmentRequest.userId
+    ) {
+      return { status: 403, message: "Forbidden" };
+    }
+
+    const enrollmentConfirmation = await db.enrollmentConfirmation.findFirst({
+      where: { requestId: existingEnrollmentRequest?.id },
+    });
+
+    if (enrollmentConfirmation) {
+      await db.enrollmentConfirmation.update({
+        where: { id: enrollmentConfirmation?.id },
+        data: {
+          status: EnrollmentConfirmationState.CANCELLATION_REQUESTED,
+        },
+      });
+      const enrollmentPayment = await db.enrollmentPayment.findFirst({
+        where: { confirmationId: enrollmentConfirmation.id },
+      });
+
+      //if deposit paid
+      if (
+        enrollmentPayment &&
+        enrollmentPayment.status === PaymentState.DEPOSIT_PAID
+      ) {
+        await db.enrollmentPayment.update({
+          where: { id: enrollmentPayment?.id },
+          data: {
+            status: EnrollmentConfirmationState.CANCELLATION_REQUESTED,
+          },
+        });
+        const cancelReason = reason ?? "";
+        await db.enrollmentCancellation.create({
+          data: {
+            paymentId: enrollmentPayment?.id,
+            userId: user?.id!,
+            reason: cancelReason,
+            refundProcessed: false,
+          },
+        });
+      }
+      //if full payment paid
+
+      if (
+        enrollmentPayment &&
+        enrollmentPayment.status === PaymentState.FULLY_PAID
+      ) {
+        await db.enrollmentPayment.update({
+          where: { id: enrollmentPayment?.id },
+          data: {
+            status: EnrollmentConfirmationState.CANCELLATION_REQUESTED,
+          },
+        });
+        const cancelReason = reason ?? "";
+        await db.enrollmentCancellation.create({
+          data: {
+            paymentId: enrollmentPayment?.id,
+            userId: user?.id,
+            reason: cancelReason,
+            refundProcessed: false,
+          },
+        });
+      }
+    }
+
+    return {
+      status: 200,
+      message: "Cancellation request submitted successfully",
+    };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const onCancelEnrollmentRequestAction = async (id: string) => {
+  try {
+    const user = await currentUser();
+
+    if (!user) {
+      return { status: 401, message: "Unauthorized" };
+    }
+
+    const existingEnrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id },
+    });
+
+    if (
+      !existingEnrollmentRequest ||
+      user.id !== existingEnrollmentRequest.userId
+    ) {
+      return { status: 403, message: "Forbidden" };
+    }
+
+    await db.enrollmentRequest.update({
+      where: { id: existingEnrollmentRequest?.id },
+      data: {
+        status: EnrollmentRequestState.CANCELLATION_REQUESTED,
+      },
+    });
+    return {
+      status: 200,
+      message: "Enrollment request cancelled successfully",
     };
   } catch (e) {
     console.error(e);

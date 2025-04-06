@@ -13,128 +13,92 @@ import { cn } from "@/lib/utils";
 import {
   EnrollmentConfirmation,
   EnrollmentConfirmationState,
-  EnrollmentRequest,
-  EnrollmentRequestState,
 } from "@prisma/client";
 
-interface EnrollmentStep {
+interface CancelStep {
   id: number;
   title: string;
-  pendingTitle: string;
+  pendingTitle?: string;
   description: string;
   isActive: boolean;
 }
 
 type Props = {
   enrollmentConfirmation: EnrollmentConfirmation;
-  enrollmentRequest: EnrollmentRequest;
 };
 
-export const EnrollmentSteps = ({
-  enrollmentConfirmation,
-  enrollmentRequest,
-}: Props) => {
-  const [steps, setSteps] = useState<EnrollmentStep[]>([
+export const CancelEnrollmentSteps = ({ enrollmentConfirmation }: Props) => {
+  const [steps, setSteps] = useState<CancelStep[]>([
     {
       id: 0,
-      title: "Enrollment request created",
+      title: "Cancellation Requested",
       pendingTitle: "",
-      description: "Your enrollment request has been submitted",
+      description: "You’ve submitted a cancellation request.",
       isActive: true,
     },
     {
       id: 1,
-      title: "Confirmed by center",
-      pendingTitle: "Awaiting confirmation by center",
-      description: "Your request has been reviewed and confirmed by the center",
+      title: "Refund Processing ",
+      pendingTitle: "Awaiting refund processing",
+      description:
+        "The center is reviewing your cancellation and processing a refund, if applicable.",
       isActive: false,
     },
     {
       id: 2,
-      title: "Confirmed by student & deposit paid",
-      pendingTitle: "Awaiting deposit payment",
-      description: "You've confirmed enrollment and paid the initial deposit",
-      isActive: false,
-    },
-    {
-      id: 3,
-      title: "All payment paid",
-      pendingTitle: "Awaiting full payment",
-      description: "Everything is set! Just wait for your course to begin",
+      title: "Enrollment Cancelled",
+      pendingTitle: "Awaiting final confirmation",
+      description: "Your enrollment has been officially cancelled.",
       isActive: false,
     },
   ]);
 
-  const toggleStep = (id: number) => {
-    setSteps(
-      steps.map((step) =>
-        step.id === id ? { ...step, isActive: !step.isActive } : step,
-      ),
-    );
-  };
-
   useEffect(() => {
-    if (!enrollmentConfirmation) {
-      if (
-        enrollmentRequest.status === EnrollmentRequestState.CONFIRM_BY_CENTER
-      ) {
-        setSteps((prev) =>
-          prev.map((step) => ({
-            ...step,
-            isActive: step.id <= 1,
-          })),
-        );
-        return;
-      }
-      setSteps((prev) =>
-        prev.map((step) => ({
-          ...step,
-          isActive: step.id === 0,
-        })),
-      );
-      return;
-    }
+    if (!enrollmentConfirmation) return;
 
-    const updatedSteps = steps.map((step) => {
-      const { status } = enrollmentConfirmation;
+    console.log(
+      "Enrollment Confirmation Status:",
+      enrollmentConfirmation.status,
+      "ID",
+      enrollmentConfirmation.id,
+    );
 
-      const statusToStepMap: Record<EnrollmentConfirmationState, number> = {
-        AWAITING_USER: 1,
-        DEPOSIT_PENDING: 1,
-        DEPOSIT_PAID: 2,
-        FULLY_PAID: 3,
-        CANCELLED: -1,
-        CANCELLATION_REQUESTED: -1,
-        CANCELLED_REFUNDED: -1,
-        CANCELLATION_PROCESSING: -1,
-      };
+    const statusToStepMap: Record<EnrollmentConfirmationState, number> = {
+      AWAITING_USER: -1,
+      DEPOSIT_PENDING: -1,
+      DEPOSIT_PAID: -1,
+      FULLY_PAID: -1,
+      CANCELLATION_REQUESTED: 0,
+      CANCELLED: 2,
+      CANCELLED_REFUNDED: 2,
+      CANCELLATION_PROCESSING: 1,
+    };
 
-      const currentStep = statusToStepMap[status];
+    const currentStep = statusToStepMap[enrollmentConfirmation.status];
 
-      return {
+    setSteps((prev) =>
+      prev.map((step) => ({
         ...step,
         isActive: step.id <= currentStep,
-      };
-    });
-
-    setSteps(updatedSteps);
+      })),
+    );
   }, [enrollmentConfirmation]);
 
   return (
     <Card className="mx-auto w-full max-w-7xl border-none shadow-none">
       <CardHeader>
-        <CardTitle>Enrollment Progress</CardTitle>
+        <CardTitle>Cancellation Progress</CardTitle>
         <CardDescription>
-          Track your enrollment status through each step of the process
+          Track the status of your enrollment cancellation
         </CardDescription>
       </CardHeader>
       <CardContent className="pb-6">
         <div className="space-y-6">
-          {steps.map((step, index) => (
+          {steps.map((step) => (
             <div
               key={step.id}
               className={cn(
-                "flex cursor-pointer items-start gap-4 transition-all",
+                "flex items-start gap-4 transition-all",
                 step.isActive ? "opacity-100" : "opacity-60",
               )}
             >
@@ -164,7 +128,7 @@ export const EnrollmentSteps = ({
                   {step.isActive ? step.title : step.pendingTitle || step.title}
                 </p>
                 {step.isActive && (
-                  <p className={"text-sm text-muted-foreground"}>
+                  <p className="text-sm text-muted-foreground">
                     {step.description}
                   </p>
                 )}
@@ -182,4 +146,4 @@ export const EnrollmentSteps = ({
   );
 };
 
-export default EnrollmentSteps;
+export default CancelEnrollmentSteps;

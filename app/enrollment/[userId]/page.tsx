@@ -33,7 +33,7 @@ const UserEnrollmentPage = async ({ params }: Props) => {
         <BackToExploreBtn variant="outline" />
       </div>
       <h1 className="my-3 flex w-full justify-start text-3xl font-semibold">
-        Enrollment Requests
+        My Enrollment
       </h1>
       {enrollment.map((item, index) => (
         <div className="my-6 flex flex-col gap-3" key={index}>

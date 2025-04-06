@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator";
 import { db } from "@/lib/db";
 import { formattedPrice } from "@/lib/formatPrice";
 import MyLoader from "@/loader/MyLoader";
-import { EnrollmentRequest } from "@prisma/client";
 import { ArrowBigLeft, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import Stripe from "stripe";
@@ -83,12 +82,6 @@ const SuccessPage = async ({
     }
   }
 
-  console.log(enrollmentConfirm?.id, enrollmentPayment?.id);
-
-  // if (!enrollmentConfirm || !enrollmentPayment) {
-  //   return <MyLoader />;
-  // }
-
   if (!enrollmentPayment || !enrollmentConfirm) {
     return (
       <div className="mt-24 flex flex-col items-center justify-center gap-3">
@@ -152,7 +145,7 @@ const SuccessPage = async ({
                 </div>
 
                 <div className="flex justify-between font-medium text-primary">
-                  <span>Deposit Paid (20%)</span>
+                  <span>Deposit Paid </span>
                   <span>{formattedPrice(enrollmentPayment.depositAmount)}</span>
                 </div>
 
@@ -250,7 +243,7 @@ const SuccessPage = async ({
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span>Paid Deposit (20%)</span>
+                  <span>Paid Deposit</span>
                   <span className="text-green-600">
                     {formattedPrice(enrollmentPayment.depositAmount)}
                   </span>
@@ -269,20 +262,6 @@ const SuccessPage = async ({
                   <span>Full Payment Date</span>
                   <span>
                     {enrollmentPayment.fullPaymentDate?.toLocaleDateString(
-                      "en-GB",
-                      {
-                        day: "numeric",
-                        month: "long",
-                        year: "numeric",
-                      },
-                    )}
-                  </span>
-                </div>
-
-                <div className="flex justify-between text-muted-foreground">
-                  <span>Enrollment Confirmed By You</span>
-                  <span>
-                    {enrollmentConfirm.userConfirmationDate?.toLocaleDateString(
                       "en-GB",
                       {
                         day: "numeric",

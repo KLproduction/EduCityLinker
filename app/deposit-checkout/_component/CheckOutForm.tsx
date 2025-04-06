@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/card";
 import MySpinner from "@/components/ui/MySpinner";
 import { Separator } from "@/components/ui/separator";
+import { DEPOSIT_RATE } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import MyLoader from "@/loader/MyLoader";
 import {
@@ -57,7 +58,7 @@ const CheckOutForm = ({
   clientSecret,
   enrollmentConfirmation,
 }: CheckOutFormProps) => {
-  const depositAmount = Math.floor(enrollment.orderTotalPrice * 0.2);
+  const depositAmount = Math.floor(enrollment.orderTotalPrice * DEPOSIT_RATE);
   const remainingBalance = enrollment.orderTotalPrice - depositAmount;
 
   const courseStart = new Date(enrollment.startDate);
@@ -103,7 +104,7 @@ const CheckOutForm = ({
                 <span>£{enrollment.orderTotalPrice}</span>
               </div>
               <div className="flex justify-between font-medium text-primary">
-                <span>Deposit (20%)</span>
+                <span>Deposit</span>
                 <span>{formattedPrice(depositAmount)}</span>
               </div>
               <Separator className="my-2" />
@@ -153,7 +154,7 @@ const Form = ({ orderPrice }: FormProps) => {
       .confirmPayment({
         elements,
         confirmParams: {
-          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/stripe/purchase-success`,
+          return_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/stripe/processing`,
         },
       })
       .then(({ error }) => {

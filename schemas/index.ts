@@ -1,6 +1,6 @@
 import FacilitiesInput from "@/components/inputs/FacilitiesInput";
 import { ageGroups, courseLevels } from "@/data/data";
-import { UserRole } from "@prisma/client";
+import { EnrollmentRequestState, UserRole } from "@prisma/client";
 import { title } from "process";
 import * as z from "zod";
 
@@ -169,12 +169,7 @@ export const enrollmentRequestSchema = z.object({
     .nonnegative("Airport transfer price must be non-negative"),
   coursePrice: z.number(),
   createdAt: z.date().default(new Date()),
-  status: z.enum([
-    "PENDING",
-    "CONFIRM_BY_CENTER",
-    "CONFIRM_BY_USER",
-    "CANCELLED",
-  ]),
+  status: z.nativeEnum(EnrollmentRequestState),
   centerConfirmed: z.boolean().default(false),
   centerConfirmationDate: z.date().nullable().default(null),
 });
@@ -195,12 +190,7 @@ export const editEnrollmentRequestSchema = z.object({
     .number()
     .nonnegative("Airport transfer price must be non-negative"),
   createdAt: z.date().default(new Date()),
-  status: z.enum([
-    "PENDING",
-    "CONFIRM_BY_CENTER",
-    "CONFIRM_BY_USER",
-    "CANCELLED",
-  ]),
+  status: z.nativeEnum(EnrollmentRequestState),
   centerConfirmed: z.boolean(),
   centerConfirmationDate: z.date().nullable().default(null),
   coursePrice: z.number().min(1, "Course price must be a positive number"),

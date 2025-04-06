@@ -12,8 +12,10 @@ import { toast } from "sonner";
 import { resetEnrollmentRequestData } from "@/redux/slice/create-enrollmentRequestSlice";
 import {
   createEnrollmentRequestAction,
+  onCancelEnrollmentRequestAction,
   onConfirmEnrollmentRequestAction,
   onDeleteEnrollmentRequestAction,
+  onRequestCancelEnrollmentRequestAction,
   onUpdateEnrollmentRequestAction,
 } from "@/actions/create-enrollment";
 import {
@@ -89,32 +91,6 @@ export const useGetListingByEnrollmentModal = (listingId: string) => {
   };
 };
 
-export const useCancelEnrollment = () => {
-  const router = useRouter();
-  const { mutate: deleteEnrollmentMutate, isPending: isDeletingEnrollment } =
-    useMutation({
-      mutationFn: async (enrollmentId: string) => {
-        const result = await onDeleteEnrollmentRequestAction(enrollmentId);
-        return result.status;
-      },
-      onError: (error) => console.error(error.message),
-      onSuccess: (data) => {
-        if (data === 200) {
-          toast.success("Enrollment deleted successfully!");
-          close();
-          router.refresh();
-        } else {
-          toast.error("Error deleting enrollment!");
-        }
-      },
-    });
-
-  return {
-    deleteEnrollmentMutate,
-    isDeletingEnrollment,
-  };
-};
-
 type EditEnrollmentProps = {
   enrollment: EnrollmentRequest;
   setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
@@ -138,6 +114,7 @@ export const useEditEnrollment = ({
       ...enrollment,
       centerConfirmed: enrollment.centerConfirmed ?? false,
       centerConfirmationDate: enrollment.centerConfirmationDate ?? null,
+      status: enrollment.status ?? "PENDING",
     },
   });
 
@@ -219,5 +196,92 @@ export const useEnrollmentConfirmation = () => {
   return {
     confirmEnrollmentMutate,
     isConfirmingEnrollment,
+  };
+};
+
+export const useDeleteEnrollment = () => {
+  const router = useRouter();
+  const { mutate: deleteEnrollmentMutate, isPending: isDeletingEnrollment } =
+    useMutation({
+      mutationFn: async (enrollmentId: string) => {
+        const result = await onDeleteEnrollmentRequestAction(enrollmentId);
+        return result.status;
+      },
+      onError: (error) => console.error(error.message),
+      onSuccess: (data) => {
+        if (data === 200) {
+          toast.success("Enrollment deleted successfully!");
+          close();
+          router.refresh();
+        } else {
+          toast.error("Error deleting enrollment!");
+        }
+      },
+    });
+
+  return {
+    deleteEnrollmentMutate,
+    isDeletingEnrollment,
+  };
+};
+export const useCancelEnrollment = () => {
+  const router = useRouter();
+  const { mutate: cancelEnrollmentMutate, isPending: isCancellingEnrollment } =
+    useMutation({
+      mutationFn: async (enrollmentId: string) => {
+        const result = await onCancelEnrollmentRequestAction(enrollmentId);
+        return result.status;
+      },
+      onError: (error) => console.error(error.message),
+      onSuccess: (data) => {
+        if (data === 200) {
+          toast.success("Enrollment deleted successfully!");
+          close();
+          router.refresh();
+        } else {
+          toast.error("Error deleting enrollment!");
+        }
+      },
+    });
+
+  return {
+    cancelEnrollmentMutate,
+    isCancellingEnrollment,
+  };
+};
+export const useRequestCancelEnrollment = () => {
+  const router = useRouter();
+  const {
+    mutate: requestCancelEnrollmentMutate,
+    isPending: isRequestCancellingEnrollment,
+  } = useMutation({
+    mutationFn: async ({
+      enrollmentId,
+      reason,
+    }: {
+      enrollmentId: string;
+      reason?: string;
+    }) => {
+      const result = await onRequestCancelEnrollmentRequestAction(
+        enrollmentId,
+        reason,
+      );
+      return result.status;
+    },
+    onError: (error) => console.error(error.message),
+    onSuccess: (data) => {
+      if (data === 200) {
+        toast.success("Enrollment cancel request sent successfully!");
+        close();
+        router.refresh();
+      } else {
+        toast.error("Error deleting enrollment!");
+      }
+    },
+  });
+
+  return {
+    requestCancelEnrollmentMutate,
+    isRequestCancellingEnrollment,
   };
 };

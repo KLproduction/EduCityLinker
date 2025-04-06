@@ -39,6 +39,7 @@ import {
 } from "react-icons/md";
 
 export const AIMO_DISCOUNT = 0.9;
+export const DEPOSIT_RATE = 0.05;
 
 export const features = [
   {
