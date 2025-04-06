@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, Menu } from "lucide-react";
+import { Menu, Building2, BookOpenText, ArrowRightLeft } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,9 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
-import OrganizationSwitcher from "./OrganizationSwitcher";
+import { useRouter } from "next/navigation";
+
 import { useGetListingByOrganizationId } from "@/hooks/listing";
 
 const DashboardContent = ({ organizationId }: { organizationId: string }) => {
@@ -30,24 +29,40 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
       toast.error("You have no organization to edit");
     }
   };
+
   return (
-    <div className="flex flex-col justify-start gap-8">
-      <Button variant={"ghost"} onClick={handleEditOrganization}>
-        Edit Organization
-      </Button>
+    <div className="flex flex-col gap-6">
+      <section>
+        <CardTitle className="mb-2 text-base">Organization</CardTitle>
+        <DashboardNavItem
+          icon={<Building2 className="h-4 w-4" />}
+          label="Edit Organization"
+          href={`/dashboard/organization/${organizationId}`}
+        />
+      </section>
+
       <Separator />
-      <div className="flex flex-col gap-4">
-        <Button
-          variant={"ghost"}
-          onClick={() => router.push(`/dashboard/enrollment`)}
-        >
-          Enrollments
-        </Button>
-        <Separator />
-        <div>Dummy</div>
-        <Separator />
-        <div>Dummy</div>
-      </div>
+
+      <section>
+        <CardTitle className="mb-2 text-base">Manage</CardTitle>
+        <DashboardNavItem
+          icon={<BookOpenText className="h-4 w-4" />}
+          label="Enrollments"
+          href={`/dashboard/enrollment/`}
+        />
+        {/* Add more items here like Courses, Payments, etc */}
+      </section>
+
+      <Separator />
+
+      <section>
+        <CardTitle className="mb-2 text-base">Settings</CardTitle>
+        <DashboardNavItem
+          icon={<ArrowRightLeft className="h-4 w-4" />}
+          label="Switch Organization"
+          href="/dashboard/switch-organization"
+        />
+      </section>
     </div>
   );
 };
@@ -63,19 +78,18 @@ const DashboardSideBar = ({ organizationId }: { organizationId: string }) => {
           <CardHeader>
             <CardTitle>Dashboard</CardTitle>
           </CardHeader>
-
-          <CardContent className="flex h-full w-full flex-col justify-start gap-8">
+          <CardContent className="flex flex-col gap-8">
             <DashboardContent organizationId={organizationId} />
           </CardContent>
         </Card>
       </aside>
 
-      {/* Mobile Filter Button & Sheet */}
+      {/* Mobile Sheet */}
       <div className="fixed bottom-4 right-4 z-50 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild className={open ? "hidden" : ""}>
+          <SheetTrigger asChild>
             <Button size="lg" className="rounded-full shadow-lg">
-              <Menu className="mr-2 h-4 w-4" />
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
           <SheetContent
@@ -92,6 +106,36 @@ const DashboardSideBar = ({ organizationId }: { organizationId: string }) => {
         </Sheet>
       </div>
     </>
+  );
+};
+
+type DashboardNavItemProps = {
+  icon: React.ReactNode;
+  label: string;
+  href: string;
+  onClick?: () => void;
+};
+
+export const DashboardNavItem = ({
+  icon,
+  label,
+  href,
+  onClick,
+}: DashboardNavItemProps) => {
+  const router = useRouter();
+
+  return (
+    <Button
+      variant="ghost"
+      className="justify-start gap-2"
+      onClick={() => {
+        if (onClick) onClick();
+        router.push(href);
+      }}
+    >
+      {icon}
+      {label}
+    </Button>
   );
 };
 
