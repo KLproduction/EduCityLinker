@@ -150,7 +150,7 @@ export const EnrollmentSteps = ({
                   {step.isActive ? (
                     <Check className="h-5 w-5" />
                   ) : (
-                    <span className="text-sm font-medium">{step.id}</span>
+                    <span className="text-sm font-medium">{step.id + 1}</span>
                   )}
                 </div>
               </div>

@@ -1,7 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { Menu, Building2, BookOpenText, ArrowRightLeft } from "lucide-react";
+import {
+  Menu,
+  Building2,
+  BookOpenText,
+  ArrowRightLeft,
+  User,
+} from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -43,14 +49,23 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
 
       <Separator />
 
-      <section>
+      <section className="flex flex-col gap-2">
         <CardTitle className="mb-2 text-base">Manage</CardTitle>
         <DashboardNavItem
           icon={<BookOpenText className="h-4 w-4" />}
           label="Enrollments"
           href={`/dashboard/enrollment/`}
         />
-        {/* Add more items here like Courses, Payments, etc */}
+        <DashboardNavItem
+          icon={<User className="h-4 w-4" />}
+          label="Users"
+          href={`/dashboard/user/`}
+        />
+        <DashboardNavItem
+          icon={<ArrowRightLeft className="h-4 w-4" />}
+          label="Enrollment Payments"
+          href={`/dashboard/payment/`}
+        />
       </section>
 
       <Separator />

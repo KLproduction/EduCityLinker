@@ -1,63 +1,58 @@
-import { getEnrollmentRequestsWithOrganizationByIdAction } from "@/actions/create-enrollment";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import EditEnrollmentForm from "./_components/EditEnrollmentForm";
-import { ArrowBigLeft } from "lucide-react";
+import {
+  getListingByIdAction,
+  getOrganizationByOrganizationIdAction,
+} from "@/actions/listing";
+import {
+  EnrollmentConfirmationState,
+  EnrollmentRequest,
+  EnrollmentRequestState,
+} from "@prisma/client";
+import React from "react";
+
 import { db } from "@/lib/db";
-import { EnrollmentConfirmationState } from "@prisma/client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
+
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { formattedPrice } from "@/lib/formatPrice";
+import { Separator } from "@/components/ui/separator";
+import DashboardUserEnrollmentDetailsSection from "./DashboardUserEnrollmentDetailsSection";
 
 type Props = {
-  params: {
-    enrollmentId: string;
-  };
+  enrollmentData: EnrollmentRequest;
+  userId: string;
 };
 
-const EnrollmentEditPage = async ({ params }: Props) => {
-  const data = await getEnrollmentRequestsWithOrganizationByIdAction(
-    params.enrollmentId,
+const DashboardUserEnrollmentDetails = async ({
+  enrollmentData,
+  userId,
+}: Props) => {
+  const organizationData = await getOrganizationByOrganizationIdAction(
+    enrollmentData.organizationId,
   );
-
-  let confirmation = undefined;
-  confirmation = await db.enrollmentConfirmation.findFirst({
+  const listingData = await getListingByIdAction(enrollmentData.listingId);
+  const organization = organizationData?.organization;
+  const listing = listingData?.listing;
+  const enrollmentConfirmation = await db.enrollmentConfirmation.findFirst({
     where: {
-      requestId: params.enrollmentId,
+      requestId: enrollmentData.id,
     },
   });
 
-  let payment = undefined;
-
-  if (confirmation) {
-    payment = await db.enrollmentPayment.findFirst({
-      where: {
-        confirmationId: confirmation.id,
-      },
-    });
-  }
-
   const PaymentDetails = async () => {
-    const enrollmentConfirmation = await db.enrollmentConfirmation.findFirst({
-      where: {
-        requestId: params.enrollmentId,
-      },
-    });
-
     const enrollmentPayment = await db.enrollmentPayment.findFirst({
       where: {
-        confirmationId: confirmation?.id!,
+        confirmationId: enrollmentConfirmation?.id,
       },
     });
-    if (
-      !enrollmentPayment ||
-      !enrollmentConfirmation ||
-      !data.enrollmentRequests
-    ) {
+    if (!enrollmentPayment) {
       return;
     }
 
-    const courseStart = new Date(data.enrollmentRequests.startDate);
+    const courseStart = new Date(enrollmentData.startDate);
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const dueDate = new Date(courseStart);
@@ -135,13 +130,14 @@ const EnrollmentEditPage = async ({ params }: Props) => {
               <div className="flex justify-between text-muted-foreground">
                 <span>Course Start Date</span>
                 <span>
-                  {new Date(
-                    data.enrollmentRequests.startDate,
-                  ).toLocaleDateString("en-GB", {
-                    day: "numeric",
-                    month: "long",
-                    year: "numeric",
-                  })}
+                  {new Date(enrollmentData.startDate).toLocaleDateString(
+                    "en-GB",
+                    {
+                      day: "numeric",
+                      month: "long",
+                      year: "numeric",
+                    },
+                  )}
                 </span>
               </div>
             </CardContent>
@@ -255,29 +251,19 @@ const EnrollmentEditPage = async ({ params }: Props) => {
   };
 
   return (
-    <div className="container flex min-h-screen w-full flex-col items-center justify-center">
-      <div className="flex w-full justify-start">
-        <Button asChild>
-          <Link
-            href="/dashboard/enrollment"
-            className="flex items-center justify-center gap-3"
-          >
-            <ArrowBigLeft className="h-6 w-6" />
-            Back
-          </Link>
-        </Button>
-      </div>
-      <div className="my-12 flex flex-col gap-5">
-        <EditEnrollmentForm
-          enrollment={data.enrollmentRequests!}
-          organization={data.enrollmentRequests?.organization!}
-          confirmation={confirmation || undefined}
-          payment={payment || undefined}
+    <Card className="flex flex-col gap-3">
+      <CardContent>
+        <DashboardUserEnrollmentDetailsSection
+          enrollmentData={enrollmentData}
+          organization={organization!}
+          listing={listing!}
+          userId={userId}
+          enrollmentConfirmation={enrollmentConfirmation!}
         />
         {await PaymentDetails()}
-      </div>
-    </div>
+      </CardContent>
+    </Card>
   );
 };
 
-export default EnrollmentEditPage;
+export default DashboardUserEnrollmentDetails;

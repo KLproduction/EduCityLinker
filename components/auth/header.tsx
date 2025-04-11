@@ -13,7 +13,7 @@ interface HeaderProps {
 export const Header = ({ label }: HeaderProps) => {
   return (
     <div className="flex w-full flex-col items-center justify-center gap-y-4">
-      <h1>E Learning</h1>
+      <h4 className="text-2xl text-rose-500">AIMO</h4>
       {/* <img src="E Learning" className="max-w-[100px]" alt="logo" /> */}
       <p className="text-sm text-muted-foreground">{label}</p>
     </div>

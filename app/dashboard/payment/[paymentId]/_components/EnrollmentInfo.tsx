@@ -43,22 +43,9 @@ type Props = {
   payment?: EnrollmentPayment;
 };
 
-const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
-  const [isEditable, setIsEditable] = useState(false);
-
-  const {
-    register,
-    errors,
-    onSubmit,
-    isSubmitting,
-    isUpdatingEnrollment,
-    watch,
-    setValue,
-    resetForm,
-    getValues,
-  } = useEditEnrollment({
+const EnrollmentInfo = ({ enrollment, organization }: Props) => {
+  const { register, errors, watch, getValues } = useEditEnrollment({
     enrollment: enrollment,
-    setIsEditable: setIsEditable,
   });
   console.log(getValues());
   const isInvalidDate = watch("startDate") <= new Date();
@@ -68,25 +55,12 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
 
   return (
     <Card className="my-6 flex w-full justify-center">
-      <form onSubmit={onSubmit} className="w-full max-w-xl space-y-6 p-6">
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            variant={isEditable ? "secondary" : "default"}
-            onClick={() => setIsEditable((prev) => !prev)}
-          >
-            {isEditable ? "Cancel Edit" : "Edit"}
-          </Button>
-        </div>
+      <form className="w-full max-w-xl space-y-6 p-6">
         <div className="grid gap-6 md:grid-cols-2">
           {/* First Name */}
           <div className="space-y-2">
             <Label htmlFor="firstName">First Name</Label>
-            <Input
-              id="firstName"
-              {...register("firstName")}
-              disabled={!isEditable}
-            />
+            <Input id="firstName" {...register("firstName")} disabled={true} />
             {errors.firstName && (
               <p className="text-sm text-destructive">
                 {errors.firstName.message}
@@ -97,11 +71,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
           {/* Surname */}
           <div className="space-y-2">
             <Label htmlFor="sureName">Surname</Label>
-            <Input
-              id="sureName"
-              {...register("sureName")}
-              disabled={!isEditable}
-            />
+            <Input id="sureName" {...register("sureName")} disabled={true} />
             {errors.sureName && (
               <p className="text-sm text-destructive">
                 {errors.sureName.message}
@@ -117,7 +87,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
             <Input
               id="contactNumber"
               {...register("contactNumber")}
-              disabled={!isEditable}
+              disabled={true}
             />
             {errors.contactNumber && (
               <p className="text-sm text-destructive">
@@ -133,7 +103,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
               id="emailAddress"
               type="email"
               {...register("emailAddress")}
-              disabled={!isEditable}
+              disabled={true}
             />
             {errors.emailAddress && (
               <p className="text-sm text-destructive">
@@ -156,7 +126,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                     "w-full justify-start text-left font-normal",
                     !watch("startDate") && "text-muted-foreground",
                   )}
-                  disabled={!isEditable}
+                  disabled={true}
                 >
                   <CalendarIcon className="mr-2 h-4 w-4" />
                   {watch("startDate") ? (
@@ -170,7 +140,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                 <Calendar
                   mode="single"
                   selected={watch("startDate")}
-                  onSelect={(date) => setValue("startDate", date ?? new Date())}
+                  onSelect={(date) => {}}
                   initialFocus
                   className="w-full rounded-md bg-white p-3 shadow-md"
                   disabled={(date) => {
@@ -190,7 +160,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
               </DialogContent>
             </Dialog>
 
-            {isInvalidDate && isEditable && (
+            {isInvalidDate && (
               <p className="text-sm text-destructive">
                 Start date must be after today.
               </p>
@@ -205,7 +175,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
               type="number"
               min="1"
               {...register("weeks", { valueAsNumber: true })}
-              disabled={!isEditable}
+              disabled={true}
             />
             {errors.weeks && (
               <p className="text-sm text-destructive">{errors.weeks.message}</p>
@@ -227,16 +197,10 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                 Request airport transfer
               </Label>
               <Switch
-                disabled={!isEditable}
+                disabled={true}
                 id="airportTransfer"
                 checked={watch("airportTransfer")}
-                onCheckedChange={(checked) => {
-                  setValue("airportTransfer", checked);
-                  if (!checked) {
-                    setValue("airportTransfersType", "");
-                    setValue("airportTransferPrice", 0);
-                  }
-                }}
+                onCheckedChange={(checked) => {}}
               />
             </div>
 
@@ -248,27 +212,9 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                 )}
               >
                 <RadioGroup
-                  disabled={!watch("airportTransfer") || !isEditable}
+                  disabled={true}
                   value={watch("airportTransfersType")}
-                  onValueChange={(value) => {
-                    setValue("airportTransfersType", value);
-
-                    // Calculate the new airport transfer price based on selection
-                    let newPrice = 0;
-                    if (value === "Arrival and Departure") {
-                      newPrice =
-                        organization.airportTransferOnArrivalAndDeparturePrice ??
-                        0;
-                    } else if (value === "Arrival Only") {
-                      newPrice =
-                        organization.airportTransferArrivalOnlyPrice ?? 0;
-                    } else if (value === "Departure Only") {
-                      newPrice =
-                        organization.airportTransferDepartureOnlyPrice ?? 0;
-                    }
-
-                    setValue("airportTransferPrice", newPrice);
-                  }}
+                  onValueChange={(value) => {}}
                 >
                   {organization.airportTransferOnArrivalAndDeparturePrice && (
                     <div className="mb-2 flex items-center justify-between space-x-2 rounded-md border p-3">
@@ -345,23 +291,10 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                   Request accommodation
                 </Label>
                 <Switch
-                  disabled={!isEditable}
+                  disabled={true}
                   id="accommodation"
                   checked={watch("accommodation")}
-                  onCheckedChange={(checked) => {
-                    setValue("accommodation", checked);
-
-                    const accommodationPrice =
-                      organization?.accommodationHomeStayPrice ??
-                      organization?.accommodationStudentResidencePrice ??
-                      organization?.accommodationPrivateApartmentPrice ??
-                      0;
-
-                    setValue(
-                      "accommodationPrice",
-                      checked ? accommodationPrice : 0,
-                    );
-                  }}
+                  onCheckedChange={(checked) => {}}
                 />
               </div>
 
@@ -474,94 +407,9 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
             </div>
           </CardContent>
         </Card>
-
-        {/* Status */}
-        <Card>
-          <CardHeader>
-            <div className="flex items-center gap-5">
-              <Label htmlFor="status">Current Status:</Label>
-
-              <h1
-                className={cn(
-                  "text-md inline-flex items-center rounded-full p-3 font-bold",
-                  watch("status") === EnrollmentRequestState.PENDING &&
-                    "bg-yellow-100 text-yellow-800",
-                  watch("status") ===
-                    EnrollmentRequestState.CONFIRM_BY_CENTER &&
-                    "bg-green-100 text-green-800",
-                  watch("status") === EnrollmentRequestState.CANCELLED &&
-                    "bg-red-100 text-red-800",
-                )}
-              >
-                {watch("status")}
-              </h1>
-            </div>
-          </CardHeader>
-          <CardContent className="flex w-full flex-col justify-center gap-5">
-            {watch("status") !== EnrollmentRequestState.CONFIRM_BY_CENTER && (
-              <Button
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.CONFIRM_BY_CENTER)
-                }
-                className="bg-green-500 text-zinc-50"
-                disabled={!isEditable}
-              >
-                Confirm By Center
-              </Button>
-            )}
-            {watch("status") !== EnrollmentRequestState.PENDING && (
-              <Button
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.PENDING)
-                }
-                className="bg-zinc-700 text-zinc-50"
-                disabled={!isEditable}
-              >
-                Pending
-              </Button>
-            )}
-
-            {watch("status") !== EnrollmentRequestState.CANCELLED && (
-              <Button
-                variant="outline"
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.CANCELLED)
-                }
-                disabled={!isEditable}
-              >
-                Cancel Enrollment
-              </Button>
-            )}
-          </CardContent>
-        </Card>
-
-        {/* Submit Button */}
-        <div className="flex w-full flex-col gap-3">
-          <Button
-            type="submit"
-            className="w-full"
-            disabled={
-              !isEditable ||
-              isSubmitting ||
-              isUpdatingEnrollment ||
-              isInvalidDate
-            }
-          >
-            {isUpdatingEnrollment ? "Updating..." : "Update Enrollment"}
-          </Button>
-          {/* <Button
-            type="button"
-            className="w-full"
-            variant={"outline"}
-            disabled={!isEditable || isSubmitting || isUpdatingEnrollment}
-            onClick={() => resetForm()}
-          >
-            {isUpdatingEnrollment ? "Updating..." : "Reset Change"}
-          </Button> */}
-        </div>
       </form>
     </Card>
   );
 };
 
-export default EditEnrollmentForm;
+export default EnrollmentInfo;

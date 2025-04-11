@@ -221,7 +221,7 @@ const Settingform = ({ user }: SettingFormProps) => {
                   <FormItem>
                     <FormLabel>Role</FormLabel>
                     <Select
-                      disabled={user.role === "USER" ? true : false}
+                      disabled={user.role === UserRole.USER ? true : false}
                       onValueChange={field.onChange}
                       defaultValue={field.value}
                     >

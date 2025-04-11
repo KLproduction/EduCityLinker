@@ -93,7 +93,7 @@ export const useGetListingByEnrollmentModal = (listingId: string) => {
 
 type EditEnrollmentProps = {
   enrollment: EnrollmentRequest;
-  setIsEditable: React.Dispatch<React.SetStateAction<boolean>>;
+  setIsEditable?: React.Dispatch<React.SetStateAction<boolean>>;
 };
 export const useEditEnrollment = ({
   enrollment,
@@ -141,7 +141,8 @@ export const useEditEnrollment = ({
       onSuccess: (data) => {
         if (data.status === 200) {
           toast.success("Enrollment updated successfully!");
-          setIsEditable(false);
+          if (setIsEditable) setIsEditable(false);
+
           router.refresh();
         } else {
           toast.error(data.message);

@@ -41,6 +41,10 @@ export const SettingSchema = z
     },
   );
 
+export const UserRoleSchema = z.object({
+  role: z.nativeEnum(UserRole),
+});
+
 export const LoginSchema = z.object({
   email: z.string().email({
     message: "Email is required",

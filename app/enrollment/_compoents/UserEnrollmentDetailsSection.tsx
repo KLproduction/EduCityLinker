@@ -67,6 +67,12 @@ const UserEnrollmentDetailsSection = ({
             isEnrollmentPage && "border-none shadow-none",
           )}
         >
+          <CardHeader className="flex items-start justify-start">
+            <CardDescription className="flex items-center gap-3">
+              <p>Enrollment ID:</p>
+              <p>{enrollmentData.id}</p>
+            </CardDescription>
+          </CardHeader>
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             {/* Cover Photo (Responsive) */}
             {organization?.coverPhoto && (

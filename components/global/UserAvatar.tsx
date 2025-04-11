@@ -79,10 +79,10 @@ const UserAvatar = ({
         className="z-[99999] bg-zinc-50"
       >
         <DropdownMenuItem
-          onClick={() => console.log("clicked")}
+          onClick={() => router.push(`/auth/setting`)}
           className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
         >
-          My Trip
+          My Profile
           <div className="mt-2 h-0.5 w-full bg-zinc-200" />
         </DropdownMenuItem>
         <DropdownMenuItem
@@ -107,24 +107,6 @@ const UserAvatar = ({
           <div className="mt-2 h-0.5 w-full bg-zinc-200" />
         </DropdownMenuItem>
 
-        {isAdmin && (
-          <DropdownMenuItem
-            onClick={() => openCreateOrganizerModal()}
-            className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
-          >
-            Create Organization
-            <div className="mt-2 h-0.5 w-full bg-zinc-200" />
-          </DropdownMenuItem>
-        )}
-        {isAdmin && (
-          <DropdownMenuItem
-            onClick={() => openCreateCourseModal()}
-            className="flex w-full flex-col items-start justify-start py-2 text-sm text-zinc-700"
-          >
-            Create Course
-            <div className="mt-2 h-0.5 w-full bg-zinc-200" />
-          </DropdownMenuItem>
-        )}
         {isAdmin && (
           <DropdownMenuItem
             onClick={() => router.push("/dashboard")}

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Filter, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
+import { RiAddCircleFill } from "react-icons/ri";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
@@ -13,22 +14,18 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import Link from "next/link";
-import { useParams, useRouter } from "next/navigation";
-import { toast } from "sonner";
 import OrganizationSwitcher from "./OrganizationSwitcher";
-import { useGetListingByOrganizationId } from "@/hooks/listing";
-import { RiAddCircleFill } from "react-icons/ri";
 import { useCreateCourseModal } from "@/hooks/modal";
 import { ExtenderUser } from "@/next-auth";
 import { Listing } from "@prisma/client";
 
-type organizationList = {
+type OrganizationList = {
   name: string;
   id: string;
 }[];
 
 type Props = {
-  organizations: organizationList;
+  organizations: OrganizationList;
   organizationId: string;
   user: ExtenderUser;
   listings: Listing[];
@@ -40,40 +37,53 @@ const ListingsContent = ({
   user,
   listings,
 }: Props) => {
-  const params = useParams();
-
   const { open } = useCreateCourseModal();
-  console.log("listings", listings);
-  return (
-    <div className="flex flex-col justify-start gap-8">
-      <OrganizationSwitcher
-        organizations={organizations}
-        organizationId={organizationId}
-        user={user}
-      />
 
-      <Separator />
-      <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold uppercase text-zinc-800">Course</p>
-        <RiAddCircleFill
-          size={20}
-          className="cursor-pointer text-zinc-500 transition hover:opacity-75"
-          onClick={open}
+  return (
+    <div className="flex flex-col gap-6">
+      {/* Org switcher */}
+      <div>
+        <p className="mb-2 text-sm font-semibold text-muted-foreground">
+          Current Organization
+        </p>
+        <OrganizationSwitcher
+          organizations={organizations}
+          organizationId={organizationId}
+          user={user}
         />
       </div>
-      <div className="flex flex-col gap-4">
-        {listings?.length && (
-          <div className="flex flex-col gap-4">
-            {listings.map((listing) => (
-              <Link key={listing.id} href={`/dashboard/listing/${listing.id}`}>
-                <div className="flex items-center justify-between gap-4 rounded-lg bg-zinc-50 p-4">
-                  <div>
-                    <p className="text-lg font-semibold">{listing.title}</p>
-                  </div>
-                </div>
-              </Link>
-            ))}
-          </div>
+
+      <Separator />
+
+      {/* Header & Add Button */}
+      <div className="flex items-center justify-between">
+        <p className="text-sm font-semibold uppercase text-zinc-800">Courses</p>
+        <Button
+          size="icon"
+          variant="ghost"
+          onClick={open}
+          className="hover:bg-zinc-100"
+        >
+          <RiAddCircleFill size={20} className="text-zinc-500" />
+        </Button>
+      </div>
+
+      {/* Listing Section */}
+      <div className="space-y-3">
+        {listings.length ? (
+          listings.map((listing) => (
+            <Link key={listing.id} href={`/dashboard/listing/${listing.id}`}>
+              <Card className="transition hover:bg-zinc-50">
+                <CardContent className="p-4">
+                  <p className="text-sm font-medium text-zinc-900">
+                    {listing.title}
+                  </p>
+                </CardContent>
+              </Card>
+            </Link>
+          ))
+        ) : (
+          <p className="text-sm text-muted-foreground">No courses yet.</p>
         )}
       </div>
     </div>
@@ -96,8 +106,7 @@ const OrganizationSideBar = ({
           <CardHeader>
             <CardTitle>Organization</CardTitle>
           </CardHeader>
-
-          <CardContent className="flex h-full w-full flex-col justify-start gap-8">
+          <CardContent className="flex flex-col gap-6">
             <ListingsContent
               organizations={organizations}
               organizationId={organizationId}
@@ -108,22 +117,22 @@ const OrganizationSideBar = ({
         </Card>
       </aside>
 
-      {/* Mobile Filter Button & Sheet */}
+      {/* Mobile Sidebar (Sheet) */}
       <div className="fixed bottom-4 right-4 z-50 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
-          <SheetTrigger asChild className={open ? "hidden" : ""}>
+          <SheetTrigger asChild>
             <Button size="lg" className="rounded-full shadow-lg">
-              <Menu className="mr-2 h-4 w-4" />
+              <Menu className="h-5 w-5" />
             </Button>
           </SheetTrigger>
           <SheetContent
             side="bottom"
-            className="z-[9999] h-[70vh] overflow-y-auto"
+            className="z-[9999] h-[75vh] overflow-y-auto px-4"
           >
             <SheetHeader>
-              <SheetTitle>Dashboard</SheetTitle>
+              <SheetTitle className="text-left">Organization</SheetTitle>
             </SheetHeader>
-            <div className="py-4">
+            <div className="py-6">
               <ListingsContent
                 organizations={organizations}
                 organizationId={organizationId}
