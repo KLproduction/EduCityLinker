@@ -144,6 +144,14 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                   })}
                 </span>
               </div>
+
+              <div className="mt-3 flex w-full items-center">
+                <Button asChild className="w-full">
+                  <Link href={`/dashboard/payment/${enrollmentPayment.id}`}>
+                    Go to Payment Details
+                  </Link>
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
@@ -194,6 +202,16 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                   >
                     View Receipt
                   </a>
+                </div>
+
+                <div className="flex justify-between text-muted-foreground">
+                  <span>View Payment Details</span>
+                  <Link
+                    href={`/dashboard/payment/${enrollmentPayment.id}`}
+                    className="text-blue-600 underline"
+                  >
+                    Go to Payment Details
+                  </Link>
                 </div>
               </CardContent>
             </Card>

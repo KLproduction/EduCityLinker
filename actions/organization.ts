@@ -58,3 +58,17 @@ export const getOrganizationsNameAction = async () => {
     console.error(e);
   }
 };
+export const getAllOrganizationsAction = async () => {
+  try {
+    const organizations = await db.organization.findMany({
+      select: {
+        name: true,
+        id: true,
+      },
+    });
+    console.log(organizations);
+    return organizations;
+  } catch (e) {
+    console.error(e);
+  }
+};

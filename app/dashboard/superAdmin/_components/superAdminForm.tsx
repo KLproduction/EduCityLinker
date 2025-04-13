@@ -5,6 +5,9 @@ import { Button } from "@/components/ui/button";
 
 import { Loader2 } from "lucide-react";
 import { useSuperAdmin } from "@/hooks/super-admin";
+import { useAdminAddDummyEnrollmentRequests } from "@/hooks/super-admin";
+import { useAdminDeleteDummyEnrollmentRequests } from "@/hooks/super-admin";
+import { Separator } from "@/components/ui/separator";
 
 const SuperAdminForm = () => {
   const {
@@ -13,6 +16,11 @@ const SuperAdminForm = () => {
     deleteEnrollmentRequests,
     isDeleteEnrollmentPending,
   } = useSuperAdmin();
+
+  const { addDummyEnrollmentRequests, isAddingDummyPending } =
+    useAdminAddDummyEnrollmentRequests();
+  const { deleteDummyEnrollmentRequests, isDeletingDummyEnrollment } =
+    useAdminDeleteDummyEnrollmentRequests();
 
   return (
     <Card className="w-full max-w-md p-6">
@@ -47,6 +55,36 @@ const SuperAdminForm = () => {
             </>
           ) : (
             "Delete All Enrollment Requests"
+          )}
+        </Button>
+        <Separator className="my-4" />
+        <Button
+          variant="default"
+          onClick={() => addDummyEnrollmentRequests(10)}
+          disabled={isAddingDummyPending}
+        >
+          {isAddingDummyPending ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Adding Dummy Enrollments...
+            </>
+          ) : (
+            "Add Dummy Enrollment Requests"
+          )}
+        </Button>
+
+        <Button
+          variant="destructive"
+          onClick={() => deleteDummyEnrollmentRequests()}
+          disabled={isDeletingDummyEnrollment}
+        >
+          {isDeletingDummyEnrollment ? (
+            <>
+              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              Deleting Dummy Enrollments...
+            </>
+          ) : (
+            "Delete Dummy Enrollment Requests"
           )}
         </Button>
       </CardContent>

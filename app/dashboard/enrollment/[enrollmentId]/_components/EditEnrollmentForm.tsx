@@ -33,7 +33,7 @@ import {
 } from "@/components/ui/card";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formattedPrice } from "@/lib/formatPrice";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { AIMO_DISCOUNT } from "@/data/data";
 
 type Props = {
@@ -44,7 +44,17 @@ type Props = {
 };
 
 const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
+  const isEditableAllowed =
+    enrollment.status === EnrollmentRequestState.PENDING ||
+    enrollment.status === EnrollmentRequestState.CONFIRM_BY_CENTER;
+
   const [isEditable, setIsEditable] = useState(false);
+
+  useEffect(() => {
+    if (!isEditableAllowed) {
+      setIsEditable(false);
+    }
+  }, [isEditableAllowed]);
 
   const {
     register,
@@ -74,6 +84,12 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
             type="button"
             variant={isEditable ? "secondary" : "default"}
             onClick={() => setIsEditable((prev) => !prev)}
+            disabled={!isEditableAllowed}
+            title={
+              !isEditableAllowed
+                ? "Editing is disabled after the user has confirmed. Please contact support for further assistance."
+                : ""
+            }
           >
             {isEditable ? "Cancel Edit" : "Edit"}
           </Button>

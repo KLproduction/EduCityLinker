@@ -1,0 +1,12 @@
+{
+  "servers": {
+    "AIMO": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-postgres",
+        "mongodb+srv://kentlawproduction01:kentlawproduction01@cluster0.2jzvq7j.mongodb.net/MyProject"
+      ]
+    }
+  }
+}
