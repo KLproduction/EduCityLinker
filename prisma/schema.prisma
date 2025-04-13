@@ -43,6 +43,12 @@ enum PaymentState {
   CANCELLED
 }
 
+enum CancellationState {
+  PENDING
+  PROCESSING
+  PROCESSED
+}
+
 model User {
   id                     String                   @id @default(auto()) @map("_id") @db.ObjectId
   name                   String?
@@ -254,7 +260,7 @@ model EnrollmentCancellation {
   cancelRequestedAt DateTime          @default(now())
   cancelledAt       DateTime?
   refundAmount      Int?
-  refundProcessed   Boolean?          @default(false)
+  refundProcessed   CancellationState @default(PENDING)
   payment           EnrollmentPayment @relation(fields: [paymentId], references: [id], onDelete: Cascade)
   user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 

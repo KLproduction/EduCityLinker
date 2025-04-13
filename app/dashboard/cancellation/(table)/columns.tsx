@@ -15,13 +15,14 @@ import {
 import { AiOutlineCaretUp, AiOutlineCaretDown } from "react-icons/ai";
 import { BsChevronExpand } from "react-icons/bs";
 import { NavigateButton } from "@/components/global/NavigateButton";
-import { EnrollmentCancellation, EnrollmentRequestState } from "@prisma/client";
+import {
+  CancellationState,
+  EnrollmentCancellation,
+  EnrollmentRequestState,
+} from "@prisma/client";
 import { formattedPrice } from "@/lib/formatPrice";
 import { cn } from "@/lib/utils";
-import {
-  useGetOrganizationByCancellationId,
-  useGetOrganizationByEnrollmentModal,
-} from "@/hooks/enrollment";
+import { useGetOrganizationByCancellationId } from "@/hooks/enrollment";
 
 type OrganizationCellProps = {
   cancellationId: string;
@@ -115,8 +116,9 @@ export const columns: ColumnDef<EnrollmentCancellation>[] = [
     header: () => <div className="text-center">Requested At</div>,
     cell: ({ row }) => {
       const data = row.getValue("cancelRequestedAt") as Date;
-      const formattedData =
-        data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getFullYear();
+
+      const formattedData = `${data.getDate()}/${data.getMonth() + 1}/${data.getFullYear()} ${data.getHours()}:${data.getMinutes().toString().padStart(2, "0")}`;
+
       return <div className="text-center">{formattedData}</div>;
     },
   },
@@ -148,18 +150,20 @@ export const columns: ColumnDef<EnrollmentCancellation>[] = [
     accessorKey: "refundProcessed",
     header: () => <div className="text-center">Refund Processed</div>,
     cell: ({ row }) => {
-      const data = row.getValue("refundProcessed") as boolean | null;
+      const data = row.getValue("refundProcessed") as CancellationState | null;
       return (
         <div className="text-center">
           <span
             className={cn(
               "inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium",
-              data === true && "bg-green-100 text-green-800",
-              data === false && "bg-red-100 text-red-800",
-              data === null && "bg-gray-100 text-gray-800",
+              data === CancellationState.PENDING && "bg-red-100 text-gray-800",
+              data === CancellationState.PROCESSING &&
+                "bg-yellow-100 text-yellow-800",
+              data === CancellationState.PROCESSED &&
+                "bg-green-100 text-green-800",
             )}
           >
-            {data === true ? "Yes" : data === false ? "No" : "—"}
+            {data}
           </span>
         </div>
       );

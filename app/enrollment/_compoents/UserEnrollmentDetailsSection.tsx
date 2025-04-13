@@ -19,6 +19,7 @@ import { cn } from "@/lib/utils";
 import {
   EnrollmentConfirmation,
   EnrollmentConfirmationState,
+  EnrollmentPayment,
   EnrollmentRequest,
   EnrollmentRequestState,
   Listing,
@@ -38,6 +39,7 @@ type Props = {
   userId: string;
   isCheckOut?: boolean;
   enrollmentConfirmation: EnrollmentConfirmation;
+  payment?: EnrollmentPayment;
 };
 
 const UserEnrollmentDetailsSection = ({
@@ -47,6 +49,7 @@ const UserEnrollmentDetailsSection = ({
   userId,
   isCheckOut = false,
   enrollmentConfirmation,
+  payment,
 }: Props) => {
   const router = useRouter();
   const pathname = usePathname();
@@ -281,6 +284,7 @@ const UserEnrollmentDetailsSection = ({
               EnrollmentConfirmationState.CANCELLED_REFUNDED ? (
               <CancelEnrollmentSteps
                 enrollmentConfirmation={enrollmentConfirmation}
+                payment={payment}
               />
             ) : (
               <EnrollmentSteps

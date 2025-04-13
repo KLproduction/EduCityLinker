@@ -52,14 +52,14 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
       <section className="flex flex-col gap-2">
         <CardTitle className="mb-2 text-base">Manage</CardTitle>
         <DashboardNavItem
-          icon={<BookOpenText className="h-4 w-4" />}
-          label="Enrollments"
-          href={`/dashboard/enrollment/`}
-        />
-        <DashboardNavItem
           icon={<User className="h-4 w-4" />}
           label="Users"
           href={`/dashboard/user/`}
+        />
+        <DashboardNavItem
+          icon={<BookOpenText className="h-4 w-4" />}
+          label="Enrollments"
+          href={`/dashboard/enrollment/`}
         />
         <DashboardNavItem
           icon={<ArrowRightLeft className="h-4 w-4" />}
@@ -74,15 +74,6 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
       </section>
 
       <Separator />
-
-      <section>
-        <CardTitle className="mb-2 text-base">Settings</CardTitle>
-        <DashboardNavItem
-          icon={<ArrowRightLeft className="h-4 w-4" />}
-          label="Switch Organization"
-          href="/dashboard/switch-organization"
-        />
-      </section>
     </div>
   );
 };

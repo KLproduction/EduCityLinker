@@ -124,7 +124,6 @@ export const getOrganizationByIdAction = async (organizationId: string) => {
       include: { listings: true },
     });
     if (organization) {
-      console.log("Organization found", organization.name);
       return {
         organization,
         status: 200,

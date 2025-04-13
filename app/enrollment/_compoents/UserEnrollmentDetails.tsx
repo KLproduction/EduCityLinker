@@ -295,7 +295,12 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
       </>
     );
   };
-
+  let payment = undefined;
+  payment = await db.enrollmentPayment.findFirst({
+    where: {
+      confirmationId: enrollmentConfirmation?.id,
+    },
+  });
   return (
     <Card className="flex flex-col gap-3">
       <CardContent>
@@ -305,6 +310,7 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
           listing={listing!}
           userId={userId}
           enrollmentConfirmation={enrollmentConfirmation!}
+          payment={payment || undefined}
         />
         {await PaymentDetails()}
       </CardContent>

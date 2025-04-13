@@ -12,6 +12,7 @@ import { toast } from "sonner";
 import { resetEnrollmentRequestData } from "@/redux/slice/create-enrollmentRequestSlice";
 import {
   createEnrollmentRequestAction,
+  getOrganizationByCancellationIdAction,
   onCancelEnrollmentRequestAction,
   onConfirmEnrollmentRequestAction,
   onDeleteEnrollmentRequestAction,
@@ -25,6 +26,7 @@ import {
 import { EnrollmentRequest, EnrollmentRequestState } from "@prisma/client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { onRefundConfirmAction } from "@/actions/payment";
 
 export const useCreateEnrollmentRequest = (
   data: z.infer<typeof enrollmentRequestSchema>,
@@ -291,11 +293,34 @@ export const useGetOrganizationByCancellationId = (cancellationId: string) => {
   const { data: organization } = useQuery({
     queryKey: ["organization", cancellationId],
     queryFn: async () => {
-      const result = await getOrganizationByIdAction(cancellationId);
+      const result =
+        await getOrganizationByCancellationIdAction(cancellationId);
       return result?.organization;
     },
   });
   return {
     organization,
+  };
+};
+
+export const useRefundConfirmAction = () => {
+  const { mutate: confirmRefundMutate, isPending: isConfirmingRefund } =
+    useMutation({
+      mutationFn: async (cancellationId: string) => {
+        const result = await onRefundConfirmAction(cancellationId);
+        return result.status;
+      },
+      onError: (error) => console.error(error.message),
+      onSuccess: (data) => {
+        if (data === 200) {
+          toast.success("Cancellation request sent successfully!");
+        } else {
+          toast.error("Error sending refund request!");
+        }
+      },
+    });
+  return {
+    confirmRefundMutate,
+    isConfirmingRefund,
   };
 };

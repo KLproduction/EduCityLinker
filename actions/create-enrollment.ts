@@ -8,6 +8,7 @@ import {
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import {
+  CancellationState,
   EnrollmentConfirmationState,
   EnrollmentRequestState,
   PaymentState,
@@ -376,6 +377,13 @@ export const onRequestCancelEnrollmentRequestAction = async (
         where: { confirmationId: enrollmentConfirmation.id },
       });
 
+      await db.enrollmentRequest.update({
+        where: { id: existingEnrollmentRequest?.id },
+        data: {
+          status: EnrollmentRequestState.CANCELLATION_REQUESTED,
+        },
+      });
+
       //if deposit paid
       if (
         enrollmentPayment &&
@@ -393,7 +401,7 @@ export const onRequestCancelEnrollmentRequestAction = async (
             paymentId: enrollmentPayment?.id,
             userId: user?.id!,
             reason: cancelReason,
-            refundProcessed: false,
+            refundProcessed: CancellationState.PENDING,
           },
         });
       }
@@ -415,7 +423,10 @@ export const onRequestCancelEnrollmentRequestAction = async (
             paymentId: enrollmentPayment?.id,
             userId: user?.id,
             reason: cancelReason,
-            refundProcessed: false,
+            refundProcessed: CancellationState.PENDING,
+            refundAmount:
+              enrollmentPayment.totalPaidAmount -
+              enrollmentPayment.depositAmount,
           },
         });
       }

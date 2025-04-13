@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import Modal from "./Modal";
 import ResponsiveModel from "../global/responsive-model";
 import { AlertTriangle, CheckCircle2 } from "lucide-react";

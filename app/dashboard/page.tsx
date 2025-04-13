@@ -44,7 +44,10 @@ const DashboardPage = async (props: Props) => {
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>Total Users</CardTitle>
+                <CardTitle className="flex flex-col justify-start gap-1">
+                  <span>Total</span>
+                  <span>Users</span>{" "}
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-4xl font-bold text-primary">
@@ -52,10 +55,12 @@ const DashboardPage = async (props: Props) => {
                 </p>
               </CardContent>
             </Card>
-
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>Total Listings</CardTitle>
+                <CardTitle className="flex flex-col justify-start gap-1">
+                  <span>Total</span>
+                  <span>Listings</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-4xl font-bold text-primary">
@@ -66,7 +71,10 @@ const DashboardPage = async (props: Props) => {
 
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>Total Organizations</CardTitle>
+                <CardTitle className="flex flex-col justify-start gap-1">
+                  <span>Total</span>
+                  <span>Organizations</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-4xl font-bold text-primary">
@@ -77,7 +85,10 @@ const DashboardPage = async (props: Props) => {
 
             <Card className="shadow-lg">
               <CardHeader>
-                <CardTitle>Total Enrollments</CardTitle>
+                <CardTitle className="flex flex-col justify-start gap-1">
+                  <span>Total</span>
+                  <span>Enrollments</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-center text-4xl font-bold text-primary">
@@ -87,10 +98,11 @@ const DashboardPage = async (props: Props) => {
             </Card>
           </div>
           <Separator className="my-10" />
-
-          <EnrollmentChart
-            enrollmentRequests={enrollmentsResponse?.enrollmentRequests!}
-          />
+          <div className="hidden md:block">
+            <EnrollmentChart
+              enrollmentRequests={enrollmentsResponse?.enrollmentRequests!}
+            />
+          </div>
         </div>
       </div>
     </div>

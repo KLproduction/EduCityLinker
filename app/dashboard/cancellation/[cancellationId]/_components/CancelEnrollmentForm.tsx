@@ -1,23 +1,17 @@
 "use client";
 
-import { useEditEnrollment } from "@/hooks/enrollment";
+import { useEditEnrollment, useRefundConfirmAction } from "@/hooks/enrollment";
 import {
   EnrollmentConfirmation,
   EnrollmentPayment,
   type EnrollmentRequest,
   EnrollmentRequestState,
   type Organization,
+  PaymentState,
 } from "@prisma/client";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { format } from "date-fns";
 import { Switch } from "@/components/ui/switch";
 import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
@@ -39,11 +33,18 @@ import { AIMO_DISCOUNT } from "@/data/data";
 type Props = {
   enrollment: EnrollmentRequest;
   organization: Organization;
-  confirmation?: EnrollmentConfirmation;
-  payment?: EnrollmentPayment;
+  confirmation: EnrollmentConfirmation;
+  payment: EnrollmentPayment;
+  cancellationId: string;
 };
 
-const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
+const CancelEnrollmentForm = ({
+  enrollment,
+  organization,
+  confirmation,
+  payment,
+  cancellationId,
+}: Props) => {
   const isEditableAllowed =
     enrollment.status === EnrollmentRequestState.PENDING ||
     enrollment.status === EnrollmentRequestState.CONFIRM_BY_CENTER;
@@ -70,30 +71,17 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
     enrollment: enrollment,
     setIsEditable: setIsEditable,
   });
-  console.log(getValues());
+
   const isInvalidDate = watch("startDate") <= new Date();
 
-  const addOnPrice =
-    watch("accommodationPrice") + watch("airportTransferPrice") || 0;
+  const { confirmRefundMutate, isConfirmingRefund } = useRefundConfirmAction();
+  const isCancelled =
+    payment.status === PaymentState.CANCELLED ||
+    payment.status === PaymentState.CANCELLATION_PROCESSING;
 
   return (
     <Card className="my-6 flex w-full justify-center">
       <form onSubmit={onSubmit} className="w-full max-w-xl space-y-6 p-6">
-        <div className="flex justify-end">
-          <Button
-            type="button"
-            variant={isEditable ? "secondary" : "default"}
-            onClick={() => setIsEditable((prev) => !prev)}
-            disabled={!isEditableAllowed}
-            title={
-              !isEditableAllowed
-                ? "Editing is disabled after the user has confirmed. Please contact support for further assistance."
-                : ""
-            }
-          >
-            {isEditable ? "Cancel Edit" : "Edit"}
-          </Button>
-        </div>
         <div className="grid gap-6 md:grid-cols-2">
           {/* First Name */}
           <div className="space-y-2">
@@ -509,75 +497,30 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
                     "bg-red-100 text-red-800",
                 )}
               >
-                {watch("status")}
+                {payment.status.replaceAll("_", " ").toLowerCase()}
               </h1>
             </div>
           </CardHeader>
-          <CardContent className="flex w-full flex-col justify-center gap-5">
-            {watch("status") !== EnrollmentRequestState.CONFIRM_BY_CENTER && (
-              <Button
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.CONFIRM_BY_CENTER)
-                }
-                className="bg-green-500 text-zinc-50"
-                disabled={!isEditable}
-              >
-                Confirm By Center
-              </Button>
-            )}
-            {watch("status") !== EnrollmentRequestState.PENDING && (
-              <Button
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.PENDING)
-                }
-                className="bg-zinc-700 text-zinc-50"
-                disabled={!isEditable}
-              >
-                Pending
-              </Button>
-            )}
-
-            {watch("status") !== EnrollmentRequestState.CANCELLED && (
-              <Button
-                variant="outline"
-                onClick={() =>
-                  setValue("status", EnrollmentRequestState.CANCELLED)
-                }
-                disabled={!isEditable}
-              >
-                Cancel Enrollment
-              </Button>
-            )}
-          </CardContent>
         </Card>
 
         {/* Submit Button */}
         <div className="flex w-full flex-col gap-3">
           <Button
-            type="submit"
-            className="w-full"
-            disabled={
-              !isEditable ||
-              isSubmitting ||
-              isUpdatingEnrollment ||
-              isInvalidDate
-            }
-          >
-            {isUpdatingEnrollment ? "Updating..." : "Update Enrollment"}
-          </Button>
-          {/* <Button
             type="button"
             className="w-full"
-            variant={"outline"}
-            disabled={!isEditable || isSubmitting || isUpdatingEnrollment}
-            onClick={() => resetForm()}
+            onClick={() => confirmRefundMutate(cancellationId)}
+            disabled={isConfirmingRefund || isCancelled}
           >
-            {isUpdatingEnrollment ? "Updating..." : "Reset Change"}
-          </Button> */}
+            {payment.status === PaymentState.CANCELLED
+              ? "Refund Processed"
+              : payment.status === PaymentState.CANCELLATION_PROCESSING
+                ? "Refund Processing"
+                : "Send Refund Request"}
+          </Button>
         </div>
       </form>
     </Card>
   );
 };
 
-export default EditEnrollmentForm;
+export default CancelEnrollmentForm;

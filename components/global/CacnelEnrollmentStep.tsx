@@ -13,6 +13,7 @@ import { cn } from "@/lib/utils";
 import {
   EnrollmentConfirmation,
   EnrollmentConfirmationState,
+  EnrollmentPayment,
 } from "@prisma/client";
 
 interface CancelStep {
@@ -25,9 +26,13 @@ interface CancelStep {
 
 type Props = {
   enrollmentConfirmation: EnrollmentConfirmation;
+  payment?: EnrollmentPayment;
 };
 
-export const CancelEnrollmentSteps = ({ enrollmentConfirmation }: Props) => {
+export const CancelEnrollmentSteps = ({
+  enrollmentConfirmation,
+  payment,
+}: Props) => {
   const [steps, setSteps] = useState<CancelStep[]>([
     {
       id: 0,
@@ -83,6 +88,19 @@ export const CancelEnrollmentSteps = ({ enrollmentConfirmation }: Props) => {
       })),
     );
   }, [enrollmentConfirmation]);
+
+  useEffect(() => {
+    if (payment?.remainingBalance! > 0) {
+      setSteps((prev) =>
+        prev.map((step) => ({
+          ...step,
+          isActive: step.id <= 1,
+        })),
+      );
+    }
+  }, [payment]);
+
+  console.log("payment", payment?.remainingBalance);
 
   return (
     <Card className="mx-auto w-full max-w-7xl border-none shadow-none">
