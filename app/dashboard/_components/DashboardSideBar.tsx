@@ -66,6 +66,11 @@ const DashboardContent = ({ organizationId }: { organizationId: string }) => {
           label="Enrollment Payments"
           href={`/dashboard/payment/`}
         />
+        <DashboardNavItem
+          icon={<ArrowRightLeft className="h-4 w-4" />}
+          label="Enrollment Cancellations"
+          href={`/dashboard/cancellation/`}
+        />
       </section>
 
       <Separator />

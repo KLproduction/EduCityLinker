@@ -465,3 +465,48 @@ export const onCancelEnrollmentRequestAction = async (id: string) => {
     return { status: 500, message: "Database error" };
   }
 };
+
+export const getAllEnrollmentCancellationsAction = async () => {
+  try {
+    const enrollmentCancellations = await db.enrollmentCancellation.findMany();
+    if (enrollmentCancellations.length > 0) {
+      return { enrollmentCancellations, status: 200 };
+    }
+    return { status: 404, message: "Enrollment cancellations not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};
+
+export const getOrganizationByCancellationIdAction = async (
+  cancellationId: string,
+) => {
+  try {
+    const enrollmentCancellation = await db.enrollmentCancellation.findUnique({
+      where: { id: cancellationId },
+    });
+    if (!enrollmentCancellation) {
+      return { status: 404, message: "Enrollment cancellation not found" };
+    }
+    const enrollmentPayment = await db.enrollmentPayment.findUnique({
+      where: { id: enrollmentCancellation.paymentId },
+    });
+    const enrollmentConfirmation = await db.enrollmentConfirmation.findUnique({
+      where: { id: enrollmentPayment?.confirmationId },
+    });
+    const enrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id: enrollmentConfirmation?.requestId },
+    });
+    const organization = await db.organization.findUnique({
+      where: { id: enrollmentRequest?.organizationId },
+    });
+    if (organization) {
+      return { organization, status: 200 };
+    }
+    return { status: 404, message: "Enrollment cancellation not found" };
+  } catch (e) {
+    console.error(e);
+    return { status: 500, message: "Database error" };
+  }
+};

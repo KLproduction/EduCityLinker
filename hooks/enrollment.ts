@@ -286,3 +286,16 @@ export const useRequestCancelEnrollment = () => {
     isRequestCancellingEnrollment,
   };
 };
+
+export const useGetOrganizationByCancellationId = (cancellationId: string) => {
+  const { data: organization } = useQuery({
+    queryKey: ["organization", cancellationId],
+    queryFn: async () => {
+      const result = await getOrganizationByIdAction(cancellationId);
+      return result?.organization;
+    },
+  });
+  return {
+    organization,
+  };
+};
