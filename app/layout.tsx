@@ -18,8 +18,8 @@ export const metadata: Metadata = {
   alternates: {
     canonical: "https://edu-city-linker.vercel.app",
   },
-  other: {
-    "google-site-verification": "yk8bo8dOqUOUYr7iXGkKjECh1JzX",
+  verification: {
+    google: "yk8bo8dOqUOUYr7iXGkKjECh1JzX",
   },
 };
 
