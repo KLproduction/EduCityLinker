@@ -37,6 +37,7 @@ module.exports = {
     ],
     additionalSitemaps: [
       "https://edu-city-linker.vercel.app/server-sitemap.xml",
+      "https://edu-city-linker.vercel.app/sitemap.xml",
     ],
   },
 };
