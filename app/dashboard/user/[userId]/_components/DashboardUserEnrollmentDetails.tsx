@@ -63,7 +63,7 @@ const DashboardUserEnrollmentDetails = async ({
       <>
         {enrollmentPayment.status ===
           EnrollmentConfirmationState.DEPOSIT_PAID && (
-          <Card className="text-md flex w-full flex-col gap-5 space-y-1 p-3">
+          <Card className="sm:text-md mx-auto flex max-w-[280px] flex-col gap-5 space-y-1 p-3 text-sm sm:max-w-full">
             <CardHeader className="flex w-full">
               <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
             </CardHeader>
@@ -251,18 +251,16 @@ const DashboardUserEnrollmentDetails = async ({
   };
 
   return (
-    <Card className="flex flex-col gap-3">
-      <CardContent>
-        <DashboardUserEnrollmentDetailsSection
-          enrollmentData={enrollmentData}
-          organization={organization!}
-          listing={listing!}
-          userId={userId}
-          enrollmentConfirmation={enrollmentConfirmation!}
-        />
-        {await PaymentDetails()}
-      </CardContent>
-    </Card>
+    <div className="flex max-w-[280px] flex-col gap-3 border-zinc-400 shadow-md sm:max-w-full">
+      <DashboardUserEnrollmentDetailsSection
+        enrollmentData={enrollmentData}
+        organization={organization!}
+        listing={listing!}
+        userId={userId}
+        enrollmentConfirmation={enrollmentConfirmation!}
+      />
+      {await PaymentDetails()}
+    </div>
   );
 };
 

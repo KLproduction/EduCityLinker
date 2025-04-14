@@ -65,8 +65,8 @@ const DashboardUserEnrollmentDetailsSection = ({
   return (
     <>
       <div className="w-full">
-        <Card className="mb-4 border-none shadow-none lg:min-w-[1000px]">
-          <CardHeader className="flex flex-row items-center justify-between">
+        <Card className="mb-4 max-w-[280px] border-none shadow-none sm:max-w-full">
+          <CardHeader className="flex flex-col items-center justify-between sm:flex-row">
             <div>
               <CardTitle className="text-base">
                 Enrollment ID: {enrollmentData.id}
@@ -96,8 +96,8 @@ const DashboardUserEnrollmentDetailsSection = ({
           </CardHeader>
 
           {isOpen && (
-            <CardContent className="pt-0">
-              <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
+            <CardContent className="">
+              <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 py-8 sm:px-4">
                 {/* Organizer Header */}
 
                 <Card
@@ -108,7 +108,7 @@ const DashboardUserEnrollmentDetailsSection = ({
                   )}
                 >
                   <CardHeader className="flex items-start justify-start">
-                    <CardDescription className="flex items-center gap-3">
+                    <CardDescription className="flex flex-col items-start gap-3 sm:flex-row">
                       <p>Enrollment ID:</p>
                       <p>{enrollmentData.id}</p>
                     </CardDescription>
@@ -156,10 +156,10 @@ const DashboardUserEnrollmentDetailsSection = ({
                 <Card className={cn("border-none shadow-none")}>
                   <CardHeader>
                     <CardDescription>Enrollment Details</CardDescription>
-                    <div>{listing && <ListingSection listing={listing} />}</div>
                   </CardHeader>
+                  <div>{listing && <ListingSection listing={listing} />}</div>
                   <CardContent className="pt-6">
-                    <dl className="space-y-4">
+                    <dl className="space-y-4 text-sm sm:text-base">
                       <div className="flex justify-between">
                         <dt className="font-medium text-muted-foreground">
                           First Name:
@@ -288,24 +288,25 @@ const DashboardUserEnrollmentDetailsSection = ({
                         )}
 
                         <Separator className="my-2" />
-                        <div className="flex justify-between">
-                          <div className="font-medium">Total Price:</div>
-                          <div className="flex flex-col justify-end gap-2 text-lg font-bold text-primary">
-                            <div className="flex w-full items-center justify-end text-zinc-800">
+                        <div className="space-y-2 text-sm sm:text-base">
+                          <div className="flex justify-between">
+                            <span className="font-medium">Total Price:</span>
+                            <span className="font-bold text-zinc-800">
                               {formattedPrice(
                                 enrollmentData.courseTotalPriceBeforeDiscount +
                                   enrollmentData.addOnPrice,
                               )}
+                            </span>
+                          </div>
+
+                          <div className="flex justify-between gap-1 sm:flex-row sm:items-center">
+                            <div className="flex items-center gap-2 text-rose-500">
+                              <h4 className="font-semibold">AIMO</h4>
+                              <span className="text-sm">Price:</span>
                             </div>
-                            <div className="flex items-center gap-3">
-                              <div className="flex items-center gap-2">
-                                <h4>AIMO</h4>
-                                <span>Price:</span>
-                              </div>
-                              <span>
-                                {formattedPrice(enrollmentData.orderTotalPrice)}
-                              </span>
-                            </div>
+                            <span className="font-bold text-primary">
+                              {formattedPrice(enrollmentData.orderTotalPrice)}
+                            </span>
                           </div>
                         </div>
                       </div>

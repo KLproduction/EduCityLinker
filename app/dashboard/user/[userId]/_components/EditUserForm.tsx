@@ -31,7 +31,7 @@ const EditUserForm = ({ user }: Props) => {
     });
 
   return (
-    <Card className="min-w-7xl mx-auto my-6 w-full">
+    <Card className="mx-auto my-6 w-full max-w-[280px] sm:max-w-7xl">
       <form onSubmit={onSubmit} className="space-y-6 p-6">
         <div className="flex items-center justify-between">
           <CardTitle>Edit User</CardTitle>
