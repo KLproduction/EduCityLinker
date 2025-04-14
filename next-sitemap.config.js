@@ -3,6 +3,7 @@ module.exports = {
   siteUrl: "https://edu-city-linker.vercel.app",
   generateRobotsTxt: true,
   sourceDir: "app",
+  outDir: ".next",
   changefreq: "weekly",
   priority: 0.7,
   sitemapSize: 5000,
