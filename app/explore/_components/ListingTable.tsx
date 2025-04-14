@@ -210,7 +210,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
           <div className="mt-4 space-y-4">
             {organizer.listings.map((listing) => (
               <div key={listing.id}>
-                {/* <ListingSection listing={listing} /> */}
+                <ListingSection listing={listing} />
               </div>
             ))}
           </div>
