@@ -1,20 +1,13 @@
-# *
 User-agent: *
-Allow: /
-Allow: /explore
-Disallow: /admin/*
-Disallow: /api/*
-Disallow: /enrollment/*
-Disallow: /auth/*
-Disallow: /deposit-checkout/*
-Disallow: /full-payment-checkout/*
-Disallow: /dashboard/*
-Disallow: /stripe/*
-Disallow: /webhook/*
+Disallow: /admin/
+Disallow: /api/
+Disallow: /enrollment/
+Disallow: /auth/
+Disallow: /deposit-checkout/
+Disallow: /full-payment-checkout/
+Disallow: /dashboard/
+Disallow: /stripe/
+Disallow: /webhook/
 
-# Host
-Host: https://edu-city-linker.vercel.app
-
-# Sitemaps
 Sitemap: https://edu-city-linker.vercel.app/sitemap.xml
 Sitemap: https://edu-city-linker.vercel.app/server-sitemap.xml
