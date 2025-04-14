@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     canonical: "https://edu-city-linker.vercel.app",
   },
   verification: {
-    google: "yk8bo8dOqUOUYr7iXGkKjECh1JzX",
+    google: "yk8bo8dOqUOUYr7iXGkKjECh1JzXFvUU_a3sJ_NulfQ",
   },
 };
 
