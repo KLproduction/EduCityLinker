@@ -56,11 +56,11 @@ const UserEnrollmentDetailsSection = ({
 
   const isEnrollmentPage = pathname.includes("/enrollment");
 
-  if (enrollmentData.status === "CANCELLED") return null;
+  if (enrollmentData.status === "CANCELLED") return;
 
   return (
-    <>
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
+    <Card className="mx-auto w-full max-w-[280px] px-2 sm:max-w-7xl sm:px-4">
+      <div className="mx-auto flex w-full flex-col gap-6 py-8">
         {/* Organizer Header */}
 
         <Card
@@ -71,7 +71,7 @@ const UserEnrollmentDetailsSection = ({
           )}
         >
           <CardHeader className="flex items-start justify-start">
-            <CardDescription className="flex items-center gap-3">
+            <CardDescription className="flex flex-col items-start gap-3">
               <p>Enrollment ID:</p>
               <p>{enrollmentData.id}</p>
             </CardDescription>
@@ -132,14 +132,14 @@ const UserEnrollmentDetailsSection = ({
       </div>
 
       {/* Enrollment Details */}
-      <div className="space-y-6">
-        <Card className={cn(isEnrollmentPage && "border-none shadow-none")}>
+      <div className="mx-auto w-full space-y-6 md:max-w-7xl">
+        <Card className={cn("border-none shadow-none")}>
           <CardHeader>
             <CardDescription>Enrollment Details</CardDescription>
-            <div>{listing && <ListingSection listing={listing} />}</div>
           </CardHeader>
+          <div>{listing && <ListingSection listing={listing} />}</div>
           <CardContent className="pt-6">
-            <dl className="space-y-4">
+            <dl className="space-y-4 text-xs sm:text-base">
               <div className="flex justify-between">
                 <dt className="font-medium text-muted-foreground">
                   First Name:
@@ -250,24 +250,25 @@ const UserEnrollmentDetailsSection = ({
                 )}
 
                 <Separator className="my-2" />
-                <div className="flex justify-between">
-                  <div className="font-medium">Total Price:</div>
-                  <div className="flex flex-col justify-end gap-2 text-lg font-bold text-primary">
-                    <div className="flex w-full items-center justify-end text-zinc-800">
+                <div className="space-y-2 text-sm sm:text-base">
+                  <div className="flex justify-between text-sm">
+                    <span className="font-medium">Total Price:</span>
+                    <span className="font-bold text-zinc-800">
                       {formattedPrice(
                         enrollmentData.courseTotalPriceBeforeDiscount +
                           enrollmentData.addOnPrice,
                       )}
+                    </span>
+                  </div>
+
+                  <div className="flex justify-between gap-1 sm:flex-row sm:items-center">
+                    <div className="flex w-full items-center gap-2 text-rose-500">
+                      <h4 className="">AIMO</h4>
+                      <span className="">Price:</span>
                     </div>
-                    <div className="flex items-center gap-3">
-                      <div className="flex items-center gap-2">
-                        <h4>AIMO</h4>
-                        <span>Price:</span>
-                      </div>
-                      <span>
-                        {formattedPrice(enrollmentData.orderTotalPrice)}
-                      </span>
-                    </div>
+                    <span className="text-sm font-bold text-primary">
+                      {formattedPrice(enrollmentData.orderTotalPrice)}
+                    </span>
                   </div>
                 </div>
               </div>
@@ -295,7 +296,7 @@ const UserEnrollmentDetailsSection = ({
           </CardFooter>
         </Card>
       </div>
-    </>
+    </Card>
   );
 };
 

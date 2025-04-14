@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Sheet,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -20,7 +21,7 @@ import AccommodationTypeFilter from "./AccommodationTypeFilter";
 
 const FilterContent = () => {
   return (
-    <div className="flex flex-col justify-start gap-8">
+    <div className="flex w-[80%] flex-col justify-start gap-8">
       <PriceFilter />
       <Separator className="my-4" />
       <AgeGroupFilter />
@@ -51,25 +52,24 @@ const ExploreSideBar = () => {
       </aside>
 
       {/* Mobile Filter Button & Sheet */}
-      <div className="fixed bottom-4 right-4 z-50 lg:hidden">
+      <div className="fixed bottom-4 left-4 z-50 lg:hidden">
         <Sheet open={open} onOpenChange={setOpen}>
           <SheetTrigger asChild className={open ? "hidden" : ""}>
-            <Button size="lg" className="rounded-full shadow-lg">
-              <Filter className="mr-2 h-4 w-4" />
-              Filters
+            <Button size="sm" className="rounded-full shadow-lg">
+              <Filter className="h-4 w-4" />
             </Button>
           </SheetTrigger>
-          <SheetContent
-            side="bottom"
-            className="z-[9999] h-[100vh] overflow-y-auto"
-          >
+          <SheetContent side="left" className="z-[9999] h-full overflow-y-auto">
             <SheetHeader>
               <SheetTitle>Filters</SheetTitle>
             </SheetHeader>
             <div className="py-4">
               <FilterContent />
             </div>
-            <div className="sticky bottom-0 mt-6 flex w-full gap-2 bg-background pt-4">
+            <SheetFooter className="sticky bottom-0 flex w-full flex-col gap-2 bg-background pt-4">
+              <Button className="flex-1" onClick={() => setOpen(false)}>
+                Apply Filters
+              </Button>
               <Button
                 variant="outline"
                 className="flex-1"
@@ -77,10 +77,7 @@ const ExploreSideBar = () => {
               >
                 Cancel
               </Button>
-              <Button className="flex-1" onClick={() => setOpen(false)}>
-                Apply Filters
-              </Button>
-            </div>
+            </SheetFooter>
           </SheetContent>
         </Sheet>
       </div>

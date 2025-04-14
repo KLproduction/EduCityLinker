@@ -72,7 +72,7 @@ const CheckOutForm = ({
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <div className="container mx-auto w-full space-y-8">
+    <div className="container mx-auto w-full max-w-[280px] space-y-8 sm:max-w-full">
       <div className="flex w-full flex-col items-center justify-start">
         <div className="flex w-full justify-start">
           <Button size={"lg"} className="flex items-center gap-3">

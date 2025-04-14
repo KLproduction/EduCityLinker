@@ -12,7 +12,7 @@ const NavLogo = () => {
     <div>
       <h2
         className={cn(
-          "text-6xl font-bold",
+          "text-4xl font-bold md:text-6xl",
           !isMainPage ? "text-rose-500" : "text-transparent",
         )}
       >

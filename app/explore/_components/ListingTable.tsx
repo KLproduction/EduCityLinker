@@ -142,12 +142,9 @@ const ListingTable = ({ data, currentUser }: Props) => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8">
+    <div className="mx-auto flex w-full max-w-[280] flex-col gap-6 py-8 md:max-w-7xl">
       {organizations.map((organizer) => (
-        <Card
-          key={organizer.id}
-          className="overflow-hidden p-4 lg:min-w-[1000px]"
-        >
+        <Card key={organizer.id} className="overflow-hidden p-4">
           {/* Organizer Header: Cover Photo | Name + Location + Button */}
           <div className="flex flex-col items-center gap-4 sm:flex-row sm:items-start">
             {/* Cover Photo (Responsive) */}
@@ -213,7 +210,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
           <div className="mt-4 space-y-4">
             {organizer.listings.map((listing) => (
               <div key={listing.id}>
-                <ListingSection listing={listing} />
+                {/* <ListingSection listing={listing} /> */}
               </div>
             ))}
           </div>

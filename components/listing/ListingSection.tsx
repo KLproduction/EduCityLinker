@@ -2,6 +2,7 @@ import { AIMO_DISCOUNT } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import { Listing, Organization } from "@prisma/client";
 import { Badge, Book, Calendar, Check, MapPin, Users } from "lucide-react";
+import { Card } from "../ui/card";
 
 type Props = {
   listing: Listing;
@@ -10,9 +11,9 @@ type Props = {
 const ListingSection = ({ listing }: Props) => {
   return (
     <div className="mt-4 space-y-4">
-      <div className="grid w-full gap-4 rounded-md border-2 border-rose-200 p-4 sm:grid-cols-[1fr_2fr_auto]">
+      <Card className="flex w-full max-w-[280px] flex-col flex-wrap gap-4 rounded-md border-2 border-rose-200 p-4 sm:grid sm:max-w-7xl sm:grid-cols-[1fr_2fr_auto]">
         {/* Course Type (Stacks on small screens) */}
-        <div className="flex items-center whitespace-nowrap text-base font-semibold">
+        <div className="flex items-center whitespace-nowrap text-xs font-semibold sm:text-base">
           <Book size={16} className="mr-2 flex-shrink-0" />
           {listing.courseType}
         </div>
@@ -38,11 +39,11 @@ const ListingSection = ({ listing }: Props) => {
         </div>
 
         {/* Price (Always right-aligned) */}
-        <div className="flex flex-col items-end gap-3">
+        <div className="flex flex-col items-start justify-start gap-3">
           <div className="text-right text-sm text-zinc-500">
             {`Original Price: ${" "}${formattedPrice(listing.price)}/week`}
           </div>
-          <div className="flex items-end gap-5 text-right text-base font-bold text-rose-500">
+          <div className="flex items-end gap-5 text-right text-sm font-bold text-rose-500 sm:text-base">
             <div className="flex items-end gap-2">
               <h4 className="text-xl">AMIO</h4>
               Price:
@@ -50,7 +51,7 @@ const ListingSection = ({ listing }: Props) => {
             {formattedPrice(listing.price * AIMO_DISCOUNT)}/week
           </div>
         </div>
-      </div>
+      </Card>
     </div>
   );
 };

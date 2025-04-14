@@ -128,20 +128,20 @@ export const EnrollmentSteps = ({
           Track your enrollment status through each step of the process
         </CardDescription>
       </CardHeader>
-      <CardContent className="pb-6">
+      <CardContent className="pb-6 text-sm sm:text-base">
         <div className="space-y-6">
           {steps.map((step, index) => (
             <div
               key={step.id}
               className={cn(
-                "flex cursor-pointer items-start gap-4 transition-all",
+                "flex items-start gap-4 transition-all",
                 step.isActive ? "opacity-100" : "opacity-60",
               )}
             >
               <div className="flex-shrink-0">
                 <div
                   className={cn(
-                    "flex h-10 w-10 items-center justify-center rounded-full border-2",
+                    "flex h-5 w-5 items-center justify-center rounded-full border-2 sm:h-10 sm:w-10",
                     step.isActive
                       ? "border-primary bg-primary text-primary-foreground"
                       : "border-muted bg-background text-muted-foreground",

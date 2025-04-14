@@ -50,7 +50,7 @@ const Navbar = async () => {
   return (
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
       <MyContainer>
-        <ul className="flex h-full items-center justify-between">
+        <ul className="mx-6 flex h-full items-center justify-between">
           {/* {navList.map(({ label, path }) => (
           <li key={label}>
             <Link href={path}>{label}</Link>

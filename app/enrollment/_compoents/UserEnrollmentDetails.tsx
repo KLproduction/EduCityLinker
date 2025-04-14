@@ -109,7 +109,7 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
       <>
         {enrollmentPayment.status ===
           EnrollmentConfirmationState.DEPOSIT_PAID && (
-          <Card className="text-md flex w-full flex-col gap-5 space-y-1 p-3">
+          <Card className="mx-auto flex w-full max-w-[280px] flex-col gap-5 space-y-1 p-3 text-xs sm:max-w-full sm:text-base">
             <CardHeader className="flex w-full">
               <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
             </CardHeader>
@@ -302,8 +302,8 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
     },
   });
   return (
-    <Card className="flex flex-col gap-3">
-      <CardContent>
+    <div className="flex flex-col gap-3">
+      <div>
         <UserEnrollmentDetailsSection
           enrollmentData={enrollmentData}
           organization={organization!}
@@ -313,7 +313,7 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
           payment={payment || undefined}
         />
         {await PaymentDetails()}
-      </CardContent>
+      </div>
       <CardFooter className="flex w-full flex-col justify-end gap-3 md:flex-row">
         <div className="flex w-full flex-col justify-end gap-3 md:flex-row">
           {enrollmentData.status === EnrollmentRequestState.PENDING && (
@@ -336,7 +336,7 @@ const UserEnrollmentDetails = async ({ enrollmentData, userId }: Props) => {
           <CancelSection />
         </div>
       </CardFooter>
-    </Card>
+    </div>
   );
 };
 

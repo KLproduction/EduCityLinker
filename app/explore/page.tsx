@@ -3,6 +3,7 @@ import { getOrganizationWithListingAction } from "@/actions/listing";
 import { currentUser } from "@/lib/auth";
 
 import ListingTable from "./_components/ListingTable";
+import MyContainer from "@/components/Container";
 // organization: (Organization & { listings: Listing[] })[];
 const ExplorePage = async () => {
   const data = await getOrganizationWithListingAction();
@@ -15,9 +16,9 @@ const ExplorePage = async () => {
   if (data.status === 200) {
     return (
       <ClientOnly>
-        <div>
+        <MyContainer>
           <ListingTable data={data.organization || []} currentUser={user} />
-        </div>
+        </MyContainer>
       </ClientOnly>
     );
   }
