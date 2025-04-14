@@ -15,6 +15,12 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "EduCityLinker",
   description: "Your Learning Buddy",
+  alternates: {
+    canonical: "https://edu-city-linker.vercel.app",
+  },
+  other: {
+    "google-site-verification": "yk8bo8dOqUOUYr7iXGkKjECh1JzX",
+  },
 };
 
 export default async function RootLayout({

@@ -10,16 +10,18 @@ const ExplorePage = async () => {
   const user = await currentUser();
 
   if (data?.status !== 200) {
-    return <div>No Listing Found</div>;
+    return (
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 lg:min-w-[1000px]">
+        No Listing Found
+      </div>
+    );
   }
 
   if (data.status === 200) {
     return (
-      <ClientOnly>
-        <MyContainer>
-          <ListingTable data={data.organization || []} currentUser={user} />
-        </MyContainer>
-      </ClientOnly>
+      <MyContainer>
+        <ListingTable data={data.organization || []} currentUser={user} />
+      </MyContainer>
     );
   }
 };

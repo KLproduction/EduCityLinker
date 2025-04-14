@@ -160,6 +160,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
                   src={`${process.env.NEXT_PUBLIC_UPLOADCARE_BASE_URL}/${organizer.coverPhoto}/-/preview/600x400/`}
                   alt={organizer.name}
                   layout="fill"
+                  loading="lazy"
                   objectFit="cover"
                   className="transition duration-300 group-hover:scale-110"
                 />
