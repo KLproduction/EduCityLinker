@@ -17,10 +17,13 @@ import { googleLat } from "@/components/GoogleMapSimple";
 import {
   createCourseAction,
   getOrganizationsAction,
+  updateListingAction,
 } from "@/actions/createCourse";
 import { useCreateCourseModal } from "./modal";
 import { STEPS } from "@/components/modals/CreateCourseModal";
 import { useRouter } from "next/navigation";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Listing } from "@prisma/client";
 
 export const useCreateCourse = (
   data: z.infer<typeof createCourseSchema>,
@@ -104,4 +107,62 @@ export const useGetOrganizations = () => {
   });
 
   return { data, isLoading };
+};
+
+export const useEditListingFromDB = (courseData: Listing) => {
+  const router = useRouter();
+
+  const defaultFormValues: z.infer<typeof createCourseSchema> = {
+    organizationId: courseData.organizationId,
+    courseType: courseData.courseType,
+    courseLevels: courseData.courseLevels,
+    ageGroups: courseData.ageGroups,
+    maxStudents: courseData.maxStudents,
+    durationWeeks: courseData.durationWeeks,
+    price: courseData.price,
+    title: courseData.title,
+    description: courseData.description,
+  };
+
+  const { register, handleSubmit, setValue, reset, watch, getValues } = useForm<
+    z.infer<typeof createCourseSchema>
+  >({
+    resolver: zodResolver(createCourseSchema),
+    defaultValues: defaultFormValues,
+  });
+
+  const { mutate: updateCourseMutate, isPending } = useMutation({
+    mutationFn: async (formData: z.infer<typeof createCourseSchema>) => {
+      return await updateListingAction(courseData.id, formData);
+    },
+    onError: (error) => {
+      console.error(error.message);
+      toast.error(error.message);
+    },
+    onSuccess: (data) => {
+      if (data?.status === 200) {
+        toast.success(data.message);
+        router.refresh();
+      } else {
+        toast.error(data?.message);
+      }
+    },
+  });
+
+  const submit = handleSubmit((formData) => updateCourseMutate(formData));
+
+  const resetToDefault = () => {
+    reset(defaultFormValues);
+  };
+
+  return {
+    register,
+    submit,
+    setValue,
+    reset,
+    watch,
+    getValues,
+    resetToDefault,
+    isPending,
+  };
 };

@@ -14,6 +14,7 @@ import {
   useAppSelector,
 } from "@/redux/store";
 import {
+  createCourseSchema,
   createOrganizerSchema,
   nationalitySchema,
   socialMediaSchema,
@@ -31,7 +32,8 @@ import { resetSocialMediaData } from "@/redux/slice/create-organizationSocialMed
 import { useForm, UseFormSetValue } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect } from "react";
-import { Organization } from "@prisma/client";
+import { Listing, Organization } from "@prisma/client";
+import { updateListingAction } from "@/actions/createCourse";
 
 export const useUploadLogo = () => {
   const dispatch = useAppDispatch();

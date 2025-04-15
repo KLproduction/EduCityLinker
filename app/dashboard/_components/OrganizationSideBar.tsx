@@ -72,15 +72,19 @@ const ListingsContent = ({
       <div className="space-y-3">
         {listings.length ? (
           listings.map((listing) => (
-            <Link key={listing.id} href={`/dashboard/listing/${listing.id}`}>
-              <Card className="transition hover:bg-zinc-50">
-                <CardContent className="p-4">
-                  <p className="text-sm font-medium text-zinc-900">
-                    {listing.title}
-                  </p>
-                </CardContent>
-              </Card>
-            </Link>
+            <div className="space-y-1" key={listing.id}>
+              <Link
+                href={`/dashboard/organization/${organizationId}/${listing.id}`}
+              >
+                <Card className="border-none shadow-none transition hover:bg-zinc-50">
+                  <CardContent className="p-4">
+                    <p className="text-sm font-medium text-zinc-900">
+                      {listing.title}
+                    </p>
+                  </CardContent>
+                </Card>
+              </Link>
+            </div>
           ))
         ) : (
           <p className="text-sm text-muted-foreground">No courses yet.</p>

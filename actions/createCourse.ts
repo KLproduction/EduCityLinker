@@ -3,7 +3,7 @@
 import { currentOrganization, currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { useAppSelector } from "@/redux/store";
-import { createCourseSchema } from "@/schemas";
+import { createCourseSchema, createOrganizerSchema } from "@/schemas";
 import { z } from "zod";
 
 export const createCourseAction = async (
@@ -69,6 +69,37 @@ export const getOrganizationsAction = async () => {
     const organizations = await db.organization.findMany();
 
     return organizations;
+  } catch (e) {
+    console.error(e);
+  }
+};
+
+export const updateListingAction = async (
+  listingId: string,
+  data: z.infer<typeof createCourseSchema>,
+) => {
+  if (!listingId) {
+    console.log("Organization not found");
+    return;
+  }
+  try {
+    const listing = await db.listing.findUnique({
+      where: { id: listingId },
+    });
+    if (listing) {
+      console.log("Listing found");
+      const result = createCourseSchema.safeParse(data);
+      if (!result.success) {
+        console.error(result.error.flatten());
+        return;
+      }
+      await db.listing.update({
+        where: { id: listingId },
+        data,
+      });
+      return { status: 200, message: "Course updated successfully!" };
+    }
+    return { status: 404, message: "Course not found" };
   } catch (e) {
     console.error(e);
   }
