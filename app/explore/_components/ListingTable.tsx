@@ -38,12 +38,27 @@ const ListingTable = ({ data, currentUser }: Props) => {
   const courseLevelsFilter = params.get("course-levels");
   const priceFilter = params.get("price");
   const accommodationFilter = params.get("accommodation-types");
+  const citiesFilter = params.get("organization-cities");
 
   const [organizations, setOrganizations] =
     useState<(Organization & { listings: Listing[] })[]>(data);
 
   useEffect(() => {
     let filteredData = data;
+
+    if (citiesFilter) {
+      const citiesArr = citiesFilter
+        .split(",")
+        .map((item) => decodeURIComponent(item).trim());
+      filteredData = filteredData
+        .map((organization) => ({
+          ...organization,
+          listings: organization.listings.filter((listing) =>
+            citiesArr.includes(organization.city),
+          ),
+        }))
+        .filter((organization) => organization.listings.length > 0);
+    }
 
     if (categoryFilter) {
       filteredData = filteredData
@@ -125,7 +140,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
   if (organizations.length === 0)
     return (
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-4 py-8 lg:min-w-[1000px]">
-        <EmptyState />
+        <EmptyState showReset />
       </div>
     );
 
@@ -142,7 +157,7 @@ const ListingTable = ({ data, currentUser }: Props) => {
   };
 
   return (
-    <div className="mx-auto flex w-full max-w-[280] flex-col gap-6 py-8 md:max-w-7xl">
+    <div className="mx-auto flex w-full max-w-[280] flex-col gap-6 py-8 md:min-w-full md:max-w-7xl">
       {organizations.map((organizer) => (
         <Card key={organizer.id} className="overflow-hidden p-4">
           {/* Organizer Header: Cover Photo | Name + Location + Button */}

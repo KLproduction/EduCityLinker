@@ -18,10 +18,12 @@ import AgeGroupFilter from "./AgeGroupFilter";
 import CourseLevelsFilter from "./CourseLevelsFilter";
 import PriceFilter from "./PriceFilter";
 import AccommodationTypeFilter from "./AccommodationTypeFilter";
+import CitiesFilter from "./CitiesFilter";
 
 const FilterContent = () => {
   return (
     <div className="flex w-[80%] flex-col justify-start gap-8">
+      <CitiesFilter />
       <PriceFilter />
       <Separator className="my-4" />
       <AgeGroupFilter />
