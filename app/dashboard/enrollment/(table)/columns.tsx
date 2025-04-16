@@ -314,33 +314,47 @@ export const columns: ColumnDef<EnrollmentRequest>[] = [
   },
 
   {
-    accessorKey: "courseTotalPriceBeforeDiscount",
-    header: () => <div className="text-center">Course Price</div>,
-    cell: ({ row }) => {
-      const data = row.getValue("courseTotalPriceBeforeDiscount") as number;
-      const formatPrice = formattedPrice(data);
-      return <div className="text-center font-medium">{formatPrice}</div>;
-    },
-  },
-  {
-    accessorKey: "addOnPrice",
-    header: () => <div className="text-center">Add-on Price</div>,
-    cell: ({ row }) => {
-      const data = row.getValue("addOnPrice") as number;
-      const formatPrice = formattedPrice(data);
-      return <div className="text-center font-medium">{formatPrice}</div>;
-    },
-  },
-  {
     accessorKey: "orderTotalPrice",
     header: () => <div className="text-center">Order Total Price</div>,
     cell: ({ row }) => {
-      const coursePrice = row.getValue(
-        "courseTotalPriceBeforeDiscount",
-      ) as number;
+      const orderTotalPrice = row.getValue("orderTotalPrice") as number;
       const addOnPrice = row.getValue("addOnPrice") as number;
-      const formatPrice = formattedPrice(coursePrice + addOnPrice);
+      const formatPrice = formattedPrice(orderTotalPrice);
       return <div className="text-center font-medium">{formatPrice}</div>;
+    },
+  },
+  {
+    accessorKey: "createdAt",
+    header: ({ column }) => {
+      const isSortedAsc = column.getIsSorted();
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="group flex items-center gap-1 px-2 py-1 hover:bg-muted/50"
+        >
+          <span>Created Date</span>
+          <div className="ml-1 transform text-muted-foreground">
+            {isSortedAsc === "asc" ? (
+              <AiOutlineCaretUp className="h-4 w-4 text-primary" />
+            ) : isSortedAsc === "desc" ? (
+              <AiOutlineCaretDown className="h-4 w-4 text-primary" />
+            ) : (
+              <BsChevronExpand className="h-4 w-4 opacity-50 group-hover:opacity-100" />
+            )}
+          </div>
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const data = row.getValue("createdAt") as Date;
+      const formattedData =
+        data.getDate() + "/" + (data.getMonth() + 1) + "/" + data.getFullYear();
+      return (
+        <div className="text-center">
+          <span>{formattedData}</span>
+        </div>
+      );
     },
   },
 ];

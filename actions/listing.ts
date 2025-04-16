@@ -137,6 +137,43 @@ export const getOrganizationByIdAction = async (organizationId: string) => {
     console.error(e);
   }
 };
+export const getOrganizationByPaymentIdAction = async (paymentId: string) => {
+  if (!paymentId) return;
+
+  try {
+    const enrollmentPayment = await db.enrollmentPayment.findUnique({
+      where: { id: paymentId },
+    });
+    if (!enrollmentPayment) return;
+
+    const enrollmentConfirm = await db.enrollmentConfirmation.findFirst({
+      where: { id: enrollmentPayment.confirmationId },
+    });
+    if (!enrollmentConfirm) return;
+    const enrollmentRequest = await db.enrollmentRequest.findUnique({
+      where: { id: enrollmentConfirm.requestId },
+    });
+    if (!enrollmentRequest) return;
+    const organization = await db.organization.findUnique({
+      where: { id: enrollmentRequest.organizationId },
+      select: { name: true },
+    });
+
+    if (organization) {
+      console.log("Organization found");
+      return {
+        organization,
+        status: 200,
+      };
+    }
+    return {
+      status: 404,
+      message: "Organization not found",
+    };
+  } catch (e) {
+    console.error(e);
+  }
+};
 
 export const getStudentNationByOrganizationIdAction = async (
   organizationId: string,

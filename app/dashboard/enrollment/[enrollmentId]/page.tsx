@@ -2,12 +2,19 @@ import { getEnrollmentRequestsWithOrganizationByIdAction } from "@/actions/creat
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import EditEnrollmentForm from "./_components/EditEnrollmentForm";
-import { ArrowBigLeft } from "lucide-react";
+import { ArrowBigLeft, Copy } from "lucide-react";
 import { db } from "@/lib/db";
 import { EnrollmentConfirmationState } from "@prisma/client";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+} from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { formattedPrice } from "@/lib/formatPrice";
+import { toast } from "sonner";
 
 type Props = {
   params: {
@@ -63,14 +70,26 @@ const EnrollmentEditPage = async ({ params }: Props) => {
     const dueDate = new Date(courseStart);
     dueDate.setDate(dueDate.getDate() - 30);
     const paymentDueDate = dueDate < today ? today : dueDate;
+    const showDepositSummary =
+      enrollmentPayment.depositPaid && !enrollmentPayment.fullPaymentPaid;
+    const showFullPaymentSummary = enrollmentPayment.fullPaymentPaid;
 
     return (
-      <>
-        {enrollmentPayment.status ===
-          EnrollmentConfirmationState.DEPOSIT_PAID && (
-          <Card className="text-md flex w-full flex-col gap-5 space-y-1 p-3">
+      <Card>
+        {showDepositSummary && (
+          <Card className="text-md flex w-full flex-col gap-5 space-y-1 border-none p-3 shadow-none">
             <CardHeader className="flex w-full">
               <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
+              <CardDescription>
+                <div className="flex flex-col justify-between text-xs text-muted-foreground">
+                  <span>Deposit Transaction ID</span>
+                  <div className="flex items-center gap-2">
+                    <span className="truncate">
+                      {enrollmentPayment.depositTransactionId || "—"}
+                    </span>
+                  </div>
+                </div>
+              </CardDescription>
             </CardHeader>
 
             <CardContent className="space-y-3">
@@ -102,7 +121,7 @@ const EnrollmentEditPage = async ({ params }: Props) => {
               <div className="flex justify-between text-muted-foreground">
                 <span>Deposit Payment Date</span>
                 <span>
-                  {enrollmentConfirmation?.userConfirmationDate?.toLocaleDateString(
+                  {confirmation?.userConfirmationDate?.toLocaleDateString(
                     "en-GB",
                     {
                       day: "numeric",
@@ -115,15 +134,13 @@ const EnrollmentEditPage = async ({ params }: Props) => {
 
               <div className="flex justify-between text-muted-foreground">
                 <span>Payment Method</span>
-                <span className="capitalize">
-                  {enrollmentPayment?.paymentMethod}
-                </span>
+                <span className="capitalize">{payment?.paymentMethod}</span>
               </div>
 
               <div className="flex justify-between text-muted-foreground">
                 <span>Receipt</span>
                 <a
-                  href={enrollmentPayment?.depositInvoiceUrl!}
+                  href={payment?.depositInvoiceUrl!}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-blue-600 underline"
@@ -136,7 +153,7 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                 <span>Course Start Date</span>
                 <span>
                   {new Date(
-                    data.enrollmentRequests.startDate,
+                    data.enrollmentRequests?.startDate!,
                   ).toLocaleDateString("en-GB", {
                     day: "numeric",
                     month: "long",
@@ -144,23 +161,24 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                   })}
                 </span>
               </div>
-
-              <div className="mt-3 flex w-full items-center">
-                <Button asChild className="w-full">
-                  <Link href={`/dashboard/payment/${enrollmentPayment.id}`}>
-                    Go to Payment Details
-                  </Link>
-                </Button>
-              </div>
             </CardContent>
           </Card>
         )}
-        {enrollmentPayment.status ===
-          EnrollmentConfirmationState.FULLY_PAID && (
+        {showFullPaymentSummary && (
           <div className="flex w-full flex-col gap-3">
-            <Card className="text-md flex w-full flex-col gap-5 space-y-1 p-3">
+            <Card className="text-md flex w-full flex-col gap-5 space-y-1 border-none p-3 shadow-none">
               <CardHeader className="flex w-full">
                 <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
+                <CardDescription>
+                  <div className="flex flex-col justify-between text-xs text-muted-foreground">
+                    <span>Deposit Payment Transaction ID</span>
+                    <div className="flex items-center gap-2">
+                      <span className="truncate">
+                        {enrollmentPayment.depositTransactionId || "—"}
+                      </span>
+                    </div>
+                  </div>
+                </CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-3">
@@ -174,7 +192,7 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                 <div className="flex justify-between text-muted-foreground">
                   <span>Deposit Payment Date</span>
                   <span>
-                    {enrollmentConfirmation?.userConfirmationDate?.toLocaleDateString(
+                    {confirmation?.userConfirmationDate?.toLocaleDateString(
                       "en-GB",
                       {
                         day: "numeric",
@@ -187,15 +205,13 @@ const EnrollmentEditPage = async ({ params }: Props) => {
 
                 <div className="flex justify-between text-muted-foreground">
                   <span>Payment Method</span>
-                  <span className="capitalize">
-                    {enrollmentPayment?.paymentMethod}
-                  </span>
+                  <span className="capitalize">{payment?.paymentMethod}</span>
                 </div>
 
                 <div className="flex justify-between text-muted-foreground">
                   <span>Receipt</span>
                   <a
-                    href={enrollmentPayment?.depositInvoiceUrl!}
+                    href={payment?.depositInvoiceUrl!}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="text-blue-600 underline"
@@ -203,23 +219,23 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                     View Receipt
                   </a>
                 </div>
-
-                <div className="flex justify-between text-muted-foreground">
-                  <span>View Payment Details</span>
-                  <Link
-                    href={`/dashboard/payment/${enrollmentPayment.id}`}
-                    className="text-blue-600 underline"
-                  >
-                    Go to Payment Details
-                  </Link>
-                </div>
               </CardContent>
             </Card>
-            <Card className="text-md w-full space-y-1 p-3">
+            <Card className="text-md w-full space-y-1 border-none p-3 shadow-none">
               <CardHeader className="flex w-full">
                 <h3 className="mx-auto text-xl font-bold">
                   Full Payment Summary
                 </h3>
+                <CardDescription>
+                  <div className="flex flex-col justify-between text-xs text-muted-foreground">
+                    <span>Full Payment Transaction ID</span>
+                    <div className="flex items-center gap-2">
+                      <span className="truncate">
+                        {enrollmentPayment.fullPaymentTransactionId || "—"}
+                      </span>
+                    </div>
+                  </div>
+                </CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-3">
@@ -265,10 +281,18 @@ const EnrollmentEditPage = async ({ params }: Props) => {
                   </a>
                 </div>
               </CardContent>
+              <CardFooter className="w-full items-end">
+                <Link
+                  href={`/dashboard/payment/${enrollmentPayment.id}`}
+                  className="mx-auto rounded-xl bg-rose-500 p-1 text-zinc-50 hover:opacity-80"
+                >
+                  View Payment
+                </Link>
+              </CardFooter>
             </Card>
           </div>
         )}
-      </>
+      </Card>
     );
   };
 

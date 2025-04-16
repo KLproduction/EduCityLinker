@@ -177,7 +177,11 @@ export const getEnrollmentRequestsWithOrganizationByIdAction = async (
 
 export const getAllEnrollmentRequestsAction = async () => {
   try {
-    const enrollmentRequests = await db.enrollmentRequest.findMany();
+    const enrollmentRequests = await db.enrollmentRequest.findMany({
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
     if (enrollmentRequests.length > 0) {
       return { enrollmentRequests, status: 200 };
     }

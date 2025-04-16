@@ -18,14 +18,17 @@ import { NavigateButton } from "@/components/global/NavigateButton";
 import { type EnrollmentRequest, EnrollmentRequestState } from "@prisma/client";
 import { formattedPrice } from "@/lib/formatPrice";
 import { cn } from "@/lib/utils";
-import { useGetOrganizationByEnrollmentModal } from "@/hooks/enrollment";
+import {
+  useGetOrganizationByEnrollmentModal,
+  useGetOrganizationByPaymentIdModal,
+} from "@/hooks/enrollment";
 import { EnrollmentPayment } from "@prisma/client";
 
 type OrganizationCellProps = {
-  organizationId: string;
+  paymentId: string;
 };
-const OrganizationCell = ({ organizationId }: OrganizationCellProps) => {
-  const { data } = useGetOrganizationByEnrollmentModal(organizationId);
+const OrganizationCell = ({ paymentId }: OrganizationCellProps) => {
+  const { data } = useGetOrganizationByPaymentIdModal(paymentId);
   return (
     <div className="flex justify-center">
       <span className="font-medium">{data?.organization?.name || "—"}</span>
@@ -71,14 +74,34 @@ export const columns: ColumnDef<EnrollmentPayment>[] = [
   },
   {
     accessorKey: "id",
-    header: "Payment ID",
-    cell: ({ row }) => <span>{row.getValue("id")}</span>,
+    header: ({ column }) => {
+      const isSortedAsc = column.getIsSorted();
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          className="group flex items-center gap-1 px-2 py-1 hover:bg-muted/50"
+        >
+          <span>Organization</span>
+          <div className="ml-1 transform text-muted-foreground">
+            {isSortedAsc === "asc" ? (
+              <AiOutlineCaretUp className="h-4 w-4 text-primary" />
+            ) : isSortedAsc === "desc" ? (
+              <AiOutlineCaretDown className="h-4 w-4 text-primary" />
+            ) : (
+              <BsChevronExpand className="h-4 w-4 opacity-50 group-hover:opacity-100" />
+            )}
+          </div>
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const paymentId = row.getValue("id") as string;
+
+      return <OrganizationCell paymentId={paymentId} />;
+    },
   },
-  {
-    accessorKey: "confirmationId",
-    header: "Confirmation ID",
-    cell: ({ row }) => <span>{row.getValue("confirmationId")}</span>,
-  },
+
   {
     accessorKey: "depositAmount",
     header: "Deposit Amount",

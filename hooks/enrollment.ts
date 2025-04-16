@@ -22,6 +22,7 @@ import {
 import {
   getListingByIdAction,
   getOrganizationByIdAction,
+  getOrganizationByPaymentIdAction,
 } from "@/actions/listing";
 import { EnrollmentRequest, EnrollmentRequestState } from "@prisma/client";
 import { useForm } from "react-hook-form";
@@ -70,6 +71,19 @@ export const useGetOrganizationByEnrollmentModal = (organizationId: string) => {
     queryKey: ["organization", organizationId],
     queryFn: async () => {
       const result = await getOrganizationByIdAction(organizationId);
+      return result;
+    },
+  });
+  return {
+    data,
+    isPending,
+  };
+};
+export const useGetOrganizationByPaymentIdModal = (paymentId: string) => {
+  const { data, isPending } = useQuery({
+    queryKey: ["organization", paymentId],
+    queryFn: async () => {
+      const result = await getOrganizationByPaymentIdAction(paymentId);
       return result;
     },
   });

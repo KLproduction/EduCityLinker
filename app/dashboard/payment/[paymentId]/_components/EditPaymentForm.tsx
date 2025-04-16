@@ -5,6 +5,7 @@ import {
   EnrollmentConfirmationState,
   EnrollmentPayment,
   EnrollmentRequest,
+  PaymentState,
 } from "@prisma/client";
 import {
   Card,
@@ -15,6 +16,9 @@ import {
 import { formattedPrice } from "@/lib/formatPrice";
 import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
+import { Copy } from "lucide-react";
 
 type Props = {
   payment: EnrollmentPayment;
@@ -29,6 +33,9 @@ const EditPaymentForm = ({ payment, confirmation, enrollment }: Props) => {
   dueDate.setDate(dueDate.getDate() - 30);
   const paymentDueDate = dueDate < today ? today : dueDate;
 
+  const showDepositSummary = payment.depositPaid && !payment.fullPaymentPaid;
+  const showFullPaymentSummary = payment.fullPaymentPaid;
+
   return (
     <Card>
       <CardHeader className="items-end bg-rose-200">
@@ -37,16 +44,32 @@ const EditPaymentForm = ({ payment, confirmation, enrollment }: Props) => {
         </Badge>
       </CardHeader>
       <CardContent className="flex flex-col gap-5 p-3">
-        {payment?.status === EnrollmentConfirmationState.DEPOSIT_PAID && (
+        {showDepositSummary && (
           <Card className="text-md flex w-full flex-col gap-5 space-y-1 border-none p-3 shadow-none">
             <CardHeader className="flex w-full">
               <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
               <CardDescription>
                 <div className="flex flex-col justify-between text-xs text-muted-foreground">
-                  <span>Deposit Transaction ID:</span>
-                  <span className="truncate">
-                    {payment.depositTransactionId || "—"}
-                  </span>
+                  <span>Deposit Transaction ID</span>
+                  <div className="flex items-center gap-2">
+                    <span className="truncate">
+                      {payment.depositTransactionId || "—"}
+                    </span>
+                    {payment.depositTransactionId && (
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        onClick={() => {
+                          navigator.clipboard.writeText(
+                            payment.depositTransactionId!,
+                          );
+                          toast.success("Transaction ID has been copied.");
+                        }}
+                      >
+                        <Copy className="h-4 w-4" />
+                      </Button>
+                    )}
+                  </div>
                 </div>
               </CardDescription>
             </CardHeader>
@@ -122,11 +145,35 @@ const EditPaymentForm = ({ payment, confirmation, enrollment }: Props) => {
             </CardContent>
           </Card>
         )}
-        {payment.status === EnrollmentConfirmationState.FULLY_PAID && (
+        {showFullPaymentSummary && (
           <div className="flex w-full flex-col gap-3">
             <Card className="text-md flex w-full flex-col gap-5 space-y-1 border-none p-3 shadow-none">
               <CardHeader className="flex w-full">
                 <h3 className="mx-auto text-xl font-bold">Deposit Summary</h3>
+                <CardDescription>
+                  <div className="flex flex-col justify-between text-xs text-muted-foreground">
+                    <span>Deposit Payment Transaction ID</span>
+                    <div className="flex items-center gap-2">
+                      <span className="truncate">
+                        {payment.depositTransactionId || "—"}
+                      </span>
+                      {payment.depositTransactionId && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              payment.depositTransactionId!,
+                            );
+                            toast.success("Transaction ID has been copied.");
+                          }}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
+                  </div>
+                </CardDescription>
               </CardHeader>
 
               <CardContent className="space-y-3">
@@ -169,7 +216,7 @@ const EditPaymentForm = ({ payment, confirmation, enrollment }: Props) => {
                 </div>
               </CardContent>
             </Card>
-            <Card className="text-md w-full space-y-1 p-3">
+            <Card className="text-md w-full space-y-1 border-none p-3 shadow-none">
               <CardHeader className="flex w-full">
                 <h3 className="mx-auto text-xl font-bold">
                   Full Payment Summary
@@ -177,9 +224,25 @@ const EditPaymentForm = ({ payment, confirmation, enrollment }: Props) => {
                 <CardDescription>
                   <div className="flex flex-col justify-between text-xs text-muted-foreground">
                     <span>Full Payment Transaction ID</span>
-                    <span className="truncate">
-                      {payment.fullPaymentTransactionId || "—"}
-                    </span>
+                    <div className="flex items-center gap-2">
+                      <span className="truncate">
+                        {payment.fullPaymentTransactionId || "—"}
+                      </span>
+                      {payment.fullPaymentTransactionId && (
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => {
+                            navigator.clipboard.writeText(
+                              payment.fullPaymentTransactionId!,
+                            );
+                            toast.success("Transaction ID has been copied.");
+                          }}
+                        >
+                          <Copy className="h-4 w-4" />
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 </CardDescription>
               </CardHeader>
