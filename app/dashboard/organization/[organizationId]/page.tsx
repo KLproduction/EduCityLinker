@@ -10,6 +10,7 @@ import AccommodationModal from "@/components/modals/AccommodationModal";
 import { currentUser } from "@/lib/auth";
 import EditOrganizationForm from "../../_components/EditOrganizationForm";
 import { redirect } from "next/navigation";
+import { UserRole } from "@prisma/client";
 
 type Props = {
   params: { organizationId: string };
@@ -28,6 +29,13 @@ const DashboardOrganizationPage = async ({ params }: Props) => {
     return (
       <div className="flex h-full w-full items-center justify-center text-4xl">
         Unauthorized
+      </div>
+    );
+  }
+  if (user.role === UserRole.ORGANIZER && !organizer) {
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center text-4xl">
+        You have not created an organization yet. Please create one to continue.
       </div>
     );
   }

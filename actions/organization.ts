@@ -1,20 +1,40 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { UserRole } from "@prisma/client";
 
 export const getOrganizationIdByUserIdAction = async (userId: string) => {
   try {
-    const organization = await db.organization.findFirst({
+    const user = await db.user.findUnique({
       where: {
-        userId,
+        id: userId,
       },
-      select: {
-        id: true,
+      include: {
+        organization: {
+          select: {
+            id: true,
+          },
+        },
       },
     });
-    if (organization) {
-      return { organization, status: 200 };
+
+    if (user?.role === UserRole.ADMIN) {
+      if (user.organization.length > 0) {
+        return { organization: user.organization[0].id, status: 200 };
+      } else {
+        const organizations = await db.organization.findMany();
+        return { organization: organizations[0].id, status: 200 };
+      }
     }
+
+    if (user?.role === UserRole.ORGANIZER) {
+      if (user.organization.length > 0) {
+        return { organization: user.organization[0].id, status: 200 };
+      } else {
+        return { status: 404, message: "Organization not found" };
+      }
+    }
+
     return { status: 404, message: "Organization not found" };
   } catch (e) {
     console.error(e);

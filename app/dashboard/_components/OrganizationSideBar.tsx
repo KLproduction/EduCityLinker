@@ -38,7 +38,7 @@ const ListingsContent = ({
   listings,
 }: Props) => {
   const { open } = useCreateCourseModal();
-
+  if (!organizations) return null;
   return (
     <div className="flex flex-col gap-6">
       {/* Org switcher */}
@@ -101,7 +101,7 @@ const OrganizationSideBar = ({
   listings,
 }: Props) => {
   const [open, setOpen] = useState(false);
-
+  if (!organizations || !listings) return;
   return (
     <>
       {/* Desktop Sidebar */}
