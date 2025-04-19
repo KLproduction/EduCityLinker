@@ -18,7 +18,7 @@ const EnrollmentTablePage = async () => {
   return (
     <div className="container relative flex min-h-full w-screen flex-col items-center justify-center">
       <div className="flex w-full justify-center gap-3">
-        <DashboardSideBar organizationId={organizationId?.organization?.id!} />
+        <DashboardSideBar organizationId={organizationId?.organization!} />
         <div className="w-full flex-1 md:min-w-[3/4]">
           <div className="container mx-auto pb-20 sm:py-10">
             <div className="flex justify-start p-0"></div>
