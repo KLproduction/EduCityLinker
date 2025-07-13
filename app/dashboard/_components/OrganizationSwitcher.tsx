@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/select";
 import { useCreateOrganizerModal } from "@/hooks/modal";
 import { ExtenderUser } from "@/next-auth";
+import { UserRole } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { RiAddCircleFill } from "react-icons/ri";
 
@@ -38,10 +39,12 @@ const OrganizationSwitcher = ({
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-center justify-between">
-        <p className="text-sm font-semibold uppercase text-zinc-800">
-          Organization
-        </p>
-        {user.role === "ADMIN" && (
+        {user.role === UserRole.ADMIN && (
+          <p className="text-sm font-semibold uppercase text-zinc-800">
+            Organization
+          </p>
+        )}
+        {user.role === UserRole.ADMIN && (
           <RiAddCircleFill
             size={20}
             className="cursor-pointer text-zinc-500 transition hover:opacity-75"

@@ -42,6 +42,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion";
+import Link from "next/link";
 
 interface SettingFormProps {
   user: ExtenderUser;
@@ -94,7 +95,12 @@ const Settingform = ({ user }: SettingFormProps) => {
 
   return (
     <Card className="w-[300px] sm:w-[600px]">
-      <CardHeader>Setting</CardHeader>
+      <CardHeader className="mx-3 flex flex-row items-center justify-between">
+        <div>Setting</div>
+        <Button asChild variant={"outline"}>
+          <Link href="/explore">Back</Link>
+        </Button>
+      </CardHeader>
       <CardContent>
         <Form {...form}>
           <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>

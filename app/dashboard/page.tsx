@@ -19,7 +19,7 @@ type Props = {};
 
 const DashboardPage = async (props: Props) => {
   const user = await currentUser();
-  const organizationId = await getOrganizationIdByUserIdAction(user?.id!);
+  const organization = await getOrganizationIdByUserIdAction(user?.id!);
 
   if (!user || (user.role !== "ORGANIZER" && user.role !== "ADMIN")) {
     redirect("/");
@@ -38,7 +38,7 @@ const DashboardPage = async (props: Props) => {
   return (
     <div className="container mx-auto py-10">
       <div className="flex w-full justify-center gap-3">
-        <DashboardSideBar organizationId={organizationId?.organization?.id!} />
+        <DashboardSideBar organizationId={organization.organization!} />
         <div className="w-full flex-1 md:min-w-[3/4]">
           <h1 className="mb-6 text-2xl font-bold">Dashboard Overview</h1>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
