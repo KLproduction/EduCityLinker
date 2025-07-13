@@ -34,7 +34,7 @@ export const CreateEnrollmentModal = () => {
   const organizationId = params.get("enrollment-organization-id");
 
   const enrollmentData = useAppSelector(
-    (state) => state.createEnrollmentRequest,
+    (state: any) => state.createEnrollmentRequest,
   );
   const { isOpen, setIsOpen, selectedListingId } = useCreateEnrollmentModal();
   const { data: organizationData, isPending: isGettingOrganization } =
