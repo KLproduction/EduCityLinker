@@ -15,6 +15,7 @@ import ModalBtn from "./ModalBtn";
 import LoginModalBtn from "./LoginModalBtn";
 import { getUserById } from "@/data/user";
 import { UserRole } from "@prisma/client";
+import MobileSignIn from "./MobileSignIn";
 
 const navList = [
   {
@@ -51,11 +52,6 @@ const Navbar = async () => {
     <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
       <MyContainer>
         <ul className="mx-6 flex h-full items-center justify-between">
-          {/* {navList.map(({ label, path }) => (
-          <li key={label}>
-            <Link href={path}>{label}</Link>
-          </li>
-        ))} */}
           <div>
             <NavLogo />
           </div>
@@ -64,18 +60,23 @@ const Navbar = async () => {
           </div>
 
           {!user?.id ? (
-            <div className="flex items-center gap-3 p-3">
-              <LoginButtonProps mode="modal" asChild>
-                <Button variant={"default"} size={"lg"}>
-                  Sign In
-                </Button>
-              </LoginButtonProps>
+            <>
+              <div className="hidden items-center gap-3 p-3 md:flex">
+                <LoginButtonProps mode="modal" asChild>
+                  <Button variant={"default"} size={"lg"}>
+                    Sign In
+                  </Button>
+                </LoginButtonProps>
 
-              <div className="border-r border-zinc-800" />
-              <Link href={"/auth/register"} className="text-gray-500">
-                Sign up
-              </Link>
-            </div>
+                <div className="border-r border-zinc-800" />
+                <Link href={"/auth/register"} className="text-gray-500">
+                  Sign up
+                </Link>
+              </div>
+              <div className="md:hidden">
+                <MobileSignIn />
+              </div>
+            </>
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
               <div className={cn("hidden sm:block")}>

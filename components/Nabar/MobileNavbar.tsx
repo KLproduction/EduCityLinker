@@ -9,6 +9,8 @@ import MyContainer from "../Container";
 import Categories from "./Categories";
 import ModalBtn from "./ModalBtn";
 import { UserRole } from "@prisma/client";
+import MobileSignIn from "./MobileSignIn";
+import { hover, motion } from "framer-motion";
 
 const navList = [
   {
@@ -39,38 +41,26 @@ const MobileNavbar = async () => {
   const isOrganizer = user?.role === UserRole.ORGANIZER ? true : false;
 
   return (
-    <nav className="fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
+    <nav className="group fixed inset-x-0 top-0 z-[100] h-20 w-full bg-white/75 backdrop-blur-md transition-all">
       <MyContainer>
         <ul className="flex h-full items-center justify-between">
-          {/* {navList.map(({ label, path }) => (
-          <li key={label}>
-            <Link href={path}>{label}</Link>
-          </li>
-        ))} */}
           <div>
-            <h2 className={cn("text-6xl font-bold text-rose-500")}>
+            <h2
+              className={cn(
+                "text-4xl font-bold text-rose-500 transition-all duration-300 group-hover:scale-50",
+              )}
+            >
               <Link href="/">
                 <h4>AMIO</h4>
               </Link>
             </h2>
           </div>
-          <div className="hidden md:block">
+          <div className="scale-90 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
             <MySearch />
           </div>
 
           {!user?.id ? (
-            <div className="flex items-center gap-3 p-3">
-              <LoginButtonProps mode="modal" asChild>
-                <Button variant={"default"} size={"lg"}>
-                  Sign In
-                </Button>
-              </LoginButtonProps>
-
-              <div className="border-r border-zinc-800" />
-              <Link href={"/auth/register"} className="text-gray-500">
-                Sign up
-              </Link>
-            </div>
+            <MobileSignIn />
           ) : (
             <div className="flex items-center justify-center gap-3 p-3">
               <div className={cn("hidden sm:block")}>
