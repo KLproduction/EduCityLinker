@@ -1,12 +1,13 @@
 "use client";
 
 import { Library } from "@googlemaps/js-api-loader";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader, type Libraries } from "@react-google-maps/api";
+
 import { useEffect, useRef, useState } from "react";
 import { Input } from "./ui/input";
 import { Label } from "./ui/label";
 
-const LIBRARY: Library[] = ["places", "marker"]; // Only include needed libraries
+const LIBRARIES: Libraries = ["places"];
 
 const MyGoogleMap = () => {
   const [map, setMap] = useState<google.maps.Map | null>(null);
@@ -21,7 +22,7 @@ const MyGoogleMap = () => {
 
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
-    libraries: LIBRARY,
+    libraries: LIBRARIES,
   });
 
   const mapRef = useRef<HTMLDivElement | null>(null);

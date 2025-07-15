@@ -12,15 +12,15 @@ import {
   CommandList,
 } from "@/components/ui/command";
 
-import { Library } from "@googlemaps/js-api-loader";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader, type Libraries } from "@react-google-maps/api";
 import { v4 } from "uuid";
 import { googleLat } from "@/components/GoogleMapSimple";
 
 import { Edit } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-const LIBRARIES: Library[] = ["marker"];
+const LIBRARIES: Libraries = ["places"];
+
 type Props = {
   centerLocation: string;
   centerLat: number;
@@ -58,7 +58,6 @@ const EditGoogleMapWithAddressInput = ({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY!,
     libraries: LIBRARIES,
   });
-
   // --- Autocomplete Logic ---
 
   const generateSessionToken = (): string => {

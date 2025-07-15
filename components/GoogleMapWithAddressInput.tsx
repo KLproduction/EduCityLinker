@@ -12,8 +12,8 @@ import {
   CommandList,
 } from "./ui/command";
 import { googleLat } from "./GoogleMapSimple";
-import { Library } from "@googlemaps/js-api-loader";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader, type Libraries } from "@react-google-maps/api";
+
 import { v4 } from "uuid";
 import {
   useAppDispatch,
@@ -21,7 +21,7 @@ import {
   setOrganizationData,
 } from "@/redux/store";
 
-const LIBRARIES: Library[] = ["marker"];
+const LIBRARIES: Libraries = ["places"];
 
 const GoogleMapWithAddressInput = () => {
   const dispatch = useAppDispatch();

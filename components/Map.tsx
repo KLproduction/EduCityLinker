@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { Library } from "@googlemaps/js-api-loader";
-import { useJsApiLoader } from "@react-google-maps/api";
+import { useJsApiLoader, type Libraries } from "@react-google-maps/api";
 
-const LIBRARIES: Library[] = ["marker"];
+const LIBRARIES: Libraries = ["places"];
 
 interface GoogleMapProps {
   lat: number;
