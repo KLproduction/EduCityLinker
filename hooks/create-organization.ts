@@ -107,6 +107,7 @@ export const useEditCoverPhoto = (setCoverPhoto: (id: string) => void) => {
     onSuccess: (data) => {
       setCoverPhoto(data);
       toast.success("Image uploaded successfully!");
+      console.log("Cover Photo", data);
     },
   });
 

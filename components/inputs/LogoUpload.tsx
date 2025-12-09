@@ -13,7 +13,7 @@ import { CldUploadWidget } from "next-cloudinary";
 import { TbPhotoPlus } from "react-icons/tb";
 import Image from "next/image";
 import { FileUploaderRegular } from "@uploadcare/react-uploader/next";
-import "@uploadcare/react-uploader/core.css";
+
 import * as LR from "@uploadcare/blocks";
 
 import { set } from "lodash";

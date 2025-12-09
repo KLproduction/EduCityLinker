@@ -36,25 +36,25 @@ export default function ImageSwiper({ onSlideChange }: ImageSwiperProps) {
       <SwiperSlide>
         <img
           src="pexels-christina99999-29434940.jpg"
-          className="object-cover h-[300px] w-[300px] rounded-lg object-center"
+          className="h-[300px] w-[300px] rounded-lg object-cover object-center"
         />
       </SwiperSlide>
       <SwiperSlide>
         <img
           src="pexels-daria-agafonova-2147746189-30173102.jpg"
-          className="object-cover h-[300px] w-[300px] rounded-lg object-center"
+          className="h-[300px] w-[300px] rounded-lg object-cover object-center"
         />
       </SwiperSlide>
       <SwiperSlide>
         <img
           src="pexels-matreding-11363619.jpg"
-          className="object-cover h-[300px] w-[300px] rounded-lg object-center"
+          className="h-[300px] w-[300px] rounded-lg object-cover object-center"
         />
       </SwiperSlide>
       <SwiperSlide>
         <img
           src="pexels-wolfgang-weiser-467045605-30176440.jpg"
-          className="object-cover h-[300px] w-[300px] rounded-lg object-center"
+          className="h-[300px] w-[300px] rounded-lg object-cover object-center"
         />
       </SwiperSlide>
     </Swiper>

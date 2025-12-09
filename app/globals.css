@@ -10,7 +10,6 @@
 }
 
 body {
-  color: rgb(var(--foreground-rgb));
   background: linear-gradient(
       to bottom,
       transparent,
@@ -86,11 +85,9 @@ h4 {
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
   }
-}
 
-@layer base {
   body {
-    color: #1e3a8a; /* Equivalent to text-blue-900 */
+    @apply text-blue-900;
   }
 }
 

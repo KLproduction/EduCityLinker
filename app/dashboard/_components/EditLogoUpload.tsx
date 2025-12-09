@@ -5,7 +5,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { TbPhotoPlus } from "react-icons/tb";
-import "@uploadcare/react-uploader/core.css";
+
 import * as LR from "@uploadcare/blocks";
 
 import { set } from "lodash";

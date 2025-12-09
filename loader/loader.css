@@ -5,7 +5,8 @@
 .loader {
   width: 108px;
   height: 16px;
-  background: radial-gradient(
+  background:
+    radial-gradient(
       circle 8px at 8px center,
       var(--dotColor) 100%,
       transparent 0
