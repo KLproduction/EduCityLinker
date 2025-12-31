@@ -1,5 +1,6 @@
 "use client";
 
+import { brandName } from "@/data/data";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -17,7 +18,7 @@ const NavLogo = () => {
         )}
       >
         <Link href="/">
-          <h4>AMIO</h4>
+          <h4>{brandName}</h4>
         </Link>
       </h2>
     </div>

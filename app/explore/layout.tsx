@@ -10,14 +10,14 @@ type Props = {
 
 const ExploreLayout = ({ children }: Props) => {
   return (
-    <div className="relative flex w-screen flex-col items-center justify-center">
+    <div className="relative flex w-full flex-col items-center justify-center">
       <div className="mb-48">
         <Navbar />
       </div>
 
-      <div className="flex justify-center gap-3">
+      <div className="mt-6 flex w-full items-start gap-3 px-12">
         <ExploreSideBar />
-        {children}
+        <div className="w-full min-w-0">{children}</div>
       </div>
     </div>
   );

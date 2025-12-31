@@ -1,3 +1,4 @@
+import { brandName } from "@/data/data";
 import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
@@ -51,7 +52,7 @@ const LogoScroll = () => {
             style={{ scale }}
             className="fixed left-0 top-0 hidden p-3 sm:block"
           >
-            <h4 className="pointer-events-none">AMIO</h4>
+            <h4 className="pointer-events-none">{brandName}</h4>
           </motion.div>
         </motion.div>
 

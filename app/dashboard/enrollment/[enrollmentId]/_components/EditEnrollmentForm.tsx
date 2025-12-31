@@ -34,7 +34,7 @@ import {
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { formattedPrice } from "@/lib/formatPrice";
 import { useState, useEffect } from "react";
-import { AIMO_DISCOUNT } from "@/data/data";
+import { AIMO_DISCOUNT, brandName } from "@/data/data";
 
 type Props = {
   enrollment: EnrollmentRequest;
@@ -442,7 +442,7 @@ const EditEnrollmentForm = ({ enrollment, organization }: Props) => {
             </div>
             <div className="flex justify-between border-b py-1 text-rose-500">
               <h4>
-                AIMO <span>Price:</span>
+                {brandName} <span>Price:</span>
               </h4>
               <span className="font-medium">
                 {formattedPrice(watch("courseTotalPrice") || 0)}

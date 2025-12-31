@@ -14,6 +14,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
+import { brandName } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import { cn } from "@/lib/utils";
 import {
@@ -301,7 +302,7 @@ const DashboardUserEnrollmentDetailsSection = ({
 
                           <div className="flex justify-between gap-1 sm:flex-row sm:items-center">
                             <div className="flex items-center gap-2 text-rose-500">
-                              <h4 className="font-semibold">AIMO</h4>
+                              <h4 className="font-semibold">{brandName}</h4>
                               <span className="text-sm">Price:</span>
                             </div>
                             <span className="font-bold text-primary">

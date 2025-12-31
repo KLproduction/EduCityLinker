@@ -41,6 +41,8 @@ import {
 export const AIMO_DISCOUNT = 0.9;
 export const DEPOSIT_RATE = 0.05;
 
+export const brandName = "ECL";
+
 export const features = [
   {
     label: "WiFi",

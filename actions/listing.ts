@@ -51,7 +51,7 @@ export const getOrganizationWithListingAction = async () => {
     const organization = await db.organization.findMany({
       include: { listings: true },
     });
-    if (organization) {
+    if (organization.length > 0) {
       return {
         organization,
         status: 200,

@@ -12,6 +12,7 @@ import {
 import { formattedPrice } from "@/lib/formatPrice";
 import { Button } from "@/components/ui/button";
 import { Check } from "lucide-react";
+import { brandName } from "@/data/data";
 
 interface PriceCalculatorProps {
   basePrice: number;
@@ -57,7 +58,7 @@ export default function PriceCalculator({ basePrice }: PriceCalculatorProps) {
 
           <div className="flex items-center justify-between">
             <div className="flex items-end gap-2 text-rose-500">
-              <h4>AIMO</h4>
+              <h4>{brandName}</h4>
               <p className="font-bold">Price:</p>
             </div>
             <span className="text-lg font-bold text-rose-600">

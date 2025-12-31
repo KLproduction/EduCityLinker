@@ -9,7 +9,7 @@ import { formattedPrice } from "@/lib/formatPrice";
 import { Check } from "lucide-react";
 import { setEnrollmentData } from "@/redux/slice/create-enrollmentRequestSlice";
 import { useAppDispatch, useAppSelector } from "@/redux/store";
-import { AIMO_DISCOUNT } from "@/data/data";
+import { AIMO_DISCOUNT, brandName } from "@/data/data";
 
 interface PriceCalculatorProps {
   basePrice: number;
@@ -83,7 +83,7 @@ export default function EnrollmentPriceSelector({
 
           <div className="flex items-center justify-between">
             <div className="flex items-end gap-2 text-rose-500">
-              <h4>AIMO</h4>
+              <h4>{brandName}</h4>
               <p className="font-bold">Price:</p>
             </div>
             <span className="text-lg font-bold text-rose-600">

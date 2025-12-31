@@ -1,6 +1,6 @@
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { AIMO_DISCOUNT } from "@/data/data";
+import { AIMO_DISCOUNT, brandName } from "@/data/data";
 import { formattedPrice } from "@/lib/formatPrice";
 import { useAppSelector } from "@/redux/store";
 import { format } from "date-fns";
@@ -106,7 +106,7 @@ const EnrollmentDetailsConfirmationStep = () => {
               <div className="flex justify-between">
                 <dt className="font-medium text-muted-foreground">
                   <div className="flex items-center gap-1 text-rose-500">
-                    <h4>AIMO</h4>
+                    <h4>{brandName}</h4>
                     <span>Price:</span>
                   </div>
                 </dt>
