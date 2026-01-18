@@ -33,6 +33,15 @@ export default async function RootLayout({
   return (
     <SessionProvider session={session}>
       <html lang="en">
+        <head>
+          <link
+            rel="preload"
+            href="/SHOWG.woff"
+            as="font"
+            type="font/woff"
+            crossOrigin="anonymous"
+          />
+        </head>
         <body className={inter.className}>
           <ReactQueryProvider>
             <ReduxProvider>
