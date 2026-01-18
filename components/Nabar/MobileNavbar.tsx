@@ -56,7 +56,7 @@ const MobileNavbar = async () => {
               </Link>
             </h2>
           </div>
-          <div className="scale-90 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+          <div className="scale-90 transition-all duration-300 group-hover:scale-100">
             <MySearch />
           </div>
 
