@@ -4,7 +4,7 @@
 
 @font-face {
   font-family: "Showcard-Gothic";
-  src: url("/SHOWG.TTF") format("truetype");
+  src: url("/SHOWG.woff") format("woff");
   font-weight: normal;
   font-style: normal;
 }

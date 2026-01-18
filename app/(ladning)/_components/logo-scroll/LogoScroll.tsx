@@ -1,6 +1,7 @@
 import { brandName } from "@/data/data";
 import { cn } from "@/lib/utils";
 import { motion, useScroll, useTransform } from "framer-motion";
+import localFont from "next/font/local";
 import { useRef } from "react";
 
 const LogoScroll = () => {
@@ -52,14 +53,14 @@ const LogoScroll = () => {
             style={{ scale }}
             className="fixed left-0 top-0 hidden p-3 sm:block"
           >
-            <h4 className="pointer-events-none">{brandName}</h4>
+            <h4 className={cn("pointer-events-none")}>{brandName}</h4>
           </motion.div>
         </motion.div>
 
         {/* SCREEN CAPTION */}
         <div
           className={cn(
-            "pointer-events-none hidden sm:block md:text-4xl lg:text-6xl",
+            "pointer-events-none hidden font-bold sm:block md:text-4xl lg:text-6xl",
           )}
         >
           <motion.h1

@@ -75,7 +75,10 @@ const CaptionText: FC<CaptionTextProps> = ({ text, className }) => {
           </p>
           <motion.div style={{ opacity: opacity }}>
             <Link href="/explore">
-              <InteractiveHoverButton text="Explore" />
+              <InteractiveHoverButton
+                text="Explore"
+                className="text-rose-500"
+              />
             </Link>
           </motion.div>
         </div>

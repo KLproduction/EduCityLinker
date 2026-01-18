@@ -1,4 +1,5 @@
 import { Gravity, MatterBody } from "@/components/ui/gravity";
+import { brandName } from "@/data/data";
 import { cn } from "@/lib/utils";
 
 function DragAndDrop({ className }: { className?: string }) {
@@ -10,7 +11,7 @@ function DragAndDrop({ className }: { className?: string }) {
       )}
     >
       <div className="lg:text-12xl z-30 w-full pt-20 text-center text-6xl font-bold text-rose-500 sm:text-7xl md:text-8xl">
-        <h4>AMIO</h4>
+        <h4>{brandName}</h4>
       </div>
       <p className="z-30 w-full pt-4 text-center text-base font-bold text-zinc-800 sm:text-xl md:text-2xl lg:text-3xl">
         Your course adviser

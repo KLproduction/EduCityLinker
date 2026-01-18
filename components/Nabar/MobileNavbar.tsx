@@ -11,6 +11,7 @@ import ModalBtn from "./ModalBtn";
 import { UserRole } from "@prisma/client";
 import MobileSignIn from "./MobileSignIn";
 import { hover, motion } from "framer-motion";
+import { brandName } from "@/data/data";
 
 const navList = [
   {
@@ -51,7 +52,7 @@ const MobileNavbar = async () => {
               )}
             >
               <Link href="/">
-                <h4>AMIO</h4>
+                <h4>{brandName}</h4>
               </Link>
             </h2>
           </div>
