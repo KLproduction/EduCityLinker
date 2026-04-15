@@ -1,13 +1,8 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { SessionProvider } from "next-auth/react";
 import { auth } from "@/auth";
-import { Toaster } from "@/components/ui/sonner";
-import { ReactQueryProvider } from "@/react-query/provider";
-import { ReduxProvider } from "@/redux/provider";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
-import { LoginModal } from "@/components/auth/LoginModal";
+import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/next";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -31,31 +26,22 @@ export default async function RootLayout({
   const session = await auth();
 
   return (
-    <SessionProvider session={session}>
-      <html lang="en">
-        <head>
-          <link
-            rel="preload"
-            href="/SHOWG.woff"
-            as="font"
-            type="font/woff"
-            crossOrigin="anonymous"
-          />
-        </head>
-        <body className={inter.className}>
-          <ReactQueryProvider>
-            <ReduxProvider>
-              <NuqsAdapter>
-                <Toaster />
-
-                <LoginModal />
-                {children}
-                <Analytics />
-              </NuqsAdapter>
-            </ReduxProvider>
-          </ReactQueryProvider>
-        </body>
-      </html>
-    </SessionProvider>
+    <html lang="en">
+      <head>
+        <link
+          rel="preload"
+          href="/SHOWG.woff"
+          as="font"
+          type="font/woff"
+          crossOrigin="anonymous"
+        />
+      </head>
+      <body className={inter.className}>
+        <Providers session={session}>
+          {children}
+          <Analytics />
+        </Providers>
+      </body>
+    </html>
   );
 }
